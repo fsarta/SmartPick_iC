@@ -45,8 +45,8 @@ END_VAR
 VAR
     (* Configuration after fill-if-empty preset application *)
     stOut  : ST_SP_VisionCfg;
-    (* Conveyor index used to pick the on-site default set *)
-    uiCv   : UINT;
+    (* Delay value in ms used to check if unset *)
+    udiCv  : UDINT;
 END_VAR
     stOut := stIn;
 
@@ -69,8 +69,9 @@ END_VAR
 
     (* ---------------- Timing defaults ------------------------------------ *)
     IF stOut.tTimeout = T#0ms THEN stOut.tTimeout := T#800ms; END_IF
-    uiCv := TIME_TO_UDINT(stOut.tDelay);
-    IF uiCv = UDINT#0 THEN stOut.tDelay := T#40ms; END_IF
+    udiCv := TIME_TO_UDINT(stOut.tDelay);
+    IF udiCv = UDINT#0 THEN stOut.tDelay := T#40ms; END_IF
+    IF stOut.tInterval = T#0ms THEN stOut.tInterval := T#200ms; END_IF
 
     (* ---------------- Trigger / parsing defaults -------------------------- *)
     (* eTrig stays at its configured value: Distance (0) is the neutral

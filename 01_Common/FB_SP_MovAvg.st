@@ -24,7 +24,7 @@ VAR_OUTPUT
     bFilled  : BOOL;          (* TRUE once the window is completely filled *)
 END_VAR
 VAR
-    m_arBuf  : ARRAY[1..GC_MOVAVG_N] OF LREAL; (* Sample window *)
+    m_arBuf  : ARRAY[1..16] OF LREAL; (* Sample window 1..GC_MOVAVG_N *)
     m_iHead  : SINT  := 1;   (* Next write index (1-based) *)
     m_iCnt   : SINT  := 0;   (* Valid sample count *)
     m_rSum   : LREAL := 0.0; (* Running sum for O(1) evaluation *)

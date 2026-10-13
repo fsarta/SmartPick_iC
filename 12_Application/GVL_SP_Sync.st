@@ -40,7 +40,7 @@ VAR
     stPattCmd : ARRAY[1..2] OF ST_SP_PattCmd;   (* One per outfeed engine *)
 
     (* ---- Pattern status publication (TaskFast -> TaskMain) ------------ *)
-    stPattStat : ARRAY[1..2] OF ST_SP_BatchStat; (* Copy of pattN.stStat  *)
+    stPattStat : ARRAY[1..2] OF ST_SP_BatchStat; (* Copy of pattN.stStat *)
 
     (* ---- Statistics event ring (TaskFast -> TaskMain) ----------------- *)
     astStatEv  : ARRAY[1..64] OF ST_SP_StatEv;  (* Ring of pick/place/cyc *)

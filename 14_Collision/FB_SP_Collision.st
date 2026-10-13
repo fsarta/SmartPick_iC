@@ -49,50 +49,50 @@ VAR_INPUT
     bEnable : BOOL;             (* Master gate (FALSE = transparent) *)
     bSysRun : BOOL;             (* FALSE = production stopped: release all *)
     uiDtMs  : UDINT;            (* Task period [ms] (wait-time accounting) *)
-    (* Current TCP positions (world frame) *)
-    ap2Pos  : ARRAY[1..GC_ROBOTS] OF ST_SP_Pose2D;
+    (* Current TCP positions (world frame) 1..GC_ROBOTS *)
+    ap2Pos  : ARRAY[1..4] OF ST_SP_Pose2D;
     (* Requested zones per robot: aiReq[r][1..2], 0 = none. The FB clamps,
-       deduplicates and sorts each pair ascending (defensive). *)
-    aiReq   : ARRAY[1..GC_ROBOTS] OF ARRAY[1..2] OF SINT;
+       deduplicates and sorts each pair ascending (defensive). 1..GC_ROBOTS *)
+    aiReq   : ARRAY[1..4] OF ARRAY[1..2] OF SINT;
+    (* Public configuration (Main/HMI write, mirrors ST_SP_ColCfg) *)
+    stCfg   : ST_SP_ColCfg;
 END_VAR
 VAR_OUTPUT
-    (* Per-robot verdict (grant + velocity scale + reason) *)
-    astRob : ARRAY[1..GC_ROBOTS] OF ST_SP_RobCol;
-    (* Per-zone diagnostics *)
-    astZd  : ARRAY[1..GC_ZONES] OF ST_SP_ZoneDiag;
+    (* Per-robot verdict (grant + velocity scale + reason) 1..GC_ROBOTS *)
+    astRob : ARRAY[1..4] OF ST_SP_RobCol;
+    (* Per-zone diagnostics 1..GC_ZONES *)
+    astZd  : ARRAY[1..8] OF ST_SP_ZoneDiag;
 END_VAR
 VAR
-    (* Public configuration (Main/HMI write, mirrors ST_SP_ColCfg) *)
-    stCfg : ST_SP_ColCfg;
-    (* Feed -> zone map (0 = unguarded) *)
-    m_aiFeedZone : ARRAY[1..GC_FEEDS] OF SINT;
-    (* Latched zone holds per robot (ascending, max 2) *)
-    m_aiHold : ARRAY[1..GC_ROBOTS] OF ARRAY[1..2] OF SINT;
-    (* Latched separation freezes (released with margin) *)
-    m_abSepStop : ARRAY[1..GC_ROBOTS] OF BOOL;
+    (* Feed -> zone map (0 = unguarded) 1..GC_FEEDS *)
+    m_aiFeedZone : ARRAY[1..8] OF SINT;
+    (* Latched zone holds per robot (ascending, max 2) 1..GC_ROBOTS *)
+    m_aiHold : ARRAY[1..4] OF ARRAY[1..2] OF SINT;
+    (* Latched separation freezes (released with margin) 1..GC_ROBOTS *)
+    m_abSepStop : ARRAY[1..4] OF BOOL;
     (* TRUE after a valid Configure() *)
     m_bCfgOk : BOOL;
     (* ------------------------- Body working data ----------------------- *)
     (* Robot / zone / slot / pair loop indices *)
     i, j, k, s : SINT;
-    (* Normalized request pair per robot (ascending, deduplicated) *)
-    aiZ1, aiZ2 : ARRAY[1..GC_ROBOTS] OF SINT;
-    (* Zone occupancy counters and holders (rebuilt every cycle) *)
-    aiCnt    : ARRAY[1..GC_ZONES] OF SINT;
-    (* Grant / scale / reason working vectors *)
-    abGrant  : ARRAY[1..GC_ROBOTS] OF BOOL;
-arScale  : ARRAY[1..GC_ROBOTS] OF LREAL; (* Per-robot velocity scale output (0.1..1.0, 1.0 = free) *)
-aeWhy    : ARRAY[1..GC_ROBOTS] OF ET_SP_ColAct; (* Per-robot current action reason (diagnostic mirror) *)
+    (* Normalized request pair per robot (ascending, deduplicated) 1..GC_ROBOTS *)
+    aiZ1, aiZ2 : ARRAY[1..4] OF SINT;
+    (* Zone occupancy counters and holders (rebuilt every cycle) 1..GC_ZONES *)
+    aiCnt    : ARRAY[1..8] OF SINT;
+    (* Grant / scale / reason working vectors 1..GC_ROBOTS *)
+    abGrant  : ARRAY[1..4] OF BOOL;
+    arScale  : ARRAY[1..4] OF LREAL; (* Per-robot velocity scale output (0.1..1.0, 1.0 = free) *)
+    aeWhy    : ARRAY[1..4] OF ET_SP_ColAct; (* Per-robot current action reason (diagnostic mirror) *)
     (* TRUE while the robot waits for a zone held by someone else *)
     bWaiting : BOOL;
     (* Best waiter scan (zone-centric service) *)
     iBest    : SINT;
-iBestPri : SINT;                       (* Highest priority rank among contending robots *)
+    iBestPri : SINT;                       (* Highest priority rank among contending robots *)
     (* Hierarchy check result and hold insert position *)
     bOk      : BOOL;
     (* Pair separation helpers *)
     iPriI, iPriJ, iYield : SINT;
-rD, rDX, rDY : LREAL;                  (* TCP-TCP separation: distance and planar deltas [mm] *)
+    rD, rDX, rDY : LREAL;                  (* TCP-TCP separation: distance and planar deltas [mm] *)
     (* TRUE when robot i already holds zone z *)
     bLatched : BOOL;
 END_VAR
@@ -193,7 +193,7 @@ END_FOR
 FOR k := 1 TO GC_ZONES DO
     IF aiCnt[k] = 0 THEN
         iBest := 0;
-        iBestPri := 32000;
+        iBestPri := 127;
         FOR i := 1 TO GC_ROBOTS DO
             IF (aiZ1[i] = k) OR (aiZ2[i] = k) THEN
                 (* Not already latched on this robot *)
@@ -352,8 +352,8 @@ END_FUNCTION_BLOCK
    ----------------------------------------------------------------------- *)
 METHOD Configure : ET_SP_RetCode
 VAR_INPUT
-    (* Feed -> zone map (0 = unguarded) *)
-    aiFeedZone : ARRAY[1..GC_FEEDS] OF SINT;
+    (* Feed -> zone map (0 = unguarded) 1..GC_FEEDS *)
+    aiFeedZone : ARRAY[1..8] OF SINT;
 END_VAR
 VAR
     (* Feed loop index (map validation) *)

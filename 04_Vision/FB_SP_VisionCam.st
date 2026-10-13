@@ -33,7 +33,7 @@ VAR_INPUT
     bExtTrig   : BOOL;            (* External trigger input (edge) *)
     rDtSec     : LREAL;           (* Task period [s] *)
     udiTickMs  : UDINT;           (* Monotonic ms tick (GVL_SP_Rtc) *)
-    abiFeedFree: ARRAY[1..GC_FEEDS] OF BOOL; (* TRUE = feed queue has space *)
+    abiFeedFree: ARRAY[1..8] OF BOOL; (* TRUE = feed queue has space 1..GC_FEEDS *)
 END_VAR
 VAR_OUTPUT
     stOut      : ST_SP_VisionStat;(* Published status *)
@@ -63,9 +63,9 @@ VAR
     m_bDelayDone: BOOL;           (* TON done flag *)
 
     (* Harvest out-queue *)
-    m_astQ   : ARRAY[1..GC_VIS_MAX2] OF ST_SP_VisionItem;
+    m_astQ   : ARRAY[1..32] OF ST_SP_VisionItem; (* 1..GC_VIS_MAX2 *)
     (* Destination feed tag per queued item *)
-    m_aiQFeed: ARRAY[1..GC_VIS_MAX2] OF SINT;
+    m_aiQFeed: ARRAY[1..32] OF SINT;             (* 1..GC_VIS_MAX2 *)
     (* Items waiting in the harvest out-queue *)
     m_iQCnt  : SINT := 0;
     (* Drain index for GetNextItem *)
@@ -357,6 +357,16 @@ END_METHOD
 
 
 (* -----------------------------------------------------------------------
+   METHOD: TriggerNow (parent SP_VisionCam)
+   Arm an immediate manual trigger request.
+   ----------------------------------------------------------------------- *)
+METHOD TriggerNow : BOOL
+    m_bTrigReq := TRUE;
+    TriggerNow := TRUE;
+END_METHOD
+
+
+(* -----------------------------------------------------------------------
    METHOD: Configure (parent SP_VisionCam)
    Validate and store configuration; bind camera index for the id space.
    ----------------------------------------------------------------------- *)
@@ -365,6 +375,9 @@ VAR_INPUT
     (* Configuration to validate and store *)
     stIn  : ST_SP_VisionCfg;
     iCam  : SINT;       (* 1..GC_CAMS *)
+END_VAR
+VAR
+    eRc   : ET_SP_RetCode;
 END_VAR
     Configure := ET_SP_RetCode#Done;
     IF (iCam < 1) OR (iCam > GC_CAMS) THEN
@@ -380,5 +393,23 @@ END_VAR
     END_IF
     stCfg  := stIn;
     m_iCam := iCam;
+    CASE stCfg.eDrv OF
+        ET_SP_VisionDrv#Cognex:
+            eRc := m_DrvCx.Configure(stCfg);
+            stCfg := m_DrvCx.stCfg;
+        ET_SP_VisionDrv#Keyence:
+            eRc := m_DrvKx.Configure(stCfg);
+            stCfg := m_DrvKx.stCfg;
+        ET_SP_VisionDrv#GenericTCP:
+            eRc := m_DrvGen.Configure(stCfg);
+            stCfg := m_DrvGen.stCfg;
+        ELSE
+            eRc := ET_SP_RetCode#Done;
+    END_CASE
+    IF eRc <> ET_SP_RetCode#Done THEN
+        Configure := eRc;
+        m_bCfgOk  := FALSE;
+        RETURN;
+    END_IF
     m_bCfgOk := TRUE;
 END_METHOD

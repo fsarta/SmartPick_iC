@@ -130,8 +130,8 @@ METHOD OfferProduct : SINT
 VAR_INPUT
     (* Offer to assign (Manual pass) *)
     stOffer : ST_SP_Offer;
-    (* Live robot snapshot array *)
-    astRob  : ARRAY[1..GC_ROBOTS] OF ST_SP_RobShare;
+    (* Live robot snapshot array 1..GC_ROBOTS *)
+    astRob  : ARRAY[1..4] OF ST_SP_RobShare;
 END_VAR
 VAR
     (* Strategy configured for the feed *)
@@ -155,7 +155,7 @@ END_VAR
     END_IF
 
     eStrat := m_stCfg.aeStrat[stOffer.iFeed];
-    bTryAny := FALSE;
+    bTryAny := (m_stCfg.eMatch = ET_SP_MatchMode#Unmatched);
 
     (* Two passes for Mixed mode: 1 = with type mask, 2 = without *)
     FOR iPass := 1 TO 2 DO
@@ -192,8 +192,8 @@ METHOD m_Organic : SINT
 VAR_INPUT
     (* Offer to assign (Manual pass) *)
     stOffer  : ST_SP_Offer;
-    (* Live robot snapshot array *)
-    astRob   : ARRAY[1..GC_ROBOTS] OF ST_SP_RobShare;
+    (* Live robot snapshot array 1..GC_ROBOTS *)
+    astRob   : ARRAY[1..4] OF ST_SP_RobShare;
     (* Type-mask bypass flag (fallback pass) *)
     bTryAny  : BOOL;
 END_VAR
@@ -238,8 +238,8 @@ METHOD m_Greedy : SINT
 VAR_INPUT
     (* Offer to assign (Manual pass) *)
     stOffer  : ST_SP_Offer;
-    (* Live robot snapshot array *)
-    astRob   : ARRAY[1..GC_ROBOTS] OF ST_SP_RobShare;
+    (* Live robot snapshot array 1..GC_ROBOTS *)
+    astRob   : ARRAY[1..4] OF ST_SP_RobShare;
     (* Type-mask bypass flag (fallback pass) *)
     bTryAny  : BOOL;
 END_VAR
@@ -278,8 +278,8 @@ METHOD m_Balanced : SINT
 VAR_INPUT
     (* Offer to assign (Manual pass) *)
     stOffer  : ST_SP_Offer;
-    (* Live robot snapshot array *)
-    astRob   : ARRAY[1..GC_ROBOTS] OF ST_SP_RobShare;
+    (* Live robot snapshot array 1..GC_ROBOTS *)
+    astRob   : ARRAY[1..4] OF ST_SP_RobShare;
     (* Type-mask bypass flag (fallback pass) *)
     bTryAny  : BOOL;
 END_VAR
@@ -317,8 +317,8 @@ METHOD m_Manual : SINT
 VAR_INPUT
     (* Offer to assign (Manual pass) *)
     stOffer  : ST_SP_Offer;
-    (* Live robot snapshot array *)
-    astRob   : ARRAY[1..GC_ROBOTS] OF ST_SP_RobShare;
+    (* Live robot snapshot array 1..GC_ROBOTS *)
+    astRob   : ARRAY[1..4] OF ST_SP_RobShare;
     (* Type-mask bypass flag (fallback pass) *)
     bTryAny  : BOOL;
 END_VAR

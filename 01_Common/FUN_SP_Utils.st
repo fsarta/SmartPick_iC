@@ -233,7 +233,7 @@ VAR_INPUT
 END_VAR
 VAR
     (* Position inside the digits table (0 = not a digit) *)
-    iPos : SINT;
+    iPos : INT;
     (* Digit loop index 0..9 *)
     i    : SINT;
     (* Digit character compared with sCh *)
@@ -243,7 +243,7 @@ END_VAR
     iPos := FIND('0123456789', sCh);
     IF iPos > 0 THEN
         FOR i := 0 TO 9 DO
-            sD := MID('0123456789', 1, i + 1);
+            sD := MID('0123456789', 1, SINT_TO_INT(i) + 1);
             IF sCh = sD THEN
                 FUN_SP_DigVal := i;
                 EXIT;

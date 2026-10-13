@@ -21,10 +21,10 @@ STRUCT
     sRecipe  : STRING(32);      (* Last loaded recipe name *)
     udiPickTotal : UDINT;       (* Lifetime picks *)
     udiPlaceTotal: UDINT;       (* Lifetime placements *)
-    (* Camera control ownership (resiliency) *)
-    aiCamOwner : ARRAY[1..GC_CAMS] OF SINT;
-    (* Batch progress per definition *)
-    astBatch : ARRAY[1..GC_BATCHES] OF ST_SP_BatchStat;
+    (* Camera control ownership (resiliency) 1..GC_CAMS *)
+    aiCamOwner : ARRAY[1..2] OF SINT;
+    (* Batch progress per definition 1..GC_BATCHES *)
+    astBatch : ARRAY[1..8] OF ST_SP_BatchStat;
 END_STRUCT
 END_TYPE
 

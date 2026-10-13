@@ -31,10 +31,10 @@ VAR_OUTPUT
     out_stStat : ST_SP_BatchStat;(* Result buffer of GetStat *)
 END_VAR
 VAR
-    (* Batch definitions (per outfeed) *)
-    m_astDef  : ARRAY[1..GC_BATCHES] OF ST_SP_BatchDef;
-    (* Live batch progress (placed/remaining) *)
-    m_astStat : ARRAY[1..GC_BATCHES] OF ST_SP_BatchStat;
+    (* Batch definitions (per outfeed, 1..GC_BATCHES) *)
+    m_astDef  : ARRAY[1..8] OF ST_SP_BatchDef;
+    (* Live batch progress (placed/remaining, 1..GC_BATCHES) *)
+    m_astStat : ARRAY[1..8] OF ST_SP_BatchStat;
     m_udiIdGen: UDINT := 0;     (* Runtime batch id generator *)
 END_VAR
 
@@ -103,6 +103,33 @@ END_VAR
     m_astStat[iFree].udiTrays:= 0;
     m_astStat[iFree].uiLayer := 0;
     AddBatch := iFree;
+END_METHOD
+
+
+(* -----------------------------------------------------------------------
+   METHOD: SetBatch (parent SP_BatchMgr)
+   Store a batch definition at explicit slot iIdx (1..GC_BATCHES).
+   ----------------------------------------------------------------------- *)
+METHOD SetBatch : ET_SP_RetCode
+VAR_INPUT
+    iIdx  : SINT;
+    stDef : ST_SP_BatchDef;
+END_VAR
+    SetBatch := ET_SP_RetCode#ErrParam;
+    IF (iIdx < 1) OR (iIdx > GC_BATCHES) THEN
+        RETURN;
+    END_IF
+    m_astDef[iIdx] := stDef;
+    IF NOT stDef.bUsed THEN
+        m_astStat[iIdx].eState := ET_SP_BatchState#Idle;
+    ELSIF m_astStat[iIdx].eState <> ET_SP_BatchState#Running THEN
+        m_astStat[iIdx].eState := ET_SP_BatchState#Idle;
+        m_astStat[iIdx].udiDone := 0;
+        m_astStat[iIdx].udiGen  := 0;
+        m_astStat[iIdx].udiTrays:= 0;
+        m_astStat[iIdx].uiLayer := 0;
+    END_IF
+    SetBatch := ET_SP_RetCode#Done;
 END_METHOD
 
 
@@ -186,7 +213,7 @@ VAR
     iPri  : SINT;
 END_VAR
     iBest := 0;
-    iPri  := -32768;
+    iPri  := -128;
     FOR i := 1 TO GC_BATCHES DO
         IF (m_astStat[i].eState = ET_SP_BatchState#Running)
            AND (m_astDef[i].iOutFeed = iFeed)
@@ -285,10 +312,10 @@ VAR
     (* Per-feed progress loop index *)
     i : SINT;
 END_VAR
-    ClearAll := UDINT#0;
+    ClearAll := UINT#0;
     FOR i := 1 TO GC_BATCHES DO
         IF m_astStat[i].eState = ET_SP_BatchState#Running THEN
-            ClearAll := ClearAll + UDINT#1;   (* Cleared batch count *)
+            ClearAll := ClearAll + UINT#1;   (* Cleared batch count *)
         END_IF
         m_astDef[i].bUsed := FALSE;
         m_astStat[i].eState := ET_SP_BatchState#Idle;

@@ -26,16 +26,16 @@ VAR
     bEStopOk : BOOL := TRUE;    (* Emergency stop chain healthy *)
     bSafetyOk: BOOL := TRUE;    (* Guards / scanners healthy *)
 
-    (* Tool signals: PICK (out), PLACE (out), FEEDBACK (in) - MotoPick 4 spec *)
-    abPickOut    : ARRAY[1..GC_ROBOTS * GC_TOOLS] OF BOOL;
-    (* Place/grip digital outputs (robot x tool channel map) *)
-    abPlaceOut   : ARRAY[1..GC_ROBOTS * GC_TOOLS] OF BOOL;
-    (* Grip feedback inputs (looped back in simulation) *)
-    abToolFbkIn  : ARRAY[1..GC_ROBOTS * GC_TOOLS] OF BOOL;
+    (* Tool signals: PICK (out), PLACE (out), FEEDBACK (in) - MotoPick 4 spec 1..GC_ROBOTS*GC_TOOLS *)
+    abPickOut    : ARRAY[1..16] OF BOOL;
+    (* Place/grip digital outputs (robot x tool channel map) 1..GC_ROBOTS*GC_TOOLS *)
+    abPlaceOut   : ARRAY[1..16] OF BOOL;
+    (* Grip feedback inputs (looped back in simulation) 1..GC_ROBOTS*GC_TOOLS *)
+    abToolFbkIn  : ARRAY[1..16] OF BOOL;
 
-    (* Conveyor drive: analog speed factor per feed (0.0 .. 1.0) *)
-    grConvDrive  : ARRAY[1..GC_FEEDS] OF REAL;
+    (* Conveyor drive: analog speed factor per feed (0.0 .. 1.0) 1..GC_FEEDS *)
+    grConvDrive  : ARRAY[1..8] OF REAL;
 
-    (* Tray / light barrier sensors per outfeed *)
-    abTraySensor : ARRAY[1..GC_FEEDS] OF BOOL;
+    (* Tray / light barrier sensors per outfeed 1..GC_FEEDS *)
+    abTraySensor : ARRAY[1..8] OF BOOL;
 END_VAR

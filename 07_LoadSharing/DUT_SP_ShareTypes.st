@@ -38,15 +38,15 @@ END_TYPE
 
 TYPE ST_SP_ShareCfg :
 STRUCT
-    aeStrat    : ARRAY[1..GC_FEEDS] OF ET_SP_ShareStrategy; (* Per feed *)
-    aabManual  : ARRAY[1..GC_FEEDS] OF ARRAY[1..GC_ROBOTS] OF BOOL; (* Manual matrix *)
-    arRatio    : ARRAY[1..GC_ROBOTS] OF LREAL;  (* User share ratios (>0) *)
-    arRangeFrom: ARRAY[1..GC_FEEDS] OF ARRAY[1..GC_ROBOTS] OF LREAL; (* mm *)
-    arRangeTo  : ARRAY[1..GC_FEEDS] OF ARRAY[1..GC_ROBOTS] OF LREAL; (* mm *)
-    audTypeMask: ARRAY[1..GC_ROBOTS] OF UDINT;   (* Bit i-1 = type i allowed *)
+    aeStrat    : ARRAY[1..8] OF ET_SP_ShareStrategy; (* Per feed 1..GC_FEEDS *)
+    aabManual  : ARRAY[1..8] OF ARRAY[1..4] OF BOOL; (* Manual matrix 1..GC_FEEDS x 1..GC_ROBOTS *)
+    arRatio    : ARRAY[1..4] OF LREAL;  (* User share ratios (>0) 1..GC_ROBOTS *)
+    arRangeFrom: ARRAY[1..8] OF ARRAY[1..4] OF LREAL; (* mm 1..GC_FEEDS x 1..GC_ROBOTS *)
+    arRangeTo  : ARRAY[1..8] OF ARRAY[1..4] OF LREAL; (* mm 1..GC_FEEDS x 1..GC_ROBOTS *)
+    audTypeMask: ARRAY[1..4] OF UDINT;   (* Bit i-1 = type i allowed 1..GC_ROBOTS *)
     eMatch     : ET_SP_MatchMode;               (* Matched/Unmatched/Mixed *)
     bStrictOrder : BOOL;      (* Strict priority order mode (organic) *)
     rPickBias  : LREAL;       (* Pick vs place planning bias [0..1] *)
-    aiOutfeedMap : ARRAY[1..GC_FEEDS] OF SINT;  (* Infeed -> outfeed, 0=none *)
+    aiOutfeedMap : ARRAY[1..8] OF SINT;  (* Infeed -> outfeed, 0=none 1..GC_FEEDS *)
 END_STRUCT
 END_TYPE

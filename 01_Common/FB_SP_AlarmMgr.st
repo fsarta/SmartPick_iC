@@ -30,13 +30,13 @@ END_VAR
 VAR_OUTPUT
     uiActive : UINT;                  (* Active, not yet acknowledged *)
     uiStored : UINT;                  (* Records currently in registry *)
+    out_stAlarm : ST_SP_Alarm;        (* Result buffer of GetEntry *)
 END_VAR
 VAR
-    (* Fixed alarm registry (slot reuse, no dynamic memory) *)
-    m_astReg  : ARRAY[1..GC_ALARM_N] OF ST_SP_Alarm;
+    (* Fixed alarm registry (slot reuse, no dynamic memory, 1..GC_ALARM_N) *)
+    m_astReg  : ARRAY[1..64] OF ST_SP_Alarm;
     m_iCnt    : UINT := 0;            (* Used registry slots *)
     m_udiAcks : UDINT := 0;           (* Total acknowledge events *)
-    out_stAlarm : ST_SP_Alarm;        (* Result buffer of GetEntry *)
 END_VAR
 
 (* ------------------------------- Body ---------------------------------- *)
@@ -90,11 +90,20 @@ VAR
     iFree : UINT;
     (* TRUE when the alarm id already exists *)
     bHit  : BOOL;
+    (* Nil RTC stamp for cleared field *)
+    stNil : Yt_YA_RTC_Struct;
 END_VAR
     Raise := FALSE;                 (* Default: existing record bumped *)
     IF uiId = 0 THEN
         RETURN;    (* 0 is reserved as "no alarm" *)
     END_IF
+    stNil.Year   := 0;
+    stNil.Month  := 0;
+    stNil.Day    := 0;
+    stNil.Hour   := 0;
+    stNil.Minute := 0;
+    stNil.Second := 0;
+    stNil.mSec   := 0;
 
     (* Look for an existing record first *)
     bHit  := FALSE;
@@ -106,7 +115,7 @@ END_VAR
             IF m_astReg[i].eState <> ET_SP_AckState#Inactive THEN
                 m_astReg[i].eState := ET_SP_AckState#Active;
                 m_astReg[i].stRaised := stNow;
-                m_astReg[i].stCleared := GC_stRtcNil;
+                m_astReg[i].stCleared := stNil;
             END_IF
             EXIT;
         END_IF
@@ -122,7 +131,7 @@ END_VAR
         END_FOR
 
         IF iFree = 0 THEN
-            IF m_iCnt < UDINT_TO_UINT(GC_ALARM_N) THEN
+            IF m_iCnt < GC_ALARM_N THEN
                 m_iCnt := m_iCnt + 1;
                 iFree  := m_iCnt;
             ELSE
@@ -137,7 +146,7 @@ END_VAR
         m_astReg[iFree].eSrc     := eSrc;
         m_astReg[iFree].sText    := sText;
         m_astReg[iFree].stRaised := stNow;
-        m_astReg[iFree].stCleared:= GC_stRtcNil;
+        m_astReg[iFree].stCleared:= stNil;
         m_astReg[iFree].udiCnt   := 1;
         Raise := TRUE;              (* New registry record created *)
     END_IF
@@ -210,6 +219,7 @@ VAR
     (* Loop index over registry slots (AckAll) *)
     i : UINT;
 END_VAR
+    AckAll := UINT#0;
     FOR i := 1 TO m_iCnt DO
         IF m_astReg[i].eState = ET_SP_AckState#Active THEN
             m_astReg[i].eState := ET_SP_AckState#Acked;

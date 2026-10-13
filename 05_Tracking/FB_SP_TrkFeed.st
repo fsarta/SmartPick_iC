@@ -115,18 +115,20 @@ END_VAR
     END_IF
 
     (* Build the tracked record *)
-    stNew.udiId    := stVi.udiId;
-    stNew.uiTypeId := stVi.uiTypeId;
-    stNew.rBeltCap := rV;
-    stNew.rEncCap  := stVi.rBeltPos;
+    stNew.udiId     := stVi.udiId;
+    stNew.uiTypeId  := stVi.uiTypeId;
+    stNew.rCrossCap := rU;
+    stNew.rBeltCap  := rV;
+    stNew.rEncCap   := stVi.rBeltPos;
     stNew.p2World.rX  := FUN_SP_TrfX(stCfg.stWorld, rU, rV);
     stNew.p2World.rY  := FUN_SP_TrfY(stCfg.stWorld, rU, rV);
     stNew.p2World.rTh := FUN_SP_NormAng(stCal.rRot + stCfg.stWorld.rRot + stVi.p2.rTh);
-    stNew.rWeight := REAL_TO_LREAL(stVi.rWeight);
-    stNew.rScore  := REAL_TO_LREAL(stVi.rScore);
+    stNew.rZWorld := stCfg.rZBelt;
+    stNew.rWeight := stVi.rWeight;
+    stNew.rScore  := stVi.rScore;
     stNew.eState  := ET_SP_ItemState#Tracked;
     stNew.iReservedBy := GC_ID_NONE;
-    stNew.uiAttempts  := 0;
+    stNew.uiAttempts  := UINT#0;
     stNew.bTarget  := FALSE;
     stNew.udiBatchId := UDINT#0;
     stNew.uiSlot := UINT#0;
@@ -134,7 +136,11 @@ END_VAR
 
     FeedItem := m_Q.Add(stNew);
     IF FeedItem = ET_SP_RetCode#Done THEN
-        stOut.udiFed := stOut.udiFed + 1;
+        IF m_Q.out_bDup THEN
+            stOut.udiDup := stOut.udiDup + UDINT#1;
+        ELSE
+            stOut.udiFed := stOut.udiFed + UDINT#1;
+        END_IF
     END_IF
 END_METHOD
 

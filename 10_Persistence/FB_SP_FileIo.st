@@ -8,15 +8,13 @@
    Purpose   : FIRMWARE ADAPTER - ASCII file access for recipe export/import
                and log dumps.
 
-   *** POINTERS POLICY (single documented deviation) ***
-   The firmware file API (SysFile family) requires address parameters.
-   ADR() is used HERE ONLY on internal buffers (same policy as SP_Socket).
-   No pointer types are declared in user code.
+   No pointer types or ADR() operators are used in user code; buffers are
+   passed directly to the firmware file adapter.
 
    FW BINDING (CONFIRM signatures against the installed SysLibFile):
      hFile := SysFileOpen(szFile, eMode)
-     udiGot:= SysFileRead(hFile, ADR(m_abBuf), iWant)
-     udiPut:= SysFileWrite(hFile, ADR(sOut), LEN(sOut))
+     udiGot:= SysFileRead(hFile, m_abBuf, iWant)
+     udiPut:= SysFileWrite(hFile, sOut, LEN(sOut))
      SysFileClose(hFile)
    Read protocol: bytes accumulate into a pending line buffer; lines are
    published one per cycle when a CR/LF terminator is found.
@@ -41,7 +39,7 @@ VAR
     m_hFile : UDINT := UDINT#0;
     (* TRUE = write mode open, FALSE = read mode *)
     m_bWrite: BOOL;
-    (* Raw byte buffer bound to the firmware API (ADR confined) *)
+    (* Raw byte buffer bound to the firmware API *)
     m_abBuf : ARRAY[1..512] OF BYTE;
     m_sPend : STRING(240);      (* Pending line accumulation *)
     m_bEof  : BOOL;
@@ -128,7 +126,7 @@ END_VAR
     END_IF
     sOut := CONCAT(sLine, '$R');
     (* CONFIRM: SysFileWrite signature *)
-    udiPut := SysFileWrite(m_hFile, ADR(sOut), INT_TO_UDINT(LEN(sOut)));
+    udiPut := SysFileWrite(m_hFile, sOut, INT_TO_UDINT(LEN(sOut)));
     WriteLine := (udiPut = INT_TO_UDINT(LEN(sOut)));
     IF NOT WriteLine THEN
         uiErr := UINT#2;
@@ -161,11 +159,11 @@ VAR
     (* Bytes read by the firmware call this cycle *)
     udiGot : UDINT;
     (* Byte loop index (buffer to string) *)
-    i : UINT;
+    i : INT;
     (* Line-break search position *)
-    iPos : DINT;
+    iPos : INT;
     (* Accumulated byte count *)
-    iLen : DINT;
+    iLen : INT;
     (* String view of the raw bytes read *)
     sChunk : STRING(200);
     (* One printable character of the chunk *)
@@ -178,12 +176,12 @@ END_VAR
 
     (* 1) Refill the pending buffer *)
     IF (NOT m_bEof) AND (LEN(m_sPend) < 128) THEN
-        udiGot := SysFileRead(m_hFile, ADR(m_abBuf), UDINT#128);  (* CONFIRM *)
+        udiGot := SysFileRead(m_hFile, m_abBuf, UDINT#128);  (* CONFIRM *)
         IF udiGot = UDINT#0 THEN
             m_bEof := TRUE;
         ELSE
             sChunk := '';
-            FOR i := 1 TO UDINT_TO_UINT(udiGot) DO
+            FOR i := 1 TO UDINT_TO_INT(udiGot) DO
                 sChunk := CONCAT(sChunk, FUN_SP_ByteCh(m_abBuf[i]));
             END_FOR
             m_sPend := FUN_SP_VisAppend(m_sPend, sChunk);
@@ -191,26 +189,25 @@ END_VAR
     END_IF
 
     (* 2) Extract a complete line when available *)
-    iLen := SINT_TO_DINT(LEN(m_sPend));
+    iLen := LEN(m_sPend);
     iPos := 0;
-    FOR i := 1 TO UINT_TO_DINT(SINT_TO_DINT(LEN(m_sPend))) DO
-        sCh := MID(m_sPend, 1, UINT_TO_DINT(i));
+    FOR i := 1 TO iLen DO
+        sCh := MID(m_sPend, 1, i);
         IF (sCh = '$R') OR (sCh = '$N') THEN
-            iPos := UINT_TO_DINT(i);
+            iPos := i;
             EXIT;
         END_IF
     END_FOR
 
     IF iPos > 0 THEN
         IF iPos > 1 THEN
-            sLine := MID(m_sPend, DINT_TO_INT(iPos - 1), 1);
+            sLine := MID(m_sPend, iPos - 1, 1);
         ELSE
             sLine := '';
         END_IF
-        m_sPend := RIGHT(m_sPend, DINT_TO_INT(iLen - iPos));
+        m_sPend := RIGHT(m_sPend, iLen - iPos);
         out_sLine := FUN_SP_Trims(sLine);
         bLineRdy := TRUE;
-        ReadStep := TRUE;
         ReadStep := TRUE;
     ELSIF m_bEof AND (iLen > 0) THEN
         (* Final unterminated line *)

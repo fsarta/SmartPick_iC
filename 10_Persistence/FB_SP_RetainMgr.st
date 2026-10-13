@@ -103,7 +103,7 @@ END_VAR
     udi := FUN_SP_StrSum(g_stRetain.sRecipe);
     udi := udi + g_stRetain.udiPickTotal + g_stRetain.udiPlaceTotal * UDINT#3;
     FOR i := 1 TO GC_CAMS DO
-        udi := udi + UDINT_TO_UDINT(SINT_TO_UDINT(g_stRetain.aiCamOwner[i])) * UDINT#7;
+        udi := udi + SINT_TO_UDINT(g_stRetain.aiCamOwner[i]) * UDINT#7;
     END_FOR
     FOR i := 1 TO GC_BATCHES DO
         udi := udi + g_stRetain.astBatch[i].udiDone * UDINT#11

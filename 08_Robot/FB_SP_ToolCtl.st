@@ -26,14 +26,14 @@ VAR_INPUT
     uiDtMs   : UDINT;           (* Task period [ms] *)
 END_VAR
 VAR_OUTPUT
-    (* Per-tool status published to HMI *)
-    astStat  : ARRAY[1..GC_TOOLS] OF ST_SP_ToolStat;
+    (* Per-tool status published to HMI 1..GC_TOOLS *)
+    astStat  : ARRAY[1..4] OF ST_SP_ToolStat;
     bAnyBusy : BOOL;            (* Any grip/release sequence running *)
     bDone    : BOOL;            (* One-cycle pulse: sequence finished *)
 END_VAR
 VAR
     m_iRob   : SINT := 1;       (* Owning robot id (channel mapping) *)
-    m_astCfg : ARRAY[1..GC_TOOLS] OF ST_SP_ToolCfg;
+    m_astCfg : ARRAY[1..4] OF ST_SP_ToolCfg; (* 1..GC_TOOLS *)
     (* TRUE after a valid Configure() *)
     m_bCfgOk : BOOL;
     (* Dry-run inhibit: outputs frozen, sequences simulated *)
@@ -98,8 +98,8 @@ END_FUNCTION_BLOCK
    ----------------------------------------------------------------------- *)
 METHOD Configure : ET_SP_RetCode
 VAR_INPUT
-    (* Tool configurations (cup offsets, timings) *)
-    astTools : ARRAY[1..GC_TOOLS] OF ST_SP_ToolCfg;
+    (* Tool configurations (cup offsets, timings) 1..GC_TOOLS *)
+    astTools : ARRAY[1..4] OF ST_SP_ToolCfg;
     (* Owner robot id (1..GC_ROBOTS) *)
     iRobot   : SINT;
 END_VAR
@@ -419,7 +419,7 @@ END_VAR
     CaptureCups := TRUE;            (* Per-cup snapshot taken *)
     uiOk := UINT#0;
     FOR i := 1 TO GC_CUPS DO
-        IF i <= UINT_TO_DINT(m_uiSyncCups) THEN
+        IF i <= UINT_TO_SINT(m_uiSyncCups) THEN
             astStat[m_iTool].abCupFbk[i] := bInhibit OR THIS.FbkCup(m_iTool, i);
         ELSE
             astStat[m_iTool].abCupFbk[i] := FALSE;

@@ -38,13 +38,9 @@ VAR_OUTPUT
     out_iPairs : SINT;              (* Registered pairs *)
     out_bValid : BOOL;              (* Transform usable *)
 END_VAR
-VAR CONSTANT
-    (* Local constant: max teaching points (usable only in this worksheet) *)
-    MAXPTS : SINT := 8;
-END_VAR
 VAR
-    m_acstCam : ARRAY[1..MAXPTS] OF ST_SP_Point2D;  (* Camera points *)
-    m_acstWrld: ARRAY[1..MAXPTS] OF ST_SP_Point2D;  (* World points *)
+    m_acstCam : ARRAY[1..8] OF ST_SP_Point2D;  (* Camera points 1..GC_CALIB_PTS *)
+    m_acstWrld: ARRAY[1..8] OF ST_SP_Point2D;  (* World points 1..GC_CALIB_PTS *)
     m_iCnt    : SINT := 0;          (* Stored pairs *)
 END_VAR
 
@@ -87,7 +83,7 @@ VAR_INPUT
     rWy : LREAL;
 END_VAR
     AddPair := ET_SP_RetCode#Done;
-    IF m_iCnt >= MAXPTS THEN
+    IF m_iCnt >= GC_CALIB_PTS THEN
         AddPair := ET_SP_RetCode#ErrFull;
         RETURN;
     END_IF

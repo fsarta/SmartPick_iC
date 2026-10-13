@@ -38,7 +38,8 @@ END_VAR
 VAR
     stCfg   : ST_SP_ConvCfg;    (* Configuration (validated by Configure) *)
     m_bCfgOk: BOOL;             (* Configuration valid *)
-    m_rPosPrev : LREAL;         (* Previous cycle position [mm] *)
+    m_rRawPos  : LREAL;         (* Raw encoder position before scaling *)
+    m_rPosPrev : LREAL;         (* Previous cycle scaled position [mm] *)
     m_bPosInit : BOOL := FALSE; (* First position acquired *)
     m_Enc : SP_ConvEncoder;     (* Encoder adapter *)
     m_Drv : SP_ConvDrive;       (* Drive adapter *)
@@ -56,16 +57,21 @@ m_Enc(
     bEnable := bEnable,
     bSim    := bSim,
     rSimPos := rSimPos,
-    rPos    => stOut.rPos,
+    rPos    => m_rRawPos,
     bValid  => stOut.bActive,
     ioAxis  := ioAxis
 );
+IF bSim THEN
+    stOut.rPos := m_rRawPos;
+ELSE
+    stOut.rPos := m_rRawPos * stCfg.rEncScale;
+END_IF
 
 (* 2) Belt speed ---------------------------------------------------------- *)
 IF stOut.bActive THEN
     IF m_bPosInit AND (rDtSec > 0.0) THEN
         m_Flt(
-            rIn     := (stOut.rPos - m_rPosPrev) * stCfg.rEncScale * SINT_TO_LREAL(stCfg.iDir) / rDtSec,
+            rIn     := (stOut.rPos - m_rPosPrev) * SINT_TO_LREAL(stCfg.iDir) / rDtSec,
             bEnable := TRUE,
             rOut    => stOut.rSpeed,
             bFilled =>
@@ -83,9 +89,13 @@ ELSE
 END_IF
 
 (* 3) Slow & stop arbitration -------------------------------------------- *)
-stOut.rReqFactor := THIS.FactorFor(rNearDist);
-IF bSim THEN
-    stOut.rReqFactor := rSimFrc;    (* Scenario override in simulation *)
+IF bEnable AND stCfg.bUsed THEN
+    stOut.rReqFactor := THIS.FactorFor(rNearDist);
+    IF bSim THEN
+        stOut.rReqFactor := stOut.rReqFactor * FUN_SP_Clamp(rSimFrc, 0.0, 1.0);
+    END_IF
+ELSE
+    stOut.rReqFactor := 0.0;
 END_IF
 stOut.bInSlow := (stOut.rReqFactor < 0.999) AND (stOut.rReqFactor > 0.001);
 stOut.bInStop := (stOut.rReqFactor <= 0.001);

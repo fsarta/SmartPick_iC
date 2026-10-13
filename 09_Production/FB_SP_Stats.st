@@ -24,14 +24,11 @@ VAR_OUTPUT
     rPiecesPerH : LREAL;        (* Estimated pieces/hour (rolling) *)
 END_VAR
 VAR
-    (* Per-feed counters (optional feed tag) *)
-    m_astFeed : ARRAY[1..GC_FEEDS] OF ST_SP_Counters;
+    (* Per-feed counters (optional feed tag) 1..GC_FEEDS *)
+    m_astFeed : ARRAY[1..8] OF ST_SP_Counters;
     m_udiWinMs : UDINT := 0;    (* Rate window accumulator *)
     m_udiWinPcs: UDINT := 0;    (* Pieces in window *)
     m_udiWinCnt: UDINT := 0;    (* Window counter for averaging *)
-END_VAR
-VAR CONSTANT
-    RATE_WIN : UDINT := UDINT#60000;   (* Rate window: 60 s *)
 END_VAR
 
 (* ------------------------------- Body ---------------------------------- *)
@@ -39,7 +36,7 @@ IF bProd THEN
     udiUptimeMs := udiUptimeMs + uiDtMs;
     m_udiWinMs  := m_udiWinMs + uiDtMs;
 
-    IF m_udiWinMs >= RATE_WIN THEN
+    IF m_udiWinMs >= GC_RATE_WIN THEN
         (* Pieces per hour over the last window *)
         rPiecesPerH := UDINT_TO_LREAL(m_udiWinPcs) * 3600000.0
                        / UDINT_TO_LREAL(m_udiWinMs);

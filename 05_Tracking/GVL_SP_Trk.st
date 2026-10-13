@@ -12,4 +12,6 @@
 VAR CONSTANT
     GC_WIN_BEHIND : LREAL := 20.0;  (* Belt offset behind pick line before an
                                        unreserved item is declared Lost [mm] *)
+    GC_DUP_TOL_MM : LREAL := 25.0;  (* Default duplicate suppression radius on
+                                       the belt across overlapping shots [mm] *)
 END_VAR

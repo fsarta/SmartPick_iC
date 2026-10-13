@@ -48,8 +48,8 @@ VAR
     m_uiLayer : UINT;             (* Current layer (0-based) *)
     m_uiPlacedInLayer : UINT;     (* Placed slots of current layer *)
     m_bLayerOpen : BOOL;          (* TRUE while current layer not exhausted *)
-    (* Out-queue *)
-    m_astT    : ARRAY[1..GC_VIS_MAX2] OF ST_SP_TrkItem;
+    (* Out-queue 1..GC_VIS_MAX2 *)
+    m_astT    : ARRAY[1..32] OF ST_SP_TrkItem;
     (* Targets waiting in the out-queue *)
     m_iTCnt   : SINT := 0;
     (* Drain index for GetTarget *)
@@ -125,12 +125,18 @@ END_VAR
     m_uiLayer := 0;
     m_uiPlacedInLayer := 0;
     m_bLayerOpen := FALSE;
+    m_bInit  := FALSE;
     m_iSlot  := 0;
     m_iMix   := 1;
     m_iMixCnt := 0;
+    m_iTCnt  := 0;
+    m_iTRd   := 0;
 
     stStat.eState := ET_SP_BatchState#Running;
     stStat.udiBatchId := udiBatchId;
+    stStat.udiDone := 0;
+    stStat.udiGen  := 0;
+    stStat.udiTrays:= 0;
     stStat.uiLayer := 0;
 END_METHOD
 
@@ -343,6 +349,7 @@ END_VAR
     IF m_iTCnt < GC_VIS_MAX2 THEN
         m_iTCnt := m_iTCnt + 1;
         m_astT[m_iTCnt] := stT;
+        stStat.udiGen := stStat.udiGen + 1;
         PushTarget := ET_SP_RetCode#Done;
     END_IF
 END_METHOD
@@ -403,6 +410,9 @@ END_VAR
             m_uiLayer := 0;
         END_IF
         stStat.uiLayer := m_uiLayer;
+        IF m_stBatch.eTrig = ET_SP_PattTrig#BatchStart THEN
+            THIS.NewTray();
+        END_IF
     END_IF
     NotifyPlaced := ET_SP_RetCode#Done;
 END_METHOD

@@ -43,19 +43,19 @@ VAR_INPUT
     bZoneOk  : BOOL := TRUE;    (* FALSE freezes the active job (zone hold) *)
     (* R-05b collision guard: live velocity scale [0.1..1], 1.0 = full speed *)
     rVelScale : LREAL := 1.0;
+    stCmd   : ST_SP_RobCmd;     (* Public command struct (System/HMI writes) *)
 END_VAR
 VAR_IN_OUT
     ioGrp : AXES_GROUP_REF;     (* Firmware kinematic group *)
-    ioaBelt: ARRAY[1..GC_FEEDS] OF AXIS_REF; (* FW-1: belt encoder axes, one per feed (native tracking) *)
+    ioaBelt: ARRAY[1..8] OF AXIS_REF; (* FW-1: belt encoder axes, one per feed (native tracking) 1..GC_FEEDS *)
 END_VAR
 VAR_OUTPUT
     stOut : ST_SP_RobStat;      (* Published status (HMI + balancer) *)
     bJobDone : BOOL;            (* One-cycle pulse: job finished *)
+    m_stJobRes : ST_SP_Job;     (* Result copy (System reads after bJobDone) *)
+    stCfg   : ST_SP_RobCfg;     (* Configuration *)
 END_VAR
 VAR
-    stCfg   : ST_SP_RobCfg;     (* Configuration *)
-    stCmd   : ST_SP_RobCmd;     (* Public command struct (System/HMI writes) *)
-    m_stJobRes : ST_SP_Job;     (* Result copy (System reads after bJobDone) *)
     m_iRob  : SINT := 1;
     (* TRUE after a valid Configure() *)
     m_bCfgOk: BOOL;
@@ -128,9 +128,9 @@ VAR
        prevents a stale re-freeze after each individual re-grip) *)
     m_bEvalArm : BOOL;
     (* Per-cup grip result of the synchronized descent (job item order) *)
-    m_abCupOk : ARRAY[1..GC_CUPS] OF BOOL;
+    m_abCupOk : ARRAY[1..4] OF BOOL; (* 1..GC_CUPS *)
     (* Per-cup retry counters (synchronized pick AND place phases) *)
-    m_auiCupRetry : ARRAY[1..GC_CUPS] OF UINT;
+    m_auiCupRetry : ARRAY[1..4] OF UINT; (* 1..GC_CUPS *)
     (* TRUE while the synchronized place leg is executing *)
     m_bSyncPlaceRun : BOOL;
     (* TRUE after the synchronized place attempt (never retried as sync) *)
@@ -139,7 +139,7 @@ VAR
     m_bSyncPlaceOk : BOOL;
     (* ---------------- FW-1 native conveyor tracking -------------------- *)
     (* Per-feed belt frame data (built by SetBeltFrames from the feed cfg) *)
-    m_astBelt : ARRAY[1..GC_FEEDS] OF ST_SP_BeltFrame;
+    m_astBelt : ARRAY[1..8] OF ST_SP_BeltFrame; (* 1..GC_FEEDS *)
     (* TRUE when the armed tracked move runs native (mode on AND feed wired,
        plus the per-feed place selector on the place side, v1.4) *)
     m_bTrkReq : BOOL;
@@ -433,8 +433,8 @@ END_METHOD
    ----------------------------------------------------------------------- *)
 METHOD SetBeltFrames : ET_SP_RetCode
 VAR_INPUT
-    (* Feed configurations (source frames, directions, window data) *)
-    astTrk : ARRAY[1..GC_FEEDS] OF ST_SP_TrkCfg;
+    (* Feed configurations (source frames, directions, window data) 1..GC_FEEDS *)
+    astTrk : ARRAY[1..8] OF ST_SP_TrkCfg;
 END_VAR
 VAR
     (* Feed scan index *)
@@ -615,11 +615,6 @@ METHOD LatchCmds : BOOL
     m_bPauseReq := stCmd.bPause;
     m_bResumeReq:= stCmd.bResume;
     m_bDryRun   := stCmd.bDryRun;
-    stCmd.bHome := FALSE;
-    stCmd.bStop := FALSE;
-    stCmd.bReset := FALSE;
-    stCmd.bPause := FALSE;
-    stCmd.bResume := FALSE;
 END_METHOD
 
 
@@ -653,7 +648,8 @@ END_METHOD
 
 (* -----------------------------------------------------------------------
    METHOD: CupPose (parent SP_Robot) - internal
-   Pose of one gripper cup: item pose + cup offset rotated by item yaw.
+   TCP pose to align one gripper cup with item pose: item pose minus cup
+   offset rotated by item yaw.
    ----------------------------------------------------------------------- *)
 METHOD CupPose : ST_SP_Pose3D
 VAR_INPUT
@@ -679,9 +675,9 @@ END_VAR
         END_IF
     END_IF
 
-    stRes.rX  := p3.rX + FUN_SP_RotX(p3.rTh, stCup.rX, stCup.rY);
-    stRes.rY  := p3.rY + FUN_SP_RotY(p3.rTh, stCup.rX, stCup.rY);
-    stRes.rZ  := p3.rZ + stCup.rZ;
+    stRes.rX  := p3.rX - FUN_SP_RotX(p3.rTh, stCup.rX, stCup.rY);
+    stRes.rY  := p3.rY - FUN_SP_RotY(p3.rTh, stCup.rX, stCup.rY);
+    stRes.rZ  := p3.rZ - stCup.rZ;
     stRes.rTh := p3.rTh;
     CupPose := stRes;
 END_METHOD
@@ -704,8 +700,8 @@ VAR
     iF, iT : SINT;
 END_VAR
     LoadOff := TRUE;                (* Offset table loaded *)
-    iF := FUN_SP_ClampI(iFeed, 1, GC_FEEDS);
-    iT := FUN_SP_ClampI(UINT_TO_DINT(uiType), 1, GC_TYPES);
+    iF := DINT_TO_SINT(FUN_SP_ClampI(SINT_TO_DINT(iFeed), 1, SINT_TO_DINT(GC_FEEDS)));
+    iT := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(uiType), 1, SINT_TO_DINT(GC_TYPES)));
     m_stOff := stCfg.astOff[iF][iT];
 END_METHOD
 
@@ -817,7 +813,7 @@ VAR
     i : SINT;
 END_VAR
     AdvancePickItem := FALSE;
-    FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+    FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
         IF m_stJob.astItems[i].bPick
            AND (NOT m_stJob.astItems[i].bPicked)
            AND (NOT m_stJob.astItems[i].bNg) THEN
@@ -839,7 +835,7 @@ VAR
     i : SINT;
 END_VAR
     AdvancePlaceItem := FALSE;
-    FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+    FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
         IF m_stJob.astItems[i].bPlace
            AND m_stJob.astItems[i].bPicked
            AND (NOT m_stJob.astItems[i].bPlaced)
@@ -926,10 +922,10 @@ VAR
     i  : SINT;
     (* Pending place item count and tool of the first one *)
     uiN : UINT;
-uiTool : UINT;                         (* Tool of the first pending place item (cup layout source) *)
-    (* Member poses and reordered cup offsets (residual input) *)
-    astP  : ARRAY[1..GC_CUPS] OF ST_SP_Pose3D;
-astCw : ARRAY[1..GC_CUPS] OF ST_SP_Point3D; (* World poses of the pending place points (LSQ fit input) *)
+    uiTool : UINT;                         (* Tool of the first pending place item (cup layout source) *)
+    (* Member poses and reordered cup offsets (residual input) 1..GC_CUPS *)
+    astP  : ARRAY[1..4] OF ST_SP_Pose3D;
+    astCw : ARRAY[1..4] OF ST_SP_Point3D; (* World poses of the pending place points (LSQ fit input) *)
     (* Fitted TCP yaw / translation and worst residual *)
     rYaw, rTx, rTy, rRes : LREAL;
     (* Match tolerance from the tool configuration [mm] *)
@@ -945,7 +941,7 @@ END_VAR
     m_bSyncPlaceOk := FALSE;
     uiN := UINT#0;
     uiTool := UINT#1;
-    FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+    FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
         stJI := m_stJob.astItems[i];
         IF stJI.bPlace AND (NOT stJI.bPlaced) AND (NOT stJI.bNg) THEN
             uiN := uiN + UINT#1;
@@ -975,7 +971,7 @@ END_VAR
     (* Least-squares fit (yaw = circular mean, XY = mean translation) *)
     rYaw := FUN_SP_FitYaw(astP, uiN);
     rTx := 0.0; rTy := 0.0;
-    FOR i := 1 TO UINT_TO_DINT(uiN) DO
+    FOR i := 1 TO UINT_TO_SINT(uiN) DO
         rTx := rTx + astP[i].rX - FUN_SP_RotX(rYaw, astCw[i].rX, astCw[i].rY);
         rTy := rTy + astP[i].rY - FUN_SP_RotY(rYaw, astCw[i].rX, astCw[i].rY);
     END_FOR
@@ -1034,7 +1030,7 @@ VAR
     i : SINT;
 END_VAR
     SyncPickPending := FALSE;
-    FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+    FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
         IF m_stJob.astItems[i].bPick
            AND (NOT m_stJob.astItems[i].bPicked)
            AND (NOT m_stJob.astItems[i].bNg) THEN
@@ -1070,7 +1066,7 @@ END_VAR
     END_IF
 
     (* Every pick side must be closed (picked or NG) before placing *)
-    FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+    FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
         IF m_stJob.astItems[i].bPick
            AND (NOT m_stJob.astItems[i].bPicked)
            AND (NOT m_stJob.astItems[i].bNg) THEN
@@ -1080,7 +1076,7 @@ END_VAR
 
     (* Count the pending place targets *)
     uiN := UINT#0;
-    FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+    FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
         IF m_stJob.astItems[i].bPlace
            AND (NOT m_stJob.astItems[i].bPlaced)
            AND (NOT m_stJob.astItems[i].bNg) THEN
@@ -1179,7 +1175,7 @@ END_VAR
         ET_SP_RobState#MoveApp:
             IF m_bEnter THEN
                 stJI := m_stJob.astItems[m_iItem];
-                m_iTool := SINT_TO_DINT(stJI.uiTool);
+                m_iTool := UINT_TO_SINT(stJI.uiTool);
                 THIS.MvTo(m_stApp, ET_SP_MvKind#LinearAbs,
                           stCfg.rVelApp, stCfg.ePrecApp);
             ELSIF m_Mot.bDone THEN
@@ -1220,7 +1216,7 @@ END_VAR
                         stJI := m_stJob.astItems[m_iItem];
                         m_bRegrip := FALSE;
                         IF stCfg.bVerifyPick AND (NOT m_bDryRun)
-                           AND (NOT THIS.CupHolding(stJI.uiCup)) THEN
+                           AND (NOT THIS.CupHolding(UINT_TO_SINT(stJI.uiCup))) THEN
                             m_eSt := ET_SP_RobState#GripEval;  (* Eval decides *)
                         ELSE
                             m_stJob.astItems[m_iItem].bPicked := TRUE;
@@ -1230,7 +1226,7 @@ END_VAR
                     ELSE
                         stJI := m_stJob.astItems[m_iItem];
                         IF stCfg.bVerifyPick AND (NOT m_bDryRun)
-                           AND (NOT THIS.CupHolding(stJI.uiCup)) THEN
+                           AND (NOT THIS.CupHolding(UINT_TO_SINT(stJI.uiCup))) THEN
                             (* Pick verification failed: retry policy *)
                             m_uiRetry := m_uiRetry + 1;
                             IF m_uiRetry <= stCfg.uiRetries THEN
@@ -1260,17 +1256,20 @@ END_VAR
                retries are exhausted. *)
             IF m_bEnter AND m_bEvalArm THEN
                 m_bEvalArm := FALSE;
-                FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+                FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
                     IF stCfg.bVerifyPick AND (NOT m_bDryRun) THEN
                         m_abCupOk[i] := m_Tool.astStat[m_iTool].abCupFbk[m_stJob.astItems[i].uiCup];
                     ELSE
                         m_abCupOk[i] := TRUE;   (* Verification disabled *)
                     END_IF
+                    IF m_abCupOk[i] THEN
+                        m_stJob.astItems[i].bPicked := TRUE;
+                    END_IF
                 END_FOR
             END_IF
             (* Find the next failed cup that still has a retry budget *)
             bOk := FALSE;               (* Reuse as "re-grip started" flag *)
-            FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+            FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
                 IF m_stJob.astItems[i].bPick
                    AND (NOT m_abCupOk[i]) AND (NOT m_stJob.astItems[i].bNg) THEN
                     IF m_auiCupRetry[i] < stCfg.uiRetries THEN
@@ -1324,7 +1323,7 @@ END_VAR
         ET_SP_RobState#MovePlace:
             IF m_bEnter THEN
                 stJI := m_stJob.astItems[m_iItem];
-                m_iTool := SINT_TO_DINT(stJI.uiTool);
+                m_iTool := UINT_TO_SINT(stJI.uiTool);
                 THIS.MvTo(m_stApp, ET_SP_MvKind#LinearAbs,
                           stCfg.rVelApp, stCfg.ePrecApp);
             ELSIF m_Mot.bDone THEN
@@ -1365,10 +1364,10 @@ END_VAR
                            failed items individually (one-shot policy). *)
                         m_bSyncPlaceRun := FALSE;
                         m_bSyncPlaceDone := TRUE;
-                        FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+                        FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
                             stJI := m_stJob.astItems[i];
                             IF stJI.bPlace AND (NOT stJI.bPlaced) AND (NOT stJI.bNg) THEN
-                                IF m_bDryRun OR (NOT THIS.CupHolding(stJI.uiCup)) THEN
+                                IF m_bDryRun OR (NOT THIS.CupHolding(UINT_TO_SINT(stJI.uiCup))) THEN
                                     m_stJob.astItems[i].bPlaced := TRUE;
                                 END_IF
                                 (* Still held: stays pending for the scan below *)
@@ -1387,7 +1386,7 @@ END_VAR
                     ELSE
                         stJI := m_stJob.astItems[m_iItem];
                         IF stCfg.bVerifyPlace AND (NOT m_bDryRun)
-                           AND THIS.CupHolding(stJI.uiCup) THEN
+                           AND THIS.CupHolding(UINT_TO_SINT(stJI.uiCup)) THEN
                             (* Part still held: retry the place *)
                             m_uiRetry := m_uiRetry + 1;
                             IF m_uiRetry <= stCfg.uiRetries THEN
@@ -1457,7 +1456,7 @@ VAR
     i : SINT;
 END_VAR
     FirstFailedPlace := 0;
-    FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+    FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
         IF m_stJob.astItems[i].bPlace
            AND (NOT m_stJob.astItems[i].bPlaced)
            AND (NOT m_stJob.astItems[i].bNg) THEN
@@ -1501,7 +1500,7 @@ END_VAR
     (* R-05b: place feed of the current job for the collision guard *)
     stOut.uiCurPlaceFeed := UINT#0;
     IF m_bJobVld THEN
-        FOR i := 1 TO UINT_TO_DINT(m_stJob.uiCount) DO
+        FOR i := 1 TO UINT_TO_SINT(m_stJob.uiCount) DO
             IF (m_stJob.astItems[i].bPlace) AND (m_stJob.astItems[i].iFeedPlace >= 1) THEN
                 stOut.uiCurPlaceFeed := DINT_TO_UINT(SINT_TO_DINT(m_stJob.astItems[i].iFeedPlace));
                 EXIT;

@@ -61,16 +61,16 @@ VAR
 
     (* --------------------------- Locals ---------------------------------- *)
     m_bInit   : BOOL := TRUE;           (* First-scan boot latch *)
-    aFeedFree : ARRAY[1..GC_FEEDS] OF BOOL;   (* Queue space flags (cameras) *)
-    (* Nearest-item distance per feed (slow/stop arbitration) *)
-    rNear     : ARRAY[1..GC_FEEDS] OF LREAL;
-    aZoneReq  : ARRAY[1..GC_ROBOTS] OF BOOL;    (* R-05: zone guard requests *)
-    aiZoneFeed: ARRAY[1..GC_ROBOTS] OF SINT;    (* R-05: feed per robot *)
-    (* R-05b: effective grant / velocity scale muxed to the robots *)
-    abZoneOk  : ARRAY[1..GC_ROBOTS] OF BOOL;
-    arVs      : ARRAY[1..GC_ROBOTS] OF LREAL;   (* Velocity scale (mux output) *)
-    (* R-05b: place feed zone per robot (collision request building) *)
-    aiZonePl  : ARRAY[1..GC_ROBOTS] OF SINT;
+    aFeedFree : ARRAY[1..8] OF BOOL;    (* Queue space flags (cameras) 1..GC_FEEDS *)
+    (* Nearest-item distance per feed (slow/stop arbitration) 1..GC_FEEDS *)
+    rNear     : ARRAY[1..8] OF LREAL;
+    aZoneReq  : ARRAY[1..4] OF BOOL;    (* R-05: zone guard requests 1..GC_ROBOTS *)
+    aiZoneFeed: ARRAY[1..4] OF SINT;    (* R-05: feed per robot 1..GC_ROBOTS *)
+    (* R-05b: effective grant / velocity scale muxed to the robots 1..GC_ROBOTS *)
+    abZoneOk  : ARRAY[1..4] OF BOOL;
+    arVs      : ARRAY[1..4] OF LREAL;   (* Velocity scale (mux output) 1..GC_ROBOTS *)
+    (* R-05b: place feed zone per robot (collision request building) 1..GC_ROBOTS *)
+    aiZonePl  : ARRAY[1..4] OF SINT;
     (* R-07: cluster request scratch (geometry fill from the tool cfg) *)
     stCl      : ST_SP_ClReq;
     eRc, eRc2 : ET_SP_RetCode;          (* Enumerated call results *)
@@ -78,6 +78,11 @@ VAR
     bRc       : BOOL;
     (* General-purpose loop indices *)
     iD, kD    : DINT;
+    (* Simulated camera round-robin feed cursor 1..6 *)
+    m_iSimFeed : SINT := 1;
+    (* Tray sensor rising-edge memory for outfeeds 7 and 8 *)
+    m_bTraySens7Prev : BOOL := FALSE;
+    m_bTraySens8Prev : BOOL := FALSE;
     (* Reservation request handed to the feed queue *)
     stReq     : ST_SP_ResReq;
     (* Item drained from a camera manager *)
@@ -195,16 +200,17 @@ END_IF
 (* =========================================================================
    3) SIMULATED CONVEYORS (simulation mode only)
       NOTE: the slow/stop factor comes from the conveyor of the previous
-      scan (one-cycle latency, irrelevant at task rate).
+      scan (one-cycle latency, irrelevant at task rate). Signed speed is
+      derived from rMaxSpeed * iDir.
    ========================================================================= *)
-sim1(bRun := g_Sys.stOut.bRunning, rSetSpd := g_astConvCfg[1].rMaxSpeed, rFactor := conv1.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
-sim2(bRun := g_Sys.stOut.bRunning, rSetSpd := g_astConvCfg[2].rMaxSpeed, rFactor := conv2.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
-sim3(bRun := g_Sys.stOut.bRunning, rSetSpd := g_astConvCfg[3].rMaxSpeed, rFactor := conv3.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
-sim4(bRun := g_Sys.stOut.bRunning, rSetSpd := g_astConvCfg[4].rMaxSpeed, rFactor := conv4.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
-sim5(bRun := g_Sys.stOut.bRunning, rSetSpd := g_astConvCfg[5].rMaxSpeed, rFactor := conv5.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
-sim6(bRun := g_Sys.stOut.bRunning, rSetSpd := g_astConvCfg[6].rMaxSpeed, rFactor := conv6.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
-sim7(bRun := g_Sys.stOut.bRunning, rSetSpd := g_astConvCfg[7].rMaxSpeed, rFactor := conv7.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
-sim8(bRun := g_Sys.stOut.bRunning, rSetSpd := g_astConvCfg[8].rMaxSpeed, rFactor := conv8.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
+sim1(bRun := g_Sys.abConvEnable[1], rSetSpd := g_astConvCfg[1].rMaxSpeed * SINT_TO_LREAL(g_astConvCfg[1].iDir), rFactor := conv1.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
+sim2(bRun := g_Sys.abConvEnable[2], rSetSpd := g_astConvCfg[2].rMaxSpeed * SINT_TO_LREAL(g_astConvCfg[2].iDir), rFactor := conv2.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
+sim3(bRun := g_Sys.abConvEnable[3], rSetSpd := g_astConvCfg[3].rMaxSpeed * SINT_TO_LREAL(g_astConvCfg[3].iDir), rFactor := conv3.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
+sim4(bRun := g_Sys.abConvEnable[4], rSetSpd := g_astConvCfg[4].rMaxSpeed * SINT_TO_LREAL(g_astConvCfg[4].iDir), rFactor := conv4.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
+sim5(bRun := g_Sys.abConvEnable[5], rSetSpd := g_astConvCfg[5].rMaxSpeed * SINT_TO_LREAL(g_astConvCfg[5].iDir), rFactor := conv5.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
+sim6(bRun := g_Sys.abConvEnable[6], rSetSpd := g_astConvCfg[6].rMaxSpeed * SINT_TO_LREAL(g_astConvCfg[6].iDir), rFactor := conv6.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
+sim7(bRun := g_Sys.abConvEnable[7], rSetSpd := g_astConvCfg[7].rMaxSpeed * SINT_TO_LREAL(g_astConvCfg[7].iDir), rFactor := conv7.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
+sim8(bRun := g_Sys.abConvEnable[8], rSetSpd := g_astConvCfg[8].rMaxSpeed * SINT_TO_LREAL(g_astConvCfg[8].iDir), rFactor := conv8.stOut.rReqFactor, uiDtMs := g_uiDtMs, rPos => , rSpeed => );
 
 (* =========================================================================
    4) CONVEYORS (encoder + drive adapters inside; VAR_IN_OUT bound here)
@@ -235,45 +241,52 @@ g_abConvRun[7] := g_Sys.abConvEnable[7]; g_abConvRun[8] := g_Sys.abConvEnable[8]
 (* =========================================================================
    5) FEEDS: housekeeping, nearest distance, queue space flags, mirror
    ========================================================================= *)
-eRc := feed1.Housekeeping(conv1.stOut.rPos, g_uiDtMs);
+IF g_Sys.bClearItemsPulse THEN
+    bRc := feed1.ClearAll(); bRc := feed2.ClearAll();
+    bRc := feed3.ClearAll(); bRc := feed4.ClearAll();
+    bRc := feed5.ClearAll(); bRc := feed6.ClearAll();
+    bRc := feed7.ClearAll(); bRc := feed8.ClearAll();
+END_IF
+
+bRc := feed1.Housekeeping(conv1.stOut.rPos, g_uiDtMs);
 bFbk := feed1.NearDist(conv1.stOut.rPos);
 IF bFbk THEN rNear[1] := feed1.out_rNear; ELSE rNear[1] := GC_REAL_MAX; END_IF
-aFeedFree[1] := (feed1.stOut.uiTracked + feed1.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - 2);
+aFeedFree[1] := (feed1.stOut.uiTracked + feed1.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - UDINT#2);
 
-eRc := feed2.Housekeeping(conv2.stOut.rPos, g_uiDtMs);
+bRc := feed2.Housekeeping(conv2.stOut.rPos, g_uiDtMs);
 bFbk := feed2.NearDist(conv2.stOut.rPos);
 IF bFbk THEN rNear[2] := feed2.out_rNear; ELSE rNear[2] := GC_REAL_MAX; END_IF
-aFeedFree[2] := (feed2.stOut.uiTracked + feed2.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - 2);
+aFeedFree[2] := (feed2.stOut.uiTracked + feed2.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - UDINT#2);
 
-eRc := feed3.Housekeeping(conv3.stOut.rPos, g_uiDtMs);
+bRc := feed3.Housekeeping(conv3.stOut.rPos, g_uiDtMs);
 bFbk := feed3.NearDist(conv3.stOut.rPos);
 IF bFbk THEN rNear[3] := feed3.out_rNear; ELSE rNear[3] := GC_REAL_MAX; END_IF
-aFeedFree[3] := (feed3.stOut.uiTracked + feed3.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - 2);
+aFeedFree[3] := (feed3.stOut.uiTracked + feed3.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - UDINT#2);
 
-eRc := feed4.Housekeeping(conv4.stOut.rPos, g_uiDtMs);
+bRc := feed4.Housekeeping(conv4.stOut.rPos, g_uiDtMs);
 bFbk := feed4.NearDist(conv4.stOut.rPos);
 IF bFbk THEN rNear[4] := feed4.out_rNear; ELSE rNear[4] := GC_REAL_MAX; END_IF
-aFeedFree[4] := (feed4.stOut.uiTracked + feed4.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - 2);
+aFeedFree[4] := (feed4.stOut.uiTracked + feed4.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - UDINT#2);
 
-eRc := feed5.Housekeeping(conv5.stOut.rPos, g_uiDtMs);
+bRc := feed5.Housekeeping(conv5.stOut.rPos, g_uiDtMs);
 bFbk := feed5.NearDist(conv5.stOut.rPos);
 IF bFbk THEN rNear[5] := feed5.out_rNear; ELSE rNear[5] := GC_REAL_MAX; END_IF
-aFeedFree[5] := (feed5.stOut.uiTracked + feed5.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - 2);
+aFeedFree[5] := (feed5.stOut.uiTracked + feed5.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - UDINT#2);
 
-eRc := feed6.Housekeeping(conv6.stOut.rPos, g_uiDtMs);
+bRc := feed6.Housekeeping(conv6.stOut.rPos, g_uiDtMs);
 bFbk := feed6.NearDist(conv6.stOut.rPos);
 IF bFbk THEN rNear[6] := feed6.out_rNear; ELSE rNear[6] := GC_REAL_MAX; END_IF
-aFeedFree[6] := (feed6.stOut.uiTracked + feed6.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - 2);
+aFeedFree[6] := (feed6.stOut.uiTracked + feed6.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - UDINT#2);
 
-eRc := feed7.Housekeeping(conv7.stOut.rPos, g_uiDtMs);
+bRc := feed7.Housekeeping(conv7.stOut.rPos, g_uiDtMs);
 bFbk := feed7.NearDist(conv7.stOut.rPos);
 IF bFbk THEN rNear[7] := feed7.out_rNear; ELSE rNear[7] := GC_REAL_MAX; END_IF
-aFeedFree[7] := (feed7.stOut.uiTracked + feed7.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - 2);
+aFeedFree[7] := (feed7.stOut.uiTracked + feed7.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - UDINT#2);
 
-eRc := feed8.Housekeeping(conv8.stOut.rPos, g_uiDtMs);
+bRc := feed8.Housekeeping(conv8.stOut.rPos, g_uiDtMs);
 bFbk := feed8.NearDist(conv8.stOut.rPos);
 IF bFbk THEN rNear[8] := feed8.out_rNear; ELSE rNear[8] := GC_REAL_MAX; END_IF
-aFeedFree[8] := (feed8.stOut.uiTracked + feed8.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - 2);
+aFeedFree[8] := (feed8.stOut.uiTracked + feed8.stOut.uiReserved) < UDINT_TO_UINT(SINT_TO_UDINT(GC_QUEUE) - UDINT#2);
 
 g_astFeedIo[1].iFeed := 1;  g_astFeedIo[1].bUsed := g_astFeedCfg[1].bUsed;
 g_astFeedIo[1].rEnc := conv1.stOut.rPos;  g_astFeedIo[1].rSpeed := conv1.stOut.rSpeed;
@@ -349,27 +362,27 @@ g_Disp.aiOutfeed := g_stShareCfg.aiOutfeedMap;
    ========================================================================= *)
 FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
     aZoneReq[iD] := g_astRobStat[iD].bBusy AND (g_astRobStat[iD].uiCurFeed > 0);
-    aiZoneFeed[iD] := UINT_TO_SINT(g_astRobStat[iD].uiCurFeed);
+    aiZoneFeed[iD] := g_astRobStat[iD].uiCurFeed;
     (* Place feed zone (0 when idle or pick-only job) *)
     aiZonePl[iD] := 0;
     kD := UINT_TO_DINT(g_astRobStat[iD].uiCurPlaceFeed);
     IF (kD >= 1) AND (kD <= SINT_TO_DINT(GC_FEEDS)) THEN
         aiZonePl[iD] := g_aiFeedZone[kD];
     END_IF
-END_FOR
-zg(bEnable := g_stSysCfg.bZoneGuard AND (NOT g_stSysCfg.bColAdv),
-   abRobReq := aZoneReq, aiRobFeed := aiZoneFeed);
-col(bEnable := g_stSysCfg.bColAdv,
-   bSysRun := g_Sys.stOut.bRunning, uiDtMs := g_uiDtMs);
-FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
     (* Requests: pick feed zone + place feed zone (FB normalizes) *)
-    IF (aiZoneFeed[iD] >= 1) AND (aiZoneFeed[iD] <= SINT_TO_DINT(GC_FEEDS)) THEN
+    IF (aiZoneFeed[iD] >= 1) AND (aiZoneFeed[iD] <= GC_FEEDS) THEN
         col.aiReq[iD][1] := g_aiFeedZone[aiZoneFeed[iD]];
     ELSE
         col.aiReq[iD][1] := GC_ZONE_NONE;
     END_IF
     col.aiReq[iD][2] := aiZonePl[iD];
     col.ap2Pos[iD] := g_astRobStat[iD].p2Now;
+END_FOR
+zg(bEnable := g_stSysCfg.bZoneGuard AND (NOT g_stSysCfg.bColAdv),
+   abRobReq := aZoneReq, aiRobFeed := aiZoneFeed);
+col(bEnable := g_stSysCfg.bColAdv,
+    bSysRun := g_Sys.stOut.bRunning, uiDtMs := g_uiDtMs);
+FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
     (* Mux the active guard to the robot interface *)
     IF g_stSysCfg.bColAdv THEN
         abZoneOk[iD] := col.astRob[iD].bGrant;
@@ -508,26 +521,42 @@ END_WHILE
 
 (* =========================================================================
    9) SIMULATED CAMERAS (simulation mode): spawn + inject
+      Distributes generated items round-robin across enabled infeeds 1..6
+      so every active infeed receives all product types 1..4 with its own
+      current belt encoder position.
    ========================================================================= *)
 simCam1(bEnable := g_bSim AND g_Sys.stOut.bRunning, iCam := 1, iFeed := 1,
         rEncNow := conv1.stOut.rPos, uiDtMs := g_uiDtMs);
 WHILE simCam1.GetNextItem() DO
     stVi := simCam1.out_stItem;
-    CASE stVi.uiTypeId MOD 6 OF
-        0: eRc := cam1.InjectItem(stVi, 1);
-        1: eRc := cam1.InjectItem(stVi, 2);
-        2: eRc := cam1.InjectItem(stVi, 3);
-        3: eRc := cam1.InjectItem(stVi, 4);
-        4: eRc := cam1.InjectItem(stVi, 5);
-        ELSE eRc := cam1.InjectItem(stVi, 6);
-    END_CASE
+    FOR kD := 1 TO 6 DO
+        m_iSimFeed := m_iSimFeed + 1;
+        IF m_iSimFeed > 6 THEN
+            m_iSimFeed := 1;
+        END_IF
+        IF g_astFeedCfg[m_iSimFeed].bUsed AND (NOT g_astFeedIo[m_iSimFeed].bIsOutfeed) THEN
+            EXIT;
+        END_IF
+    END_FOR
+    stVi.rBeltPos := g_astFeedIo[m_iSimFeed].rEnc;
+    eRc := cam1.InjectItem(stVi, m_iSimFeed);
 END_WHILE
 
-simCam2(bEnable := g_bSim AND g_Sys.stOut.bRunning, iCam := 2, iFeed := 1,
+simCam2(bEnable := g_bSim AND g_Sys.stOut.bRunning AND g_astCamCfg[2].bUsed, iCam := 2, iFeed := 1,
         rEncNow := conv2.stOut.rPos, uiDtMs := g_uiDtMs);
 WHILE simCam2.GetNextItem() DO
     stVi := simCam2.out_stItem;
-    eRc := cam2.InjectItem(stVi, 1);
+    FOR kD := 1 TO 6 DO
+        m_iSimFeed := m_iSimFeed + 1;
+        IF m_iSimFeed > 6 THEN
+            m_iSimFeed := 1;
+        END_IF
+        IF g_astFeedCfg[m_iSimFeed].bUsed AND (NOT g_astFeedIo[m_iSimFeed].bIsOutfeed) THEN
+            EXIT;
+        END_IF
+    END_FOR
+    stVi.rBeltPos := g_astFeedIo[m_iSimFeed].rEnc;
+    eRc := cam2.InjectItem(stVi, m_iSimFeed);
 END_WHILE
 
 (* =========================================================================
@@ -550,17 +579,23 @@ IF GVL_SP_Sync.stPattCmd[2].bStart THEN
 END_IF
 IF GVL_SP_Sync.stPattCmd[1].bAbort THEN
     GVL_SP_Sync.stPattCmd[1].bAbort := FALSE;
-    patt1.AbortBatch();
+    bRc := patt1.AbortBatch();
 END_IF
 IF GVL_SP_Sync.stPattCmd[2].bAbort THEN
     GVL_SP_Sync.stPattCmd[2].bAbort := FALSE;
-    patt2.AbortBatch();
+    bRc := patt2.AbortBatch();
 END_IF
 
-eRc := patt1.Engine(conv7.stOut.rPos);
-eRc := patt2.Engine(conv8.stOut.rPos);
-IF GVL_SP_Io.abTraySensor[7] THEN eRc := patt1.OnSensor(conv7.stOut.rPos); END_IF
-IF GVL_SP_Io.abTraySensor[8] THEN eRc := patt2.OnSensor(conv8.stOut.rPos); END_IF
+bRc := patt1.Engine(conv7.stOut.rPos);
+bRc := patt2.Engine(conv8.stOut.rPos);
+IF GVL_SP_Io.abTraySensor[7] AND (NOT m_bTraySens7Prev) THEN
+    bRc := patt1.OnSensor(conv7.stOut.rPos);
+END_IF
+m_bTraySens7Prev := GVL_SP_Io.abTraySensor[7];
+IF GVL_SP_Io.abTraySensor[8] AND (NOT m_bTraySens8Prev) THEN
+    bRc := patt2.OnSensor(conv8.stOut.rPos);
+END_IF
+m_bTraySens8Prev := GVL_SP_Io.abTraySensor[8];
 
 WHILE patt1.GetNextTarget() DO
     eRc := feed7.AddTarget(patt1.out_stTarget);
@@ -586,8 +621,8 @@ FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
     (* ----- 11a) Reservation requests -> feed.Reserve / ReserveCluster -- *)
     IF g_Disp.abReqPulse[iD] AND g_Disp.astReq[iD].bReq THEN
         g_Disp.abReqPulse[iD] := FALSE;     (* Consume the latched request *)
-        kD := FUN_SP_ClampI(SINT_TO_DINT(g_Disp.astReq[iD].iFeed), 1, GC_FEEDS);
-        stReq.iRobotId := iD;
+        kD := FUN_SP_ClampI(SINT_TO_DINT(g_Disp.astReq[iD].iFeed), 1, SINT_TO_DINT(GC_FEEDS));
+        stReq.iRobotId := DINT_TO_SINT(iD);
         stReq.rRangeFrom := g_stShareCfg.arRangeFrom[kD][iD];
         stReq.rRangeTo   := g_stShareCfg.arRangeTo[kD][iD];
         stReq.uiTypeId   := g_Disp.astReq[iD].uiTypeId;
@@ -597,7 +632,7 @@ FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
             (* R-07: cluster reservation - geometry and rules come from the
                robot tool configuration (single source of truth) *)
             stCl := g_Disp.astReq[iD].stCl;
-            stCl.iRobotId := iD;
+            stCl.iRobotId := DINT_TO_SINT(iD);
             stCl.rRangeFrom := g_stShareCfg.arRangeFrom[kD][iD];
             stCl.rRangeTo   := g_stShareCfg.arRangeTo[kD][iD];
             stCl.uiTypeId   := UINT#0;
@@ -699,7 +734,7 @@ FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
                 udiIdx := (GVL_SP_Sync.udiStatWr - GVL_SP_Sync.udiStatRd);
                 IF udiIdx < UDINT#64 THEN
                     udiIdx := (GVL_SP_Sync.udiStatWr MOD UDINT#64) + UDINT#1;
-                    GVL_SP_Sync.astStatEv[DINT_TO_DINT(udiIdx)] := stEv;
+                    GVL_SP_Sync.astStatEv[UDINT_TO_DINT(udiIdx)] := stEv;
                     GVL_SP_Sync.udiStatWr := GVL_SP_Sync.udiStatWr + UDINT#1;
                 ELSE
                     GVL_SP_Sync.udiStatDrop := GVL_SP_Sync.udiStatDrop + UDINT#1;
@@ -709,9 +744,9 @@ FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
             IF stJI.bPlace AND (stJI.iFeedPlace >= 1) AND (NOT stJI.bNg) THEN
                 CASE stJI.iFeedPlace OF
                     7: eRc := feed7.PlaceTarget(stJI.iIdxPlace);
-                        eRc2 := patt1.NotifyPlaced(stJI.stItem.uiSlot);
+                        eRc2 := patt1.NotifyPlaced(stJI.stTgt.uiSlot);
                     8: eRc := feed8.PlaceTarget(stJI.iIdxPlace);
-                        eRc2 := patt2.NotifyPlaced(stJI.stItem.uiSlot);
+                        eRc2 := patt2.NotifyPlaced(stJI.stTgt.uiSlot);
                     ELSE (* no pattern bookkeeping *)
                 END_CASE
                 (* Statistics event -> ring (applied by PRG_SP_TaskMain) *)
@@ -720,7 +755,7 @@ FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
                 udiIdx := (GVL_SP_Sync.udiStatWr - GVL_SP_Sync.udiStatRd);
                 IF udiIdx < UDINT#64 THEN
                     udiIdx := (GVL_SP_Sync.udiStatWr MOD UDINT#64) + UDINT#1;
-                    GVL_SP_Sync.astStatEv[DINT_TO_DINT(udiIdx)] := stEv;
+                    GVL_SP_Sync.astStatEv[UDINT_TO_DINT(udiIdx)] := stEv;
                     GVL_SP_Sync.udiStatWr := GVL_SP_Sync.udiStatWr + UDINT#1;
                 ELSE
                     GVL_SP_Sync.udiStatDrop := GVL_SP_Sync.udiStatDrop + UDINT#1;
@@ -734,7 +769,7 @@ FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
         udiIdx := (GVL_SP_Sync.udiStatWr - GVL_SP_Sync.udiStatRd);
         IF udiIdx < UDINT#64 THEN
             udiIdx := (GVL_SP_Sync.udiStatWr MOD UDINT#64) + UDINT#1;
-            GVL_SP_Sync.astStatEv[DINT_TO_DINT(udiIdx)] := stEv;
+            GVL_SP_Sync.astStatEv[UDINT_TO_DINT(udiIdx)] := stEv;
             GVL_SP_Sync.udiStatWr := GVL_SP_Sync.udiStatWr + UDINT#1;
         ELSE
             GVL_SP_Sync.udiStatDrop := GVL_SP_Sync.udiStatDrop + UDINT#1;
@@ -750,32 +785,32 @@ FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
         stRelJob := g_Disp.astCancel[iD].stJob;
         bReleasePend := TRUE;
     END_IF
-END_FOR
 
-(* Release helper block (refusals and cancellations) *)
-IF bReleasePend THEN
-    FOR kD := 1 TO UINT_TO_DINT(stRelJob.uiCount) DO
-        stJI := stRelJob.astItems[kD];
-        IF stJI.bPick AND (stJI.iFeedPick >= 1) THEN
-            CASE stJI.iFeedPick OF
-                1: eRc := feed1.Release(stJI.iIdx);
-                2: eRc := feed2.Release(stJI.iIdx);
-                3: eRc := feed3.Release(stJI.iIdx);
-                4: eRc := feed4.Release(stJI.iIdx);
-                5: eRc := feed5.Release(stJI.iIdx);
-                ELSE eRc := feed6.Release(stJI.iIdx);
-            END_CASE
-        END_IF
-        IF stJI.bPlace AND (stJI.iFeedPlace >= 1) THEN
-            CASE stJI.iFeedPlace OF
-                7: eRc := feed7.Release(stJI.iIdxPlace);
-                8: eRc := feed8.Release(stJI.iIdxPlace);
-                ELSE (* nothing to release *)
-            END_CASE
-        END_IF
-    END_FOR
-    bReleasePend := FALSE;
-END_IF
+    (* Release helper block (per-robot refusals and cancellations) *)
+    IF bReleasePend THEN
+        FOR kD := 1 TO UINT_TO_DINT(stRelJob.uiCount) DO
+            stJI := stRelJob.astItems[kD];
+            IF stJI.bPick AND (stJI.iFeedPick >= 1) THEN
+                CASE stJI.iFeedPick OF
+                    1: eRc := feed1.Release(stJI.iIdx);
+                    2: eRc := feed2.Release(stJI.iIdx);
+                    3: eRc := feed3.Release(stJI.iIdx);
+                    4: eRc := feed4.Release(stJI.iIdx);
+                    5: eRc := feed5.Release(stJI.iIdx);
+                    ELSE eRc := feed6.Release(stJI.iIdx);
+                END_CASE
+            END_IF
+            IF stJI.bPlace AND (stJI.iFeedPlace >= 1) THEN
+                CASE stJI.iFeedPlace OF
+                    7: eRc := feed7.Release(stJI.iIdxPlace);
+                    8: eRc := feed8.Release(stJI.iIdxPlace);
+                    ELSE (* nothing to release *)
+                END_CASE
+            END_IF
+        END_FOR
+        bReleasePend := FALSE;
+    END_IF
+END_FOR
 
 END_PROGRAM
 

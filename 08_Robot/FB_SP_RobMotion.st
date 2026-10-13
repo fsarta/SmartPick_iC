@@ -223,7 +223,18 @@ IF bStopReq THEN
     );
     bBusy := FALSE;
     m_udiSeqPrev := udiSeq; (* Drop the stale request *)
-    THIS.ReadPose();
+    m_fbPos(
+        AxesGroup := ioGrp,
+        Enable    := TRUE,
+        Valid     => ,
+        Busy      => ,
+        Error     => ,
+        ErrorID   =>
+    );
+    (* CONFIRM: map the library position outputs, e.g.
+       p2Now.rX := m_fbPos.Position[1];
+       p2Now.rY := m_fbPos.Position[2];
+       rZNow    := m_fbPos.Position[3];  (orientation per library) *)
     RETURN;
 END_IF
 
@@ -240,7 +251,18 @@ IF bReset THEN
 END_IF
 
 (* 4) Actual position ------------------------------------------------------- *)
-THIS.ReadPose();
+m_fbPos(
+    AxesGroup := ioGrp,
+    Enable    := TRUE,
+    Valid     => ,
+    Busy      => ,
+    Error     => ,
+    ErrorID   =>
+);
+(* CONFIRM: map the library position outputs, e.g.
+   p2Now.rX := m_fbPos.Position[1];
+   p2Now.rY := m_fbPos.Position[2];
+   rZNow    := m_fbPos.Position[3];  (orientation per library) *)
 
 (* 5) Move request edge ------------------------------------------------------ *)
 IF (udiSeq <> m_udiSeqPrev) AND (eMv <> ET_SP_MvKind#None) THEN
@@ -409,27 +431,6 @@ END_IF
 bTrkSess  := m_bTrkSess OR m_bTrkRel;
 bTrkInSync := m_bTrkActi AND (NOT m_bTrkErr);
 END_FUNCTION_BLOCK
-
-
-(* -----------------------------------------------------------------------
-   METHOD: ReadPose (parent SP_RobMotion) - internal
-   Firmware group position read (hardware path only, called by the body).
-   ----------------------------------------------------------------------- *)
-METHOD ReadPose : BOOL
-    ReadPose := TRUE;               (* Group pose read issued *)
-    m_fbPos(
-        AxesGroup := ioGrp,
-        Enable    := TRUE,
-        Valid     => ,
-        Busy      => ,
-        Error     => ,
-        ErrorID   =>
-    );
-    (* CONFIRM: map the library position outputs, e.g.
-       p2Now.rX := m_fbPos.Position[1];
-       p2Now.rY := m_fbPos.Position[2];
-       rZNow    := m_fbPos.Position[3];  (orientation per library) *)
-END_METHOD
 
 
 (* -----------------------------------------------------------------------

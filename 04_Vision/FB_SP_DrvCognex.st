@@ -42,9 +42,9 @@ VAR_OUTPUT
     bItemsAvail : BOOL;
     (* GetItem result passthrough *)
     out_stItem  : ST_SP_VisionItem;
+    stCfg       : ST_SP_VisionCfg;   (* Public config passthrough *)
 END_VAR
 VAR
-    stCfg   : ST_SP_VisionCfg;   (* Public config passthrough *)
     m_Eng   : SP_DrvAscii;       (* Protocol engine *)
 END_VAR
 
@@ -108,6 +108,7 @@ END_METHOD
    ----------------------------------------------------------------------- *)
 METHOD GetItem : BOOL
     GetItem := m_Eng.GetItem();
+    out_stItem := m_Eng.out_stItem;
 END_METHOD
 
 

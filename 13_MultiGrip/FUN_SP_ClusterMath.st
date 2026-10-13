@@ -32,8 +32,8 @@
    ----------------------------------------------------------------------- *)
 FUNCTION FUN_SP_FitYaw : LREAL
 VAR_INPUT
-    (* Member item poses (world) *)
-    astP : ARRAY[1..GC_CUPS] OF ST_SP_Pose3D;
+    (* Member item poses (world) 1..GC_CUPS *)
+    astP : ARRAY[1..4] OF ST_SP_Pose3D;
     (* Number of valid members 1..GC_CUPS *)
     uiN  : UINT;
 END_VAR
@@ -49,7 +49,7 @@ END_VAR
         FUN_SP_FitYaw := 0.0;
         RETURN;
     END_IF
-    FOR i := 1 TO UINT_TO_DINT(uiN) DO
+    FOR i := 1 TO UINT_TO_SINT(uiN) DO
         rS := rS + SIN(astP[i].rTh * GC_DEG2RAD);
         rC := rC + COS(astP[i].rTh * GC_DEG2RAD);
     END_FOR
@@ -66,10 +66,10 @@ END_FUNCTION
    ----------------------------------------------------------------------- *)
 FUNCTION FUN_SP_ClusterResidual : LREAL
 VAR_INPUT
-    (* Member item poses (world, XY used) *)
-    astP  : ARRAY[1..GC_CUPS] OF ST_SP_Pose3D;
-    (* Cup offsets in the tool frame (XY used) *)
-    astC  : ARRAY[1..GC_CUPS] OF ST_SP_Point3D;
+    (* Member item poses (world, XY used) 1..GC_CUPS *)
+    astP  : ARRAY[1..4] OF ST_SP_Pose3D;
+    (* Cup offsets in the tool frame (XY used) 1..GC_CUPS *)
+    astC  : ARRAY[1..4] OF ST_SP_Point3D;
     (* Candidate synchronized TCP pose *)
     stTcp : ST_SP_Pose3D;
     (* Number of valid members/cups 1..GC_CUPS *)
@@ -87,7 +87,7 @@ END_VAR
     IF uiN < UINT#1 THEN
         RETURN;
     END_IF
-    FOR i := 1 TO UINT_TO_DINT(uiN) DO
+    FOR i := 1 TO UINT_TO_SINT(uiN) DO
         rCx := FUN_SP_RotX(stTcp.rTh, astC[i].rX, astC[i].rY);
         rCy := FUN_SP_RotY(stTcp.rTh, astC[i].rX, astC[i].rY);
         rD  := SQRT( (stTcp.rX + rCx - astP[i].rX) * (stTcp.rX + rCx - astP[i].rX)

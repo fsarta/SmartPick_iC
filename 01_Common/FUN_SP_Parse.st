@@ -38,9 +38,9 @@ VAR
     (* Token loop counter (1..uiN) *)
     uiK    : UINT;
     (* Character position in the allowed-charset table *)
-    iPos   : SINT;
+    iPos   : INT;
     (* Delimiter position copied for LEN arithmetic *)
-    uiNdx  : UINT;
+    iNdx   : INT;
     (* Token extracted for the requested index *)
     sTok   : STRING(64);
 END_VAR
@@ -54,8 +54,8 @@ END_VAR
                 IF uiK = uiN THEN
                     sTok := LEFT(sRest, iPos - 1);
                 ELSE
-                    uiNdx := iPos;                       (* avoid arith on LEN arg *)
-                    sRest := RIGHT(sRest, LEN(sRest) - uiNdx);
+                    iNdx  := iPos;                       (* avoid arith on LEN arg *)
+                    sRest := RIGHT(sRest, LEN(sRest) - iNdx);
                 END_IF
             ELSE
                 IF uiK = uiN THEN
@@ -86,9 +86,9 @@ VAR
     (* Token counter (starts at 1: a line is always one token) *)
     uiCnt  : UINT;
     (* Character position in the allowed-charset table *)
-    iPos   : SINT;
+    iPos   : INT;
     (* Delimiter position copied for LEN arithmetic *)
-    uiNdx  : UINT;
+    iNdx   : INT;
 END_VAR
     uiCnt := 0;
     sRest := sTxt;
@@ -100,8 +100,8 @@ END_VAR
                 EXIT;
             END_IF
             uiCnt := uiCnt + 1;
-            uiNdx := iPos;
-            sRest := RIGHT(sRest, LEN(sRest) - uiNdx);
+            iNdx  := iPos;
+            sRest := RIGHT(sRest, LEN(sRest) - iNdx);
         END_WHILE
     END_IF
     FUN_SP_TokCnt := uiCnt;
@@ -118,13 +118,13 @@ VAR_INPUT
 END_VAR
 VAR
     (* Length of the concatenation result *)
-    iLen : SINT;
+    iLen : INT;
     (* First non-space position *)
-    iSt  : SINT;
+    iSt  : INT;
     (* Last non-space position *)
-    iEn  : SINT;
+    iEn  : INT;
     (* Character loop index (trim scan) *)
-    i    : SINT;
+    i    : INT;
     (* Character under examination *)
     sCh  : STRING(1);
 END_VAR
@@ -171,9 +171,9 @@ VAR
     (* Trimmed working copy of the input *)
     s        : STRING(32);
     (* Length of the concatenation result *)
-    iLen     : SINT;
+    iLen     : INT;
     (* Character loop index (LReal parse) *)
-    i        : SINT;
+    i        : INT;
     (* Character under examination *)
     sCh      : STRING(1);
     (* Sign factor (-1.0 / +1.0) *)
@@ -235,7 +235,7 @@ END_VAR
     END_FOR
 
     IF rExp > 0.0 THEN
-        FUN_SP_StrToLReal := rSign * (rInt + rFrac) * EXPT(10.0, iExpSgn * rExp);
+        FUN_SP_StrToLReal := rSign * (rInt + rFrac) * EXPT(10.0, SINT_TO_LREAL(iExpSgn) * rExp);
     ELSE
         FUN_SP_StrToLReal := rSign * (rInt + rFrac);
     END_IF
@@ -254,9 +254,9 @@ VAR_INPUT
 END_VAR
 VAR
     (* Character loop index (StrToUi) *)
-    i    : SINT;
+    i    : INT;
     (* Length of the concatenation result *)
-    iLen : SINT;
+    iLen : INT;
     (* Character under examination *)
     sCh  : STRING(1);
     (* Numeric value of the current digit (0..9) *)
@@ -296,9 +296,9 @@ VAR_INPUT
 END_VAR
 VAR
     (* Character loop index (StrToUd) *)
-    i    : SINT;
+    i    : INT;
     (* Length of the concatenation result *)
-    iLen : SINT;
+    iLen : INT;
     (* Character under examination *)
     sCh  : STRING(1);
     (* Numeric value of the current digit (0..9) *)
@@ -348,7 +348,7 @@ END_VAR
     END_IF
     WHILE udi > 0 DO
         iD := UDINT_TO_SINT(udi MOD 10);
-        s  := CONCAT(FUN_SP_DigCh(iD), s);
+        s  := CONCAT(FUN_SP_DigCh(SINT_TO_DINT(iD)), s);
         udi := udi / 10;
     END_WHILE
     FUN_SP_UiToStr := s;
@@ -390,14 +390,14 @@ END_VAR
         rV := -rV;
     END_IF
 
-    iDec := FUN_SP_ClampI(iDec, 0, 6);
+    iDec := DINT_TO_SINT(FUN_SP_ClampI(SINT_TO_DINT(iDec), 0, 6));
     udiS := 1;
     FOR iK := 1 TO iDec DO
         udiS := udiS * 10;
     END_FOR
 
-    udiI := LREAL_TO_UDINT(TRUNC(rV));
-    udiF := LREAL_TO_UDINT(TRUNC((rV - TRUNC(rV)) * UDINT_TO_LREAL(udiS) + 0.5));
+    udiI := DINT_TO_UDINT(TRUNC(rV));
+    udiF := DINT_TO_UDINT(TRUNC((rV - DINT_TO_LREAL(TRUNC(rV))) * UDINT_TO_LREAL(udiS) + 0.5));
 
     (* Rounding overflow: 1.999 with 2 dec -> udiF = 1000 *)
     IF udiF >= udiS THEN
@@ -412,7 +412,7 @@ END_VAR
     ELSE
         WHILE udiI > 0 DO
             iD := UDINT_TO_SINT(udiI MOD 10);
-            sI := CONCAT(FUN_SP_DigCh(iD), sI);
+            sI := CONCAT(FUN_SP_DigCh(SINT_TO_DINT(iD)), sI);
             udiI := udiI / 10;
         END_WHILE
     END_IF
@@ -422,8 +422,8 @@ END_VAR
     IF iDec > 0 THEN
         sF := '.';
         FOR iK := iDec TO 1 BY -1 DO
-            iD  := UDINT_TO_SINT(udiF MOD 10);
-            sF  := CONCAT(FUN_SP_DigCh(iD), sF);
+            iD   := UDINT_TO_SINT(udiF MOD 10);
+            sF   := CONCAT(FUN_SP_DigCh(SINT_TO_DINT(iD)), sF);
             udiF := udiF / 10;
         END_FOR
     END_IF
@@ -451,7 +451,7 @@ VAR
     (* Concatenation of buffer and new chunk *)
     sAll   : STRING(255);
     (* Length of the concatenation result *)
-    iLen   : SINT;
+    iLen   : INT;
 END_VAR
     sAll := CONCAT(sBuf, sChunk);
     iLen := LEN(sAll);
@@ -474,15 +474,15 @@ VAR_INPUT
 END_VAR
 VAR
     (* Character loop index (checksum) *)
-    i    : SINT;
+    i    : INT;
     (* Length of the concatenation result *)
-    iLen : SINT;
+    iLen : INT;
     (* Accumulated checksum *)
     udi  : UDINT;
     (* Character under examination *)
     sCh  : STRING(1);
     (* Character position in the allowed-charset table *)
-    iPos : SINT;
+    iPos : INT;
 END_VAR
     udi  := 0;
     iLen := LEN(sTxt);
@@ -490,7 +490,7 @@ END_VAR
         sCh  := MID(sTxt, 1, i);
         iPos := FIND('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-_:=,;/[] ', sCh);
         IF iPos > 0 THEN
-            udi := udi + SINT_TO_UDINT(iPos) + UDINT#31 * SINT_TO_UDINT(i);
+            udi := udi + INT_TO_UDINT(iPos) + UDINT#31 * INT_TO_UDINT(i);
         ELSE
             udi := udi + UDINT#127;
         END_IF
@@ -523,7 +523,7 @@ END_VAR
     s := '';
     WHILE udi > UDINT#0 DO
         iD := UDINT_TO_SINT(udi MOD UDINT#10);
-        s  := CONCAT(FUN_SP_DigCh(iD), s);
+        s  := CONCAT(FUN_SP_DigCh(SINT_TO_DINT(iD)), s);
         udi := udi / UDINT#10;
     END_WHILE
     FUN_SP_UdToStr := s;

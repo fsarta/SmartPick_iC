@@ -51,14 +51,14 @@ m_iCh := FUN_SP_ClampI(UINT_TO_DINT(uiAnaCh), 1, SINT_TO_DINT(GC_FEEDS));
 
 (* External mode: publish only *)
 IF eMode = ET_SP_ConvDriveMode#External THEN
-    GVL_SP_Io.grConvDrive[m_iCh] := rFactor;
+    GVL_SP_Io.grConvDrive[m_iCh] := LREAL_TO_REAL(rFactor);
     rCmdSpeed := rFactor;
     RETURN;
 END_IF
 
 (* Analog mode: write scaled factor to the analog output mirror *)
 IF eMode = ET_SP_ConvDriveMode#Analog THEN
-    GVL_SP_Io.grConvDrive[m_iCh] := FUN_SP_Clamp(rFactor, 0.0, 1.0);
+    GVL_SP_Io.grConvDrive[m_iCh] := LREAL_TO_REAL(FUN_SP_Clamp(rFactor, 0.0, 1.0));
     RETURN;
 END_IF
 

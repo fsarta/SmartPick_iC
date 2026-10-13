@@ -44,10 +44,10 @@ STRUCT
        robot is slowed (linear ramp), below rStopDist it is frozen. *)
     rSlowDist : LREAL;
     rStopDist : LREAL;
-    (* Service priority per robot: 1 = highest. Ties break by robot id. *)
-    aiPriority : ARRAY[1..GC_ROBOTS] OF SINT;
-    (* Zone speed limits [0.1..1.0], 1.0 = full speed (transfer areas) *)
-    arZoneLim : ARRAY[1..GC_ZONES] OF LREAL;
+    (* Service priority per robot: 1 = highest. Ties break by robot id. 1..GC_ROBOTS *)
+    aiPriority : ARRAY[1..4] OF SINT;
+    (* Zone speed limits [0.1..1.0], 1.0 = full speed (transfer areas) 1..GC_ZONES *)
+    arZoneLim : ARRAY[1..8] OF LREAL;
 END_STRUCT
 END_TYPE
 

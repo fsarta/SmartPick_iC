@@ -46,8 +46,8 @@ VAR
     (* ------------------- FW-2: injected group status -------------------- *)
     (* PRG_SP_TaskFast wires these from the group status source of the
        installed library. Ignored while g_eFwStatMode = 0. *)
-    g_abFwGrpReady : ARRAY[1..GC_ROBOTS] OF BOOL; (* Group enabled / ready   *)
-    g_abFwGrpRef   : ARRAY[1..GC_ROBOTS] OF BOOL; (* Group referenced / homed *)
+    g_abFwGrpReady : ARRAY[1..4] OF BOOL; (* Group enabled / ready   1..GC_ROBOTS *)
+    g_abFwGrpRef   : ARRAY[1..4] OF BOOL; (* Group referenced / homed 1..GC_ROBOTS *)
 
     (* ------------------- FW-1: conveyor tracking mode ------------------- *)
     (* 0 = fallback: cut-off predicted world pose + MCS linear move (v1.x
@@ -67,5 +67,5 @@ VAR
        the static cut-off prediction (v1.x behavior). Default FALSE =
        v1.3 behavior, zero change unless enabled. Plain variables so the
        mode can be switched from the HMI/init or per recipe. *)
-    g_abPlaceTrack : ARRAY[1..GC_FEEDS] OF BOOL;
+    g_abPlaceTrack : ARRAY[1..8] OF BOOL; (* 1..GC_FEEDS *)
 END_VAR

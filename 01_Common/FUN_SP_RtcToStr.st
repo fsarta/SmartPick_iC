@@ -40,7 +40,7 @@ END_VAR
     sY := CONCAT(sY, '-');
 
     iV := INT_TO_DINT(stRtc.Month);
-    IF (iV < 0) OR (iV > 9) THEN
+    IF (iV < 0) OR (iV > 12) THEN
         iV := 0;                    (* Nil / invalid -> 00 *)
     END_IF
     sY := CONCAT(sY, FUN_SP_DigCh(iV / 10));
@@ -87,5 +87,5 @@ END_VAR
     sT := CONCAT(sT, FUN_SP_DigCh(iV / 10 MOD 10));
     sT := CONCAT(sT, FUN_SP_DigCh(iV MOD 10));
 
-    FUN_SP_RtcToStr := CONCAT(sY, sT);
+    FUN_SP_RtcToStr := CONCAT(CONCAT(sY, ' '), sT);
 END_FUNCTION

@@ -23,11 +23,12 @@ TYPE ST_SP_TrkItem :
 STRUCT
     udiId     : UDINT;          (* Globally unique id (from camera) *)
     uiTypeId  : UINT;           (* Product type 1..GC_TYPES *)
-    rBeltCap  : LREAL;          (* Belt offset at capture, upstream of pick line [mm] *)
+    rCrossCap : LREAL;          (* Across-belt coordinate u at capture [mm] *)
+    rBeltCap  : LREAL;          (* Belt offset v at capture, upstream of pick line [mm] *)
     rEncCap   : LREAL;          (* Belt encoder coordinate at capture [mm] *)
     p2World   : ST_SP_Pose2D;   (* World pose at capture (feed frame) *)
-    rWeight   : REAL;           (* Part weight [g], 0 = unknown *)
-    rScore    : REAL;           (* Vision score [0..1] *)
+    rWeight   : LREAL;          (* Part weight [g], 0 = unknown *)
+    rScore    : LREAL;          (* Vision score [0..1] *)
     eState    : ET_SP_ItemState;
     iReservedBy : SINT;         (* Robot id holding the reservation (0 = none) *)
     uiAttempts: UINT;           (* Pick attempts (retry policy) *)
@@ -48,7 +49,7 @@ STRUCT
     rRangeTo  : LREAL;          (* Robot work range, belt Y offset [mm] *)
     uiTypeId  : UINT;           (* Required type, 0 = any *)
     bTargetOnly: BOOL;          (* TRUE = only placement targets *)
-    rMaxWeight: REAL;           (* Tool capacity [g], 0 = unlimited *)
+    rMaxWeight: LREAL;          (* Tool capacity [g], 0 = unlimited *)
 END_STRUCT
 END_TYPE
 
@@ -71,9 +72,11 @@ STRUCT
     rWinLen   : LREAL;          (* Tracking window length [mm] *)
     rPickAhead: LREAL;          (* Reservation cut-off ahead of pick line [mm] *)
     tTimeout  : TIME;           (* Item tracking timeout *)
-    astCalib  : ARRAY[1..GC_CAMS] OF ST_SP_Transf2D; (* Camera -> feed world *)
+    astCalib  : ARRAY[1..2] OF ST_SP_Transf2D; (* Camera -> feed world 1..GC_CAMS *)
     stWorld   : ST_SP_Transf2D; (* Feed -> robot world frame (misalignment compensation) *)
     rZBelt    : LREAL;          (* Belt surface height in world frame [mm] *)
+    rDupTol   : LREAL := 25.0;  (* Duplicate suppression radius across overlapping shots [mm] *)
+    bDupSameType : BOOL := FALSE; (* TRUE = deduplicate only identical uiTypeId; FALSE = any type *)
 END_STRUCT
 END_TYPE
 
@@ -81,7 +84,8 @@ TYPE ST_SP_TrkStat :
 STRUCT
     uiTracked : UINT;           (* Items currently tracked *)
     uiReserved: UINT;           (* Items reserved by robots *)
-    udiFed    : UDINT;          (* Total items fed into the queue *)
+    udiFed    : UDINT;          (* Total unique items fed into the queue *)
+    udiDup    : UDINT;          (* Duplicate detections merged/suppressed across shots *)
     udiPicked : UDINT;          (* Total items picked *)
     udiLost   : UDINT;          (* Items lost (timeout / window exit) *)
     bWindowBusy: BOOL;          (* Window saturated (backpressure signal) *)

@@ -202,8 +202,8 @@ class RecipeCheck:
         scale = self.num(t[2], ln, "scale", "CONV")
         if scale <= 0:
             self.err(ln, "CONV %d: encoder scale must be > 0." % n)
-        if self.int_(t[3], ln, "dir", "CONV") not in (0, 1):
-            self.err(ln, "CONV %d: dir must be 0 (reverse) or 1 (forward)." % n)
+        if self.int_(t[3], ln, "dir", "CONV") not in (-1, 0, 1):
+            self.err(ln, "CONV %d: dir must be -1/0 (reverse) or 1 (forward)." % n)
         spd = self.num(t[4], ln, "maxspd", "CONV")
         if spd <= 0:
             self.err(ln, "CONV %d: max speed must be > 0." % n)
@@ -229,6 +229,8 @@ class RecipeCheck:
         self.check_range(n, 1, GC_FEEDS, ln, "n", "FEED")
         if n in self.feeds:
             self.err(ln, "FEED %d duplicated (last one wins on import)." % n)
+        if self.int_(t[2], ln, "dir", "FEED") not in (-1, 0, 1):
+            self.err(ln, "FEED %d: dir must be -1/0 (reverse) or 1 (forward)." % n)
         wl = self.num(t[4], ln, "winlen", "FEED")
         if wl <= 0:
             self.err(ln, "FEED %d: window length must be > 0." % n)
@@ -265,10 +267,10 @@ class RecipeCheck:
         if n in self.cams:
             self.err(ln, "CAM %d duplicated." % n)
         drv = self.int_(t[2], ln, "drv", "CAM")
-        self.check_range(drv, 0, 3, ln, "drv (0=Cognex,1=Keyence,"
-                                       "2=GenericTCP,3=Simulated)", "CAM")
+        self.check_range(drv, 0, 3, ln, "drv (0=Simulated,1=Cognex,"
+                                       "2=Keyence,3=GenericTCP)", "CAM")
         ip = t[3]
-        if drv == 3:
+        if drv == 0:
             pass  # simulated: addressing ignored by SP_VisionCam.Configure
         else:
             if not re.match(r"^\d{1,3}(\.\d{1,3}){3}$", ip):
@@ -482,7 +484,7 @@ class RecipeCheck:
         cam_feeds = set(mm["feed"] for mm in self.cammaps.values()
                         if mm["feed"] > 0 and mm["feed"] in self.feeds)
         outfeeds = set(sh["ofm"] for sh in self.shares.values() if sh["ofm"] > 0)
-        sim = any(c["drv"] == 3 for c in self.cams.values())
+        sim = any(c["drv"] == 0 for c in self.cams.values())
         for f in sorted(self.feeds):
             if f in cam_feeds or f in outfeeds:
                 continue

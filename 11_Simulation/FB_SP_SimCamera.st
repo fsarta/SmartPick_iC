@@ -21,6 +21,7 @@ FUNCTION_BLOCK SP_SimCamera
 (* ----------------------------- Interface ------------------------------- *)
 VAR_OUTPUT
     out_stItem : ST_SP_VisionItem;  (* Drained item (GetNextItem) *)
+    stVi       : ST_SP_VisionItem;  (* Last generated item *)
 END_VAR
 VAR_INPUT
     bEnable : BOOL;             (* Scenario active *)
@@ -48,13 +49,12 @@ VAR
     m_bExtPrev : BOOL;
     (* Simulated item id generator *)
     m_udiId : UDINT := UDINT#0;
-    (* Out-queue drained by the wiring program -> VisionCam.InjectItem *)
-    m_astQ  : ARRAY[1..GC_VIS_MAX2] OF ST_SP_VisionItem;
+    (* Out-queue drained by the wiring program -> VisionCam.InjectItem 1..GC_VIS_MAX2 *)
+    m_astQ  : ARRAY[1..32] OF ST_SP_VisionItem;
     (* Simulated items waiting for injection *)
     m_iQCnt : SINT := 0;
     (* Injection read index *)
     m_iQRd  : SINT := 0;
-    stVi : ST_SP_VisionItem;    (* Public: last generated item (debug) *)
 END_VAR
 
 (* ------------------------------- Body ---------------------------------- *)
@@ -93,14 +93,18 @@ VAR
     uiQ : UINT := UINT#0;
 END_VAR
     SpawnBatch := UINT#0;
-    uiN := UDINT_TO_UINT(SINT_TO_UDINT(FUN_SP_ClampI(UINT_TO_DINT(uiItemsPerImg), 1, GC_VIS_MAX)));
+    IF m_iQRd >= m_iQCnt THEN
+        m_iQCnt := 0;
+        m_iQRd  := 0;
+    END_IF
+    uiN := DINT_TO_UINT(FUN_SP_ClampI(UINT_TO_DINT(uiItemsPerImg), 1, SINT_TO_DINT(GC_VIS_MAX)));
 
     FOR i := 1 TO UINT_TO_DINT(uiN) DO
         rX := rXmin + (rXmax - rXmin) * THIS.Rand();
         rV := rVmin + (rVmax - rVmin) * THIS.Rand();
         rTh := (THIS.Rand() - 0.5) * GC_90;   (* Uniform yaw in +/-45 deg *)
         uiType := uiTypeMin
-                  + DINT_TO_UINT(TRUNC((UDINT_TO_LREAL(uiTypeMax - uiTypeMin) + 1.0) * THIS.Rand()));
+                  + DINT_TO_UINT(TRUNC((UDINT_TO_LREAL(UINT_TO_UDINT(uiTypeMax - uiTypeMin)) + 1.0) * THIS.Rand()));
         IF uiType > uiTypeMax THEN
             uiType := uiTypeMax;
         END_IF

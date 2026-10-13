@@ -65,7 +65,7 @@ IF bRun THEN
                 sMsg := CONCAT('Robot', FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(i))));
                 sMsg := CONCAT(sMsg, ' tool count out of range');
             END_IF
-            FOR k := 1 TO SINT_TO_DINT(g_astRobCfg[i].uiNumTools) DO
+            FOR k := 1 TO UINT_TO_SINT(g_astRobCfg[i].uiNumTools) DO
                 IF (sMsg = '') AND g_astRobCfg[i].astTools[k].bUsed THEN
                     IF (g_astRobCfg[i].astTools[k].uiCups < UINT#1)
                        OR (g_astRobCfg[i].astTools[k].uiCups
@@ -156,7 +156,7 @@ IF bRun THEN
     sMsg := '';
     FOR i := 1 TO GC_CAMS DO
         IF (sMsg = '') AND g_astCamCfg[i].bUsed
-           AND (g_astCamCfg[i].eDrv <> ET_SP_VisionDrv#Simulated) THEN
+           AND (g_astCamCfg[i].eDrv <> ET_SP_CamDrv#Simulated) THEN
             IF (g_astCamCfg[i].sIp = '') OR (g_astCamCfg[i].uiPort = UINT#0) THEN
                 sMsg := CONCAT('Camera', FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(i))));
                 sMsg := CONCAT(sMsg, ' needs IP and port');
@@ -200,7 +200,7 @@ END_VAR
     Close := (sMsg = '');           (* TRUE = check passed *)
     IF sMsg <> '' THEN
         stRes.uiFails := stRes.uiFails + UINT#1;
-        IF stRes.uiFails <= UDINT_TO_UINT(SINT_TO_UDINT(16)) THEN
+        IF stRes.uiFails <= UINT#16 THEN
             stRes.auiFail[stRes.uiFails] := stRes.uiChecks;
         END_IF
         IF stRes.sMsg = '' THEN

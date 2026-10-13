@@ -65,7 +65,7 @@ STRUCT
     bUsed      : BOOL;          (* Tool present *)
     sName      : STRING(16);    (* Human readable tool name *)
     bSuction   : BOOL;          (* TRUE = suction, FALSE = mechanical grip *)
-    rMaxWeight : REAL;          (* Payload capacity [g], 0 = unlimited *)
+    rMaxWeight : LREAL;         (* Payload capacity [g], 0 = unlimited *)
     uiPickOutCh : UINT;         (* Pick output channel (0 = auto robot*tool) *)
     uiPlaceOutCh: UINT;         (* Place output channel (0 = auto) *)
     uiFbkInCh  : UINT;          (* Feedback input channel (0 = auto) *)
@@ -74,9 +74,9 @@ STRUCT
     rAdvance   : LREAL;         (* Advance timing distance (cut-off margin) [mm] *)
     uiCups     : UINT;          (* Active cups 1..GC_CUPS *)
     bSingleType: BOOL;          (* Tool holds one type per cycle (no mixing) *)
-    astCups    : ARRAY[1..GC_CUPS] OF ST_SP_Point3D;  (* Cup offsets rel. TCP [mm] *)
+    astCups    : ARRAY[1..4] OF ST_SP_Point3D;  (* Cup offsets rel. TCP [mm] 1..GC_CUPS *)
     (* R-07 advanced multi-grip extensions *)
-    auiCupFbkCh: ARRAY[1..GC_CUPS] OF UINT; (* Per-cup vacuum feedback channels (0 = tool fbk) *)
+    auiCupFbkCh: ARRAY[1..4] OF UINT; (* Per-cup vacuum feedback channels (0 = tool fbk) 1..GC_CUPS *)
     rMatchTol  : LREAL;         (* Cluster cup-to-item match tolerance [mm] *)
     rCapCog    : LREAL;         (* Max CoG offset from TCP [mm], 0 = check off *)
 END_STRUCT
@@ -90,7 +90,7 @@ STRUCT
     udiPicks  : UDINT;
     udiPlaces : UDINT;
     (* R-07 synchronized multi-grip status (valid after GripSync) *)
-    abCupFbk  : ARRAY[1..GC_CUPS] OF BOOL;  (* Per-cup vacuum feedback at grip end *)
+    abCupFbk  : ARRAY[1..4] OF BOOL;  (* Per-cup vacuum feedback at grip end 1..GC_CUPS *)
     uiCupOk   : UINT;           (* Cups confirmed holding at the last sync grip *)
 END_STRUCT
 END_TYPE
@@ -114,7 +114,7 @@ STRUCT
     sName    : STRING(16);      (* Human readable name *)
     uiGroup  : UINT;            (* Firmware kinematic group index (adapter) *)
     uiNumTools : UINT;          (* Configured tools 1..GC_TOOLS *)
-    astTools : ARRAY[1..GC_TOOLS] OF ST_SP_ToolCfg;
+    astTools : ARRAY[1..4] OF ST_SP_ToolCfg; (* 1..GC_TOOLS *)
     (* Segment velocities [mm/s] - segment specific velocity *)
     rVelApp  : LREAL;           (* Approach/depart moves *)
     rVelTrack: LREAL;           (* Tracking pick move (belt synchronized) *)
@@ -139,9 +139,9 @@ STRUCT
     bDeferVerify : BOOL;        (* Deferred: verify holding at place *)
     uiRetries : UINT;           (* Retry count before NG *)
     (* Camera control ownership (resiliency transfer) *)
-    abiCamOwner : ARRAY[1..GC_CAMS] OF BOOL;  (* TRUE = this robot owns camera i *)
+    abiCamOwner : ARRAY[1..2] OF BOOL;  (* TRUE = this robot owns camera i 1..GC_CAMS *)
     (* 3-point path offsets per feed x type *)
-    astOff : ARRAY[1..GC_FEEDS] OF ARRAY[1..GC_TYPES] OF ST_SP_PathOff;
+    astOff : ARRAY[1..8] OF ARRAY[1..32] OF ST_SP_PathOff; (* 1..GC_FEEDS x 1..GC_TYPES *)
 END_STRUCT
 END_TYPE
 
@@ -171,7 +171,7 @@ STRUCT
     eKind  : ET_SP_JobKind;     (* Pick / Place / PickPlace *)
     iRobot : SINT;              (* Assigned robot *)
     uiCount: UINT;              (* Valid items 1..GC_CUPS *)
-    astItems : ARRAY[1..GC_CUPS] OF ST_SP_JobItem;
+    astItems : ARRAY[1..4] OF ST_SP_JobItem; (* 1..GC_CUPS *)
     (* R-07 synchronized multi-grip execution *)
     eExec  : ET_SP_GripExec;    (* AsyncCup = sequential, SyncAll = one descent *)
     stSyncPick : ST_SP_Pose3D;  (* Cluster TCP pose at the pick event (SyncAll) *)

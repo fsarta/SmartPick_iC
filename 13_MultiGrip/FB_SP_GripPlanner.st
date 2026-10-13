@@ -49,15 +49,15 @@ VAR_OUTPUT
     out_bOk   : BOOL;           (* Plan valid (Finish called) *)
     out_bSync : BOOL;           (* TRUE = synchronized multi-pick approved *)
     out_uiN   : UINT;           (* Final members 1..GC_CUPS *)
-    (* Queue slot per member (1 = anchor) *)
-    out_aiIdx : ARRAY[1..GC_CUPS] OF SINT;
-    (* Cup id per member (1 = anchor cup) *)
-    out_aCup  : ARRAY[1..GC_CUPS] OF SINT;
-    (* Member item poses (capture frame, world) *)
-    out_astP  : ARRAY[1..GC_CUPS] OF ST_SP_Pose3D;
+    (* Queue slot per member (1 = anchor) 1..GC_CUPS *)
+    out_aiIdx : ARRAY[1..4] OF SINT;
+    (* Cup id per member (1 = anchor cup) 1..GC_CUPS *)
+    out_aCup  : ARRAY[1..4] OF SINT;
+    (* Member item poses (capture frame, world) 1..GC_CUPS *)
+    out_astP  : ARRAY[1..4] OF ST_SP_Pose3D;
     (* Synchronized TCP pose at the pick event (capture frame) *)
     out_stTcp : ST_SP_Pose3D;
-    out_rW    : REAL;           (* Total accepted weight [g] *)
+    out_rW    : LREAL;          (* Total accepted weight [g] *)
     out_rCog  : LREAL;          (* CoG offset from TCP [mm], 0 = unknown *)
 END_VAR
 VAR
@@ -71,18 +71,18 @@ VAR
     m_uiTypeA : UINT;
     (* Accepted member count *)
     m_uiN     : UINT;
-    (* Queue slot per accepted member *)
-    m_aiIdx   : ARRAY[1..GC_CUPS] OF SINT;
-    (* Cup id per accepted member *)
-    m_aCup    : ARRAY[1..GC_CUPS] OF SINT;
-    (* Accepted member poses (world, capture frame) *)
-    m_astP    : ARRAY[1..GC_CUPS] OF ST_SP_Pose3D;
-    (* Accepted member weights [g] (CoG audit) *)
-    m_arW     : ARRAY[1..GC_CUPS] OF REAL;
-    (* Cup occupancy flags (cup 1 = anchor, always used) *)
-    m_abCupUsed : ARRAY[1..GC_CUPS] OF BOOL;
+    (* Queue slot per accepted member 1..GC_CUPS *)
+    m_aiIdx   : ARRAY[1..4] OF SINT;
+    (* Cup id per accepted member 1..GC_CUPS *)
+    m_aCup    : ARRAY[1..4] OF SINT;
+    (* Accepted member poses (world, capture frame) 1..GC_CUPS *)
+    m_astP    : ARRAY[1..4] OF ST_SP_Pose3D;
+    (* Accepted member weights [g] (CoG audit) 1..GC_CUPS *)
+    m_arW     : ARRAY[1..4] OF LREAL;
+    (* Cup occupancy flags (cup 1 = anchor, always used) 1..GC_CUPS *)
+    m_abCupUsed : ARRAY[1..4] OF BOOL;
     (* Running weight sum [g] *)
-    m_rW      : REAL;
+    m_rW      : LREAL;
 END_VAR
 
 (* ------------------------------- Body ---------------------------------- *)
@@ -103,6 +103,10 @@ VAR_INPUT
     p2Anchor : ST_SP_Pose2D;
     (* Anchor product type *)
     uiTypeA  : UINT;
+    (* Anchor world Z height [mm] *)
+    rZAnchor : LREAL;
+    (* Anchor item weight [g] *)
+    rWAnchor : LREAL;
 END_VAR
 VAR
     (* Cup loop index (state reset) *)
@@ -122,6 +126,9 @@ END_VAR
     m_uiTypeA := uiTypeA;
     m_uiN := UINT#1;            (* Anchor pre-accepted *)
     m_rW := 0.0;
+    IF rWAnchor > 0.0 THEN
+        m_rW := rWAnchor;
+    END_IF
     FOR i := 1 TO GC_CUPS DO
         m_aiIdx[i] := 0;
         m_aCup[i]  := 0;
@@ -133,6 +140,11 @@ END_VAR
     m_aiIdx[1] := 0;            (* Slot id filled by the queue at commit *)
     m_aCup[1]  := 1;
     m_abCupUsed[1] := TRUE;
+    m_astP[1].rX  := p2Anchor.rX;
+    m_astP[1].rY  := p2Anchor.rY;
+    m_astP[1].rZ  := rZAnchor;
+    m_astP[1].rTh := p2Anchor.rTh;
+    m_arW[1]      := m_rW;
     m_bRun := TRUE;
     Begin := ET_SP_RetCode#Done;
 END_METHOD
@@ -191,7 +203,7 @@ END_VAR
 
     (* Rule 3: minimum gap to every accepted member *)
     IF m_stReq.rMinGap > 0.0 THEN
-        FOR k := 1 TO UINT_TO_DINT(m_uiN) DO
+        FOR k := 1 TO UINT_TO_SINT(m_uiN) DO
             rG := SQRT( (stIt.p2World.rX - m_astP[k].rX) * (stIt.p2World.rX - m_astP[k].rX)
                       + (stIt.p2World.rY - m_astP[k].rY) * (stIt.p2World.rY - m_astP[k].rY) );
             IF rG < m_stReq.rMinGap THEN
@@ -203,7 +215,7 @@ END_VAR
     (* Rule 4: geometric match to an unassigned cup *)
     iBestC := 0;
     rBest  := m_stReq.rMatchTol + 1.0E9;
-    FOR c := 2 TO UINT_TO_DINT(m_stReq.uiCups) DO
+    FOR c := 2 TO UINT_TO_SINT(m_stReq.uiCups) DO
         IF NOT m_abCupUsed[c] THEN
             (* Required world position of this cup for the candidate *)
             rDX := m_stReq.astCup[c].rX - m_stReq.astCup[1].rX;
@@ -251,15 +263,15 @@ METHOD Finish : ET_SP_RetCode
 VAR
     (* Member loop index (fit / prune / compact) *)
     i, k : SINT;
-    (* Working cup array reordered per member (residual input) *)
-    astCw : ARRAY[1..GC_CUPS] OF ST_SP_Point3D;
+    (* Working cup array reordered per member (residual input) 1..GC_CUPS *)
+    astCw : ARRAY[1..4] OF ST_SP_Point3D;
     (* Fitted TCP yaw and translation accumulators *)
     rYaw, rTx, rTy : LREAL;
     (* Worst residual of the current fit [mm] *)
     rRes : LREAL;
     (* Index and value of the worst member (pruning) *)
     iWorst : SINT;
-rWorst : LREAL;                        (* Largest per-cup residual of the candidate set [mm] *)
+    rWorst : LREAL;             (* Largest per-cup residual of the candidate set [mm] *)
     (* Per-member residual (pruning scan) *)
     rD : LREAL;
     (* Center-of-gravity accumulators *)
@@ -301,14 +313,14 @@ END_VAR
     rRes := GC_REAL_MAX;
     FOR iGuard := 1 TO (GC_CUPS + 1) DO
         (* Reorder the cup array per member for the residual function *)
-        FOR i := 1 TO UINT_TO_DINT(m_uiN) DO
+        FOR i := 1 TO UINT_TO_SINT(m_uiN) DO
             astCw[i] := m_stReq.astCup[m_aCup[i]];
         END_FOR
 
         (* Fit: yaw = circular mean, XY = least-squares translation *)
         rYaw := FUN_SP_FitYaw(m_astP, m_uiN);
         rTx := 0.0; rTy := 0.0;
-        FOR i := 1 TO UINT_TO_DINT(m_uiN) DO
+        FOR i := 1 TO UINT_TO_SINT(m_uiN) DO
             rTx := rTx + m_astP[i].rX - FUN_SP_RotX(rYaw, astCw[i].rX, astCw[i].rY);
             rTy := rTy + m_astP[i].rY - FUN_SP_RotY(rYaw, astCw[i].rX, astCw[i].rY);
         END_FOR
@@ -330,7 +342,7 @@ END_VAR
         (* Drop the worst non-anchor member and refit *)
         iWorst := 0;
         rWorst := -1.0;
-        FOR i := 2 TO UINT_TO_DINT(m_uiN) DO
+        FOR i := 2 TO UINT_TO_SINT(m_uiN) DO
             rD := SQRT( (out_stTcp.rX + FUN_SP_RotX(rYaw, astCw[i].rX, astCw[i].rY) - m_astP[i].rX)
                       * (out_stTcp.rX + FUN_SP_RotX(rYaw, astCw[i].rX, astCw[i].rY) - m_astP[i].rX)
                       + (out_stTcp.rY + FUN_SP_RotY(rYaw, astCw[i].rX, astCw[i].rY) - m_astP[i].rY)
@@ -343,7 +355,11 @@ END_VAR
         IF iWorst = 0 THEN
             EXIT;               (* Defensive: nothing to drop *)
         END_IF
-        FOR k := iWorst TO (UINT_TO_DINT(m_uiN) - 1) DO
+        m_rW := m_rW - m_arW[iWorst];
+        IF m_rW < 0.0 THEN
+            m_rW := 0.0;
+        END_IF
+        FOR k := iWorst TO (UINT_TO_SINT(m_uiN) - 1) DO
             m_aiIdx[k] := m_aiIdx[k + 1];
             m_aCup[k]  := m_aCup[k + 1];
             m_astP[k]  := m_astP[k + 1];
@@ -352,18 +368,30 @@ END_VAR
         m_uiN := m_uiN - UINT#1;
     END_FOR
 
+    (* Publish the post-pruning member arrays *)
     out_uiN := m_uiN;
+    out_rW  := m_rW;
+    FOR i := 1 TO GC_CUPS DO
+        IF i <= UINT_TO_SINT(m_uiN) THEN
+            out_aiIdx[i] := m_aiIdx[i];
+            out_aCup[i]  := m_aCup[i];
+            out_astP[i]  := m_astP[i];
+        ELSE
+            out_aiIdx[i] := 0;
+            out_aCup[i]  := 0;
+        END_IF
+    END_FOR
     out_bSync := (m_uiN >= UINT#2) AND (rRes <= m_stReq.rMatchTol);
 
     (* ------------------------- CoG audit -------------------------------- *)
     out_rCog := 0.0;
     IF (m_stReq.rMaxCog > 0.0) AND (m_rW > 0.0) AND out_bSync THEN
         rCogX := 0.0; rCogY := 0.0;
-        FOR i := 1 TO UINT_TO_DINT(m_uiN) DO
+        FOR i := 1 TO UINT_TO_SINT(m_uiN) DO
             rCogX := rCogX + m_arW[i] * (m_astP[i].rX - out_stTcp.rX);
             rCogY := rCogY + m_arW[i] * (m_astP[i].rY - out_stTcp.rY);
         END_FOR
-        rWL := REAL_TO_LREAL(m_rW);
+        rWL := m_rW;
         IF rWL > 0.0 THEN
             rCogX := rCogX / rWL;
             rCogY := rCogY / rWL;

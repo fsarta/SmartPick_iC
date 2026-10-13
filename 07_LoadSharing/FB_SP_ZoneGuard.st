@@ -50,19 +50,20 @@ FUNCTION_BLOCK SP_ZoneGuard
 (* ----------------------------- Interface ------------------------------- *)
 VAR_INPUT
     bEnable   : BOOL;                           (* FALSE = all grants TRUE *)
-    abRobReq  : ARRAY[1..GC_ROBOTS] OF BOOL;    (* Robot requests its feed zone *)
-    aiRobFeed : ARRAY[1..GC_ROBOTS] OF SINT;    (* Feed each robot works on *)
+    abRobReq  : ARRAY[1..4] OF BOOL;            (* Robot requests its feed zone 1..GC_ROBOTS *)
+    aiRobFeed : ARRAY[1..4] OF SINT;            (* Feed each robot works on 1..GC_ROBOTS *)
 END_VAR
 VAR_OUTPUT
-    abGrant : ARRAY[1..GC_ROBOTS] OF BOOL;      (* TRUE = robot free to move *)
-    abHold  : ARRAY[1..GC_ROBOTS] OF BOOL;      (* Latched grant (diagnostic) *)
-    auiCnt  : ARRAY[1..GC_ZONES] OF UINT;       (* Current holders per zone *)
+    abGrant : ARRAY[1..4] OF BOOL;              (* TRUE = robot free to move 1..GC_ROBOTS *)
+    abHold  : ARRAY[1..4] OF BOOL;              (* Latched grant (diagnostic) 1..GC_ROBOTS *)
+    auiCnt  : ARRAY[1..4] OF UINT;              (* Current holders per zone 1..GC_ZONES *)
     uiWait  : UINT;                             (* Robots waiting for a zone *)
 END_VAR
 VAR
-    m_aiFeedZone : ARRAY[1..GC_FEEDS] OF SINT;  (* Feed -> zone (0 = unguarded) *)
-    m_abHold     : ARRAY[1..GC_ROBOTS] OF BOOL; (* Latch state *)
-    m_aiRobZone  : ARRAY[1..GC_ROBOTS] OF SINT; (* Resolved zone per robot *)
+    m_aiFeedZone : ARRAY[1..8] OF SINT;         (* Feed -> zone (0 = unguarded) 1..GC_FEEDS *)
+    m_abHold     : ARRAY[1..4] OF BOOL;         (* Latch state 1..GC_ROBOTS *)
+    m_aiHeldZone : ARRAY[1..4] OF SINT;         (* Zone id currently held per robot *)
+    m_aiRobZone  : ARRAY[1..4] OF SINT;         (* Resolved zone per robot 1..GC_ROBOTS *)
     m_bInit      : BOOL := FALSE;
     (* Body working variables *)
     i, k, iZ : SINT;
@@ -75,9 +76,10 @@ END_VAR
 (* 0) Disabled: transparent pass-through ---------------------------------- *)
 IF NOT bEnable THEN
     FOR i := 1 TO GC_ROBOTS DO
-        m_abHold[i] := FALSE;
-        abHold[i]   := FALSE;
-        abGrant[i]  := TRUE;
+        m_abHold[i]     := FALSE;
+        m_aiHeldZone[i] := GC_ZONE_NONE;
+        abHold[i]       := FALSE;
+        abGrant[i]      := TRUE;
     END_FOR
     FOR k := 1 TO GC_ZONES DO
         auiCnt[k] := UINT#0;
@@ -97,12 +99,13 @@ FOR i := 1 TO GC_ROBOTS DO
     END_IF
 END_FOR
 
-(* 2) Release latched holds whose request dropped --------------------------- *)
-(* The hold is kept while the robot keeps requesting the same zone; it is
-   released as soon as the request disappears (job done, paused or idle). *)
+(* 2) Release latched holds whose request dropped or switched zone ---------- *)
+(* The hold is kept while the robot keeps requesting the SAME zone; it is
+   released as soon as the request disappears or switches to another zone. *)
 FOR i := 1 TO GC_ROBOTS DO
-    IF m_abHold[i] AND (m_aiRobZone[i] = GC_ZONE_NONE) THEN
-        m_abHold[i] := FALSE;
+    IF m_abHold[i] AND (m_aiRobZone[i] <> m_aiHeldZone[i]) THEN
+        m_abHold[i]     := FALSE;
+        m_aiHeldZone[i] := GC_ZONE_NONE;
     END_IF
 END_FOR
 
@@ -111,8 +114,8 @@ FOR k := 1 TO GC_ZONES DO
     auiCnt[k] := UINT#0;
 END_FOR
 FOR i := 1 TO GC_ROBOTS DO
-    IF m_abHold[i] THEN
-        k := m_aiRobZone[i];
+    IF m_abHold[i] AND (m_aiHeldZone[i] >= 1) AND (m_aiHeldZone[i] <= GC_ZONES) THEN
+        k := m_aiHeldZone[i];
         auiCnt[k] := auiCnt[k] + UINT#1;
     END_IF
 END_FOR
@@ -124,8 +127,9 @@ FOR i := 1 TO GC_ROBOTS DO
         k  := m_aiRobZone[i];
         bFree := (auiCnt[k] = UINT#0);
         IF bFree THEN
-            m_abHold[i] := TRUE;        (* Latch: held until request drops *)
-            auiCnt[k] := auiCnt[k] + UINT#1;
+            m_abHold[i]     := TRUE;    (* Latch: held until request drops *)
+            m_aiHeldZone[i] := k;
+            auiCnt[k]       := auiCnt[k] + UINT#1;
         ELSE
             uiWait := uiWait + UINT#1;  (* Waiting for the zone holder *)
         END_IF
@@ -149,8 +153,8 @@ END_FUNCTION_BLOCK
    ----------------------------------------------------------------------- *)
 METHOD Configure : ET_SP_RetCode
 VAR_INPUT
-    (* Feed -> zone map (0 = unguarded) *)
-    aiFeedZone : ARRAY[1..GC_FEEDS] OF SINT;
+    (* Feed -> zone map (0 = unguarded) 1..GC_FEEDS *)
+    aiFeedZone : ARRAY[1..8] OF SINT;
 END_VAR
 VAR
     (* Feed loop index (map validation) *)

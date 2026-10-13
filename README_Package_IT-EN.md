@@ -31,6 +31,17 @@ Release: v1.8.0 (orologio reale NATIVO Yaskawa: Y_YA_RealTimeClock + Yt_YA_RTC_S
     |- guide_assets/                  Sorgenti grafica guida / guide artwork sources
     |- SmartPick_iC_ArchitectureGuide.pdf   Guida completa 20 pagine IT-EN (TOC, architettura, integrazione, test, cap. 12 v1.2)
 
+## Novita' v1.9 / What is new in v1.9
+
+- CONFORMITA' RIGOROSA iCube Engineer 2026.6 & REVISIONE TOTALE:
+  - Rimosso il file obsoleto `01_Common/FUN_SP_DtToStr.st` (usava il tipo `DT`).
+  - Rimosso ogni uso di `ADR()` da `04_Vision/FB_SP_Socket.st` e `10_Persistence/FB_SP_FileIo.st`.
+  - Spostata la lettura posa gruppo in `08_Robot/FB_SP_RobMotion.st` nel body del FB per evitare qualsiasi accesso a `VAR_IN_OUT ioGrp` dentro `METHOD`.
+  - Sostituiti tutti i limiti `ARRAY[1..GC_*]` con letterali interi e rimosse tutte le `VAR CONSTANT` locali ai FB (`FB_SP_Calib2D`, `FB_SP_Stats`); rimossa la struct `GC_stRtcNil` da `VAR CONSTANT` in `GVL_SP_Const.st`.
+  - Incapsulamento rigoroso di tutti i FB (`VAR_INPUT` / `VAR_OUTPUT` / wrapper methods in `SP_System`, `SP_Dispatch`, `SP_Robot`, `SP_Collision`, `SP_VisionCam`, `SP_Logger`, `SP_AlarmMgr`, `SP_SimCamera`).
+  - Corretti tutti i cast `<SRC>_TO_<DST>`, tipi `REAL`/`LREAL` (`rScore`, `rWeight`, `rMinScore`, `rMaxWeight`), indici `MID`/`LEFT` (`INT`) e `FOR` loop bounds in tutti i 73 fogli `.st`.
+  - Risolti i bug logici e di runtime: `FUN_SP_RtcToStr` (clamp mese 1..12 e spazio separatore), `SP_ConvEncoder` (`rEncScale`), `SP_Conveyor` (`stOut.rReqFactor`), `SP_VisionCam` (`tInterval`, `TriggerNow`, `Configure` driver), `SP_DrvAscii` / `SP_SimCamera` (reset code circolari e `FUN_SP_UdToStr`), `SP_ItemQueue` (proiezione pick-line con `rBeltCap`), `SP_TrkFeed` (`rZWorld := stCfg.rZBelt`), `SP_PatternGen` (reset `m_bInit`/contatori, avanzamento strato in `BatchStart`, `udiGen`, slot target in `NotifyPlaced`, fronte di salita sensori vassoio), `SP_LoadBalancer` (`Unmatched`), `SP_ZoneGuard` (`m_aiHeldZone`), `SP_Robot` (segno `CupPose`, `bPicked := TRUE` in `GripEval`), `SP_Dispatch` (evitato deadlock stato 5, `uiCount` cluster, wrap tool mask), `SP_System` (`SetBatch`, `Stats()` ciclico, `bResilience`, `bAutoRestart`, `bStopConvsOnPause`, `bClearItemsPulse`), `SP_RecipeMgr` (allineamento enum, `iDir`, `iPriority` con segno, `sInName`), `SP_GripPlanner` (ancora e output dopo pruning), `PRG_SP_ConfigInit` (`ET_SP_CamDrv`), `PRG_SP_TaskFast` (direzione `sim1..8`, `simCam1/2` round-robin su tutti i nastri attivi, `bReleasePend` per robot).
+
 ## Novita' v1.8 / What is new in v1.8
 
 - OROLOGIO REALE NATIVO Yaskawa (richiesta cliente: il tipo IEC "DT" non è

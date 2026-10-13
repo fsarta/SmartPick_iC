@@ -21,8 +21,8 @@
 
    FW BINDING (CONFIRM signatures against the installed SysLibSocket):
      hSock  := SysSocketOpen(sHost, uiPort)
-     uiSent := SysSocketSend(hSock, ADR(sTx), LEN(sTx))
-     uiGot  := SysSocketReceive(hSock, ADR(m_abTmp), iWant)
+     uiSent := SysSocketSend(hSock, sTx, INT_TO_UDINT(LEN(sTx)))
+     uiGot  := SysSocketReceive(hSock, m_abTmp, iWant)
      SysSocketClose(hSock)
    =============================================================================
 *)
@@ -47,8 +47,8 @@ VAR_OUTPUT
 END_VAR
 VAR
     m_hSock   : UDINT;        (* Socket handle (opaque firmware token) *)
-    m_abRx    : ARRAY[1..GC_SOCK_RX] OF BYTE;  (* Accumulated receive data *)
-    m_abTmp   : ARRAY[1..GC_SOCK_RX] OF BYTE;  (* Firmware receive target *)
+    m_abRx    : ARRAY[1..512] OF BYTE;  (* Accumulated receive data 1..GC_SOCK_RX *)
+    m_abTmp   : ARRAY[1..512] OF BYTE;  (* Firmware receive target 1..GC_SOCK_RX *)
     m_sView   : STRING(255);  (* String view of accumulated bytes *)
     m_uiRxLen : UINT;         (* Bytes pending *)
     m_bRxDrop : BOOL;         (* Overflow diagnostic flag *)
@@ -108,7 +108,7 @@ IF eState = ET_SP_SocketState#Connected THEN
     bConn := TRUE;
 
     IF bSend AND NOT m_bSendPrev THEN
-        m_uiSent := SysSocketSend(m_hSock, ADR(sTx), INT_TO_UDINT(LEN(sTx)));  (* CONFIRM *)
+        m_uiSent := SysSocketSend(m_hSock, sTx, INT_TO_UDINT(LEN(sTx)));  (* CONFIRM *)
         IF m_uiSent <> INT_TO_UDINT(LEN(sTx)) THEN
             eState := ET_SP_SocketState#Fault;
             uiErr  := UINT#3;          (* Send failed / partial *)
@@ -146,7 +146,7 @@ VAR
     iSpace: DINT;
 END_VAR
     PollRx := FALSE;                (* Default: nothing received *)
-    iWant := SINT_TO_DINT(GC_SOCK_RX) - 1;
+    iWant := GC_SOCK_RX - 1;
     IF m_uiRxLen > 0 THEN
         iWant := iWant - UINT_TO_DINT(m_uiRxLen);
     END_IF
@@ -155,14 +155,14 @@ END_VAR
         RETURN;
     END_IF
 
-    uiGot := SysSocketReceive(m_hSock, ADR(m_abTmp), iWant);   (* CONFIRM: signature *)
+    uiGot := SysSocketReceive(m_hSock, m_abTmp, iWant);   (* CONFIRM: signature *)
     IF uiGot = UDINT#0 THEN
         RETURN;                        (* Nothing this cycle *)
     END_IF
     PollRx := TRUE;                    (* Bytes received this cycle *)
 
     (* Append firmware bytes into the accumulation buffer *)
-    iSpace := SINT_TO_DINT(GC_SOCK_RX) - 1 - UINT_TO_DINT(m_uiRxLen);
+    iSpace := GC_SOCK_RX - 1 - UINT_TO_DINT(m_uiRxLen);
     FOR i := 1 TO UDINT_TO_UINT(uiGot) DO
         IF UINT_TO_DINT(i) > iSpace THEN
             m_bRxDrop := TRUE;         (* Buffer full: drop excess *)
@@ -171,7 +171,7 @@ END_VAR
         m_abRx[m_uiRxLen + i] := m_abTmp[i];
     END_FOR
     IF m_bRxDrop THEN
-        m_uiRxLen := DINT_TO_UINT(SINT_TO_DINT(GC_SOCK_RX) - 1);
+        m_uiRxLen := DINT_TO_UINT(GC_SOCK_RX - 1);
     ELSE
         m_uiRxLen := m_uiRxLen + UDINT_TO_UINT(uiGot);
     END_IF

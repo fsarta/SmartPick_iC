@@ -22,12 +22,12 @@ VAR
 
     (* ---------------- Status (logic writes, HMI reads) ------------------ *)
     g_hmiSysStat  : ST_SP_SysStat;
-    (* Robot status mirrors for the HMI (one row per robot) *)
-    g_astHmiRob   : ARRAY[1..GC_ROBOTS] OF ST_SP_RobStat;
-    (* Feed/conveyor status mirrors for the HMI *)
-    g_astHmiFeed  : ARRAY[1..GC_FEEDS] OF ST_SP_FeedIo;
-    (* Camera status mirrors for the HMI *)
-    g_astHmiCam   : ARRAY[1..GC_CAMS] OF ST_SP_VisionStat;
+    (* Robot status mirrors for the HMI (one row per robot) 1..GC_ROBOTS *)
+    g_astHmiRob   : ARRAY[1..4] OF ST_SP_RobStat;
+    (* Feed/conveyor status mirrors for the HMI 1..GC_FEEDS *)
+    g_astHmiFeed  : ARRAY[1..8] OF ST_SP_FeedIo;
+    (* Camera status mirrors for the HMI 1..GC_CAMS *)
+    g_astHmiCam   : ARRAY[1..2] OF ST_SP_VisionStat;
     (* Production counters mirror (OEE page) *)
     g_stHmiStats  : ST_SP_Counters;
     (* Pieces-per-hour KPI computed by Main *)
@@ -47,9 +47,9 @@ VAR
 
     (* Camera model preset selector (HW-4, applied by bApplyConfig):
        -1 = Cognex, 1 = Keyence, 2 = GenericTCP, 3 = Simulated,
-        0 = keep the current configuration. Uses the ET_SP_VisionDrv
-       numbering; see FUN_SP_CamPreset. *)
-    g_aiCamModel : ARRAY[1..GC_CAMS] OF SINT;
+        0 = keep the current configuration. Uses the ET_SP_CamDrv
+       numbering; see FUN_SP_CamPreset. 1..GC_CAMS *)
+    g_aiCamModel : ARRAY[1..2] OF SINT;
 
     (* ---------------- Professional layer (R-16) ------------------------- *)
     (* One-shot commands *)
@@ -64,6 +64,6 @@ VAR
     g_stHmiMaint : ST_SP_MaintStat;
     (* Self-test result (diagnostics page) *)
     g_stHmiTest  : ST_SP_TestRes;
-    (* Advanced collision guard diagnostics (R-05b diagnostics page) *)
-    g_astHmiCol  : ARRAY[1..GC_ROBOTS] OF ST_SP_RobCol;
+    (* Advanced collision guard diagnostics (R-05b diagnostics page) 1..GC_ROBOTS *)
+    g_astHmiCol  : ARRAY[1..4] OF ST_SP_RobCol;
 END_VAR

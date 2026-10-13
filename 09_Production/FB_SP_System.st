@@ -30,45 +30,54 @@ FUNCTION_BLOCK SP_System
 VAR_INPUT
     uiDtMs    : UDINT;          (* Task period [ms] *)
     bEStopOk  : BOOL;           (* Safety chain OK *)
-END_VAR
-VAR_OUTPUT
-    stOut : ST_SP_SysStat;      (* Published system status *)
-END_VAR
-VAR
     (* Public configuration & commands (Main/HMI write) *)
     stSysCfg : ST_SP_SysCfg;
     (* Operator/System command register (start, stop, batch...) *)
     stCmd    : ST_SP_SysCmd;
-    (* Public subordinate managers (wiring access allowed by design) *)
-    Bal   : SP_LoadBalancer;    (* Distribution strategies *)
+    (* Batch start/abort pulses per outfeed 1..GC_FEEDS (set by BatchService, cleared by Main) *)
+    aiPattStart : ARRAY[1..8] OF SINT;
+    aiPattAbort : ARRAY[1..8] OF SINT;
+END_VAR
+VAR_OUTPUT
+    stOut : ST_SP_SysStat;      (* Published system status *)
+    (* Outputs to the wiring program *)
+    abCamEnable : ARRAY[1..2] OF BOOL;   (* 1..GC_CAMS *)
+    (* Conveyor enable vector staged by startup state 1..GC_FEEDS *)
+    abConvEnable: ARRAY[1..8] OF BOOL;
+    (* Dispatcher enable output (final stage) *)
+    abDispatchOn: BOOL;
+    (* Pause command per robot 1..GC_ROBOTS *)
+    abRobPause  : ARRAY[1..4] OF BOOL;
+    (* Resume command per robot 1..GC_ROBOTS *)
+    abRobResume : ARRAY[1..4] OF BOOL;
+    (* Fault-reset command per robot 1..GC_ROBOTS *)
+    abRobReset  : ARRAY[1..4] OF BOOL;
+    (* Dry-run command per robot 1..GC_ROBOTS *)
+    abRobDryRun : ARRAY[1..4] OF BOOL;
+    (* One-cycle pulse requesting queue purge on all tracking feeds *)
+    bClearItemsPulse : BOOL;
+    (* Published statistics mirrors from subordinate Stats *)
+    stTot       : ST_SP_Counters;
+    rPiecesPerH : LREAL;
+    udiUptimeMs : UDINT;
+    (* Batch query buffers from subordinate Batch *)
+    out_stBatchDef  : ST_SP_BatchDef;
+    out_stBatchStat : ST_SP_BatchStat;
+END_VAR
+VAR
+    (* Subordinate managers *)
     Batch : SP_BatchMgr;        (* Batch registry *)
     Stats : SP_Stats;           (* Production statistics *)
     (* Startup staging *)
     m_uiStage : SINT := 0;      (* 0..3 *)
     m_tStage  : UDINT := 0;     (* Stage timer [ms] *)
     m_tStageDelay : UDINT := 500;
-    (* Resiliency *)
-    m_abRobDown : ARRAY[1..GC_ROBOTS] OF BOOL;
+    (* Resiliency 1..GC_ROBOTS *)
+    m_abRobDown : ARRAY[1..4] OF BOOL;
     (* Batch command handshake *)
     m_iStartBatchPrev : SINT := 0;
     (* Previous stop-batch command (edge detection) *)
     m_iStopBatchPrev  : SINT := 0;
-    (* Outputs to the wiring program *)
-    abCamEnable : ARRAY[1..GC_CAMS] OF BOOL;
-    (* Conveyor enable vector staged by startup state *)
-    abConvEnable: ARRAY[1..GC_FEEDS] OF BOOL;
-    (* Dispatcher enable output (final stage) *)
-    abDispatchOn: BOOL;
-    (* Pause command per robot *)
-    abRobPause  : ARRAY[1..GC_ROBOTS] OF BOOL;
-    (* Resume command per robot *)
-    abRobResume : ARRAY[1..GC_ROBOTS] OF BOOL;
-    (* Fault-reset command per robot *)
-    abRobReset  : ARRAY[1..GC_ROBOTS] OF BOOL;
-    (* Dry-run command per robot *)
-    abRobDryRun : ARRAY[1..GC_ROBOTS] OF BOOL;
-    aiPattStart : ARRAY[1..GC_FEEDS] OF SINT;   (* Batch idx pulse per outfeed *)
-    aiPattAbort : ARRAY[1..GC_FEEDS] OF SINT;
     (* System FSM state *)
     m_eSt : ET_SP_SysState := ET_SP_SysState#Init;
     (* Dry-run mode latched at start command *)
@@ -80,6 +89,14 @@ END_VAR
 (* ------------------------------- Body ---------------------------------- *)
 THIS.Step();
 THIS.Publish();
+Stats(
+    uiDtMs := uiDtMs,
+    bProd  := stOut.bRunning,
+    stTot => stTot,
+    out_stCnt => ,
+    udiUptimeMs => udiUptimeMs,
+    rPiecesPerH => rPiecesPerH
+);
 END_FUNCTION_BLOCK
 
 
@@ -109,24 +126,32 @@ END_VAR
         m_tStageDelay := UDINT#500;
     END_IF
     m_bDryRunLatch := stCmd.bDryRun;    (* Level command *)
+    bClearItemsPulse := stCmd.bClearItems;
+
+    (* Clear one-cycle robot command pulses *)
+    FOR i := 1 TO GC_ROBOTS DO
+        abRobPause[i]  := FALSE;
+        abRobResume[i] := FALSE;
+        abRobReset[i]  := FALSE;
+    END_FOR
 
     (* Robot health from the mirror *)
-    uiRun := 0; uiFault := 0; udiItems := UDINT#0;
+    uiRun := UINT#0; uiFault := UINT#0; udiItems := UDINT#0;
     FOR i := 1 TO GC_ROBOTS DO
         IF g_astRobStat[i].bFault OR (NOT g_astRobStat[i].bOnline) THEN
             m_abRobDown[i] := TRUE;
         ELSE
             m_abRobDown[i] := FALSE;
-            uiRun := uiRun + 1;
+            uiRun := uiRun + UINT#1;
         END_IF
         IF g_astRobStat[i].bFault THEN
-            uiFault := uiFault + 1;
+            uiFault := uiFault + UINT#1;
         END_IF
     END_FOR
     FOR i := 1 TO GC_FEEDS DO
         IF g_astFeedIo[i].bUsed THEN
-            udiItems := udiItems + g_astFeedIo[i].stStat.uiTracked
-                        + g_astFeedIo[i].stStat.uiReserved;
+            udiItems := udiItems + UINT_TO_UDINT(g_astFeedIo[i].stStat.uiTracked)
+                        + UINT_TO_UDINT(g_astFeedIo[i].stStat.uiReserved);
         END_IF
     END_FOR
 
@@ -156,7 +181,7 @@ END_VAR
                        m_uiStage := 2; m_tStage := UDINT#0;
                    END_IF
                 2: THIS.StageOutputs(2);
-                   IF (m_tStage >= m_tStageDelay) AND (uiRun > 0) THEN
+                   IF (m_tStage >= m_tStageDelay) AND (uiRun > UINT#0) THEN
                        m_uiStage := 3; m_tStage := UDINT#0;
                    END_IF
                 3: THIS.StageOutputs(3);
@@ -169,10 +194,15 @@ END_VAR
             abDispatchOn := TRUE;
             (* Batch commands *)
             THIS.BatchService();
-            (* Resiliency: any robot down -> Recovering (continue or fault) *)
-            IF uiFault > 0 THEN
-                THIS.OnRobotLoss();
-                m_eSt := ET_SP_SysState#Recovering;
+            (* Resiliency: any robot down -> Recovering if bResilience and a robot remains *)
+            IF uiFault > UINT#0 THEN
+                IF stSysCfg.bResilience AND (uiRun > UINT#0) THEN
+                    THIS.OnRobotLoss();
+                    m_eSt := ET_SP_SysState#Recovering;
+                ELSE
+                    m_uiErr := UINT#2;
+                    m_eSt := ET_SP_SysState#Fault;
+                END_IF
             ELSIF stCmd.bPause THEN
                 m_eSt := ET_SP_SysState#Pausing;
             ELSIF stCmd.bStop THEN
@@ -191,9 +221,11 @@ END_VAR
 
         ET_SP_SysState#Paused:
             (* Items keep tracked; conveyors per policy *)
-            FOR i := 1 TO GC_ROBOTS DO
-                abRobPause[i] := FALSE;     (* pulse consumed by Main *)
-            END_FOR
+            IF stSysCfg.bStopConvsOnPause THEN
+                FOR i := 1 TO GC_FEEDS DO
+                    abConvEnable[i] := FALSE;
+                END_FOR
+            END_IF
             IF stCmd.bResume THEN
                 m_eSt := ET_SP_SysState#Resuming;
             ELSIF stCmd.bStop THEN
@@ -201,6 +233,7 @@ END_VAR
             END_IF
 
         ET_SP_SysState#Resuming:
+            THIS.StageOutputs(3);
             FOR i := 1 TO GC_ROBOTS DO
                 abRobResume[i] := TRUE;
             END_FOR
@@ -232,9 +265,10 @@ END_VAR
                camera control already transferred by OnRobotLoss. *)
             THIS.StageOutputs(3);
             abDispatchOn := TRUE;
-            IF uiFault = 0 THEN
+            THIS.BatchService();
+            IF uiFault = UINT#0 THEN
                 m_eSt := ET_SP_SysState#Running;   (* Cause resolved *)
-            ELSIF uiRun = 0 THEN
+            ELSIF (uiRun = UINT#0) OR (NOT stSysCfg.bResilience) THEN
                 m_uiErr := UINT#2;                 (* No robot left *)
                 m_eSt := ET_SP_SysState#Fault;
             ELSIF stCmd.bStop THEN
@@ -244,7 +278,7 @@ END_VAR
         ET_SP_SysState#Fault:
             abDispatchOn := FALSE;
             THIS.StageOutputs(0);
-            IF stCmd.bReset AND bEStopOk THEN
+            IF (stCmd.bReset OR (stSysCfg.bAutoRestart AND (uiFault = UINT#0))) AND bEStopOk THEN
                 m_uiErr := UINT#0;
                 FOR i := 1 TO GC_ROBOTS DO
                     abRobReset[i] := TRUE;
@@ -257,14 +291,6 @@ END_VAR
     FOR i := 1 TO GC_ROBOTS DO
         abRobDryRun[i] := m_bDryRunLatch;
     END_FOR
-
-    (* Consume one-shot commands (FSM has evaluated them this cycle) *)
-    stCmd.bStart := FALSE;
-    stCmd.bStop := FALSE;
-    stCmd.bPause := FALSE;
-    stCmd.bResume := FALSE;
-    stCmd.bReset := FALSE;
-    stCmd.bClearItems := FALSE;
 END_METHOD
 
 
@@ -319,10 +345,10 @@ END_VAR
     IF stCmd.iStartBatch <> m_iStartBatchPrev THEN
         m_iStartBatchPrev := stCmd.iStartBatch;
         IF stCmd.iStartBatch > 0 THEN
-            eRc := THIS.Batch.StartBatch(stCmd.iStartBatch);
+            eRc := Batch.StartBatch(stCmd.iStartBatch);
             IF eRc = ET_SP_RetCode#Done THEN
-                IF THIS.Batch.GetDef(stCmd.iStartBatch) THEN
-                    iFeed := FUN_SP_ClampI(THIS.Batch.out_stDef.iOutFeed, 1, GC_FEEDS);
+                IF Batch.GetDef(stCmd.iStartBatch) THEN
+                    iFeed := DINT_TO_SINT(FUN_SP_ClampI(SINT_TO_DINT(Batch.out_stDef.iOutFeed), 1, SINT_TO_DINT(GC_FEEDS)));
                     aiPattStart[iFeed] := stCmd.iStartBatch;  (* Pulse *)
                 END_IF
             END_IF
@@ -332,13 +358,94 @@ END_VAR
     IF stCmd.iStopBatch <> m_iStopBatchPrev THEN
         m_iStopBatchPrev := stCmd.iStopBatch;
         IF stCmd.iStopBatch > 0 THEN
-            THIS.Batch.StopBatch(stCmd.iStopBatch);
-            IF THIS.Batch.GetDef(stCmd.iStopBatch) THEN
-                iFeed := FUN_SP_ClampI(THIS.Batch.out_stDef.iOutFeed, 1, GC_FEEDS);
+            Batch.StopBatch(stCmd.iStopBatch);
+            IF Batch.GetDef(stCmd.iStopBatch) THEN
+                iFeed := DINT_TO_SINT(FUN_SP_ClampI(SINT_TO_DINT(Batch.out_stDef.iOutFeed), 1, SINT_TO_DINT(GC_FEEDS)));
                 aiPattAbort[iFeed] := stCmd.iStopBatch;
             END_IF
         END_IF
     END_IF
+END_METHOD
+
+
+(* -----------------------------------------------------------------------
+   METHOD: SetBatch / GetBatchDef / GetBatchStat / GetActiveBatch /
+           SyncBatchProgress (parent SP_System)
+   Clean encapsulated wrappers over subordinate Batch (SP_BatchMgr).
+   ----------------------------------------------------------------------- *)
+METHOD SetBatch : ET_SP_RetCode
+VAR_INPUT
+    (* Batch table slot 1..GC_BATCHES *)
+    iIdx  : SINT;
+    (* Batch definition to store *)
+    stDef : ST_SP_BatchDef;
+END_VAR
+    SetBatch := Batch.SetBatch(iIdx, stDef);
+END_METHOD
+
+METHOD GetBatchDef : BOOL
+VAR_INPUT
+    (* Batch table slot 1..GC_BATCHES *)
+    iIdx : SINT;
+END_VAR
+    GetBatchDef := Batch.GetDef(iIdx);
+    out_stBatchDef := Batch.out_stDef;
+END_METHOD
+
+METHOD GetBatchStat : BOOL
+VAR_INPUT
+    (* Batch table slot 1..GC_BATCHES *)
+    iIdx : SINT;
+END_VAR
+    GetBatchStat := Batch.GetStat(iIdx);
+    out_stBatchStat := Batch.out_stStat;
+END_METHOD
+
+METHOD GetActiveBatch : SINT
+VAR_INPUT
+    (* Outfeed selector 1..GC_FEEDS *)
+    iOutFeed : SINT;
+END_VAR
+    GetActiveBatch := Batch.GetActive(iOutFeed);
+END_METHOD
+
+METHOD SyncBatchProgress : BOOL
+VAR_INPUT
+    (* Batch table slot 1..GC_BATCHES *)
+    iIdx   : SINT;
+    (* Pattern generator status snapshot *)
+    stPatt : ST_SP_BatchStat;
+END_VAR
+    SyncBatchProgress := Batch.SyncProgress(iIdx, stPatt);
+END_METHOD
+
+
+(* -----------------------------------------------------------------------
+   METHOD: AddPickStat / AddPlaceStat / AddCycleStat (parent SP_System)
+   Clean encapsulated wrappers over subordinate Stats (SP_Stats).
+   ----------------------------------------------------------------------- *)
+METHOD AddPickStat : BOOL
+VAR_INPUT
+    (* TRUE = good pick *)
+    bOk   : BOOL;
+    (* Feed index 1..GC_FEEDS *)
+    iFeed : SINT;
+END_VAR
+    AddPickStat := Stats.AddPick(bOk, iFeed);
+END_METHOD
+
+METHOD AddPlaceStat : BOOL
+VAR_INPUT
+    (* TRUE = good place *)
+    bOk   : BOOL;
+    (* Feed index 1..GC_FEEDS *)
+    iFeed : SINT;
+END_VAR
+    AddPlaceStat := Stats.AddPlace(bOk, iFeed);
+END_METHOD
+
+METHOD AddCycleStat : BOOL
+    AddCycleStat := Stats.AddCycle();
 END_METHOD
 
 
@@ -382,19 +489,19 @@ VAR
     udiItems : UDINT;
 END_VAR
     Publish := TRUE;                (* Status snapshot published *)
-    uiRun := 0; uiFault := 0; udiItems := UDINT#0;
+    uiRun := UINT#0; uiFault := UINT#0; udiItems := UDINT#0;
     FOR i := 1 TO GC_ROBOTS DO
         IF g_astRobStat[i].bOnline AND (NOT g_astRobStat[i].bFault) THEN
-            uiRun := uiRun + 1;
+            uiRun := uiRun + UINT#1;
         END_IF
         IF g_astRobStat[i].bFault THEN
-            uiFault := uiFault + 1;
+            uiFault := uiFault + UINT#1;
         END_IF
     END_FOR
     FOR i := 1 TO GC_FEEDS DO
         IF g_astFeedIo[i].bUsed THEN
-            udiItems := udiItems + g_astFeedIo[i].stStat.uiTracked
-                        + g_astFeedIo[i].stStat.uiReserved;
+            udiItems := udiItems + UINT_TO_UDINT(g_astFeedIo[i].stStat.uiTracked)
+                        + UINT_TO_UDINT(g_astFeedIo[i].stStat.uiReserved);
         END_IF
     END_FOR
 

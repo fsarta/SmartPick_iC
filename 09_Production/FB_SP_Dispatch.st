@@ -36,60 +36,69 @@
 
 FUNCTION_BLOCK SP_Dispatch
 (* ----------------------------- Interface ------------------------------- *)
-VAR
+VAR_INPUT
     (* Public configuration (Main writes) *)
     stShare  : ST_SP_ShareCfg;          (* Distribution configuration *)
-    aiOutfeed: ARRAY[1..GC_FEEDS] OF SINT;  (* mirror of stShare.aiOutfeedMap *)
-    abiFeedOn: ARRAY[1..GC_FEEDS] OF BOOL;  (* Feed eligible for dispatch *)
+    aiOutfeed: ARRAY[1..8] OF SINT;     (* mirror of stShare.aiOutfeedMap 1..GC_FEEDS *)
+    abiFeedOn: ARRAY[1..8] OF BOOL;     (* Feed eligible for dispatch 1..GC_FEEDS *)
     bEnable  : BOOL;                    (* System dispatch gate *)
     uiMaxGrip: UINT := UINT#1;          (* Parts per cycle *)
     (* R-07: synchronized multi-grip enabled per robot (Main fills from
-       the robot cfg: eGripMode = Sync AND uiMaxGrip > 1) *)
-    abSyncGrip : ARRAY[1..GC_ROBOTS] OF BOOL;
-    (* Public subordinate *)
+       the robot cfg: eGripMode = Sync AND uiMaxGrip > 1) 1..GC_ROBOTS *)
+    abSyncGrip : ARRAY[1..4] OF BOOL;
+    (* Handshake responses and latched request flags (Main/Fast access) 1..GC_ROBOTS *)
+    astReq   : ARRAY[1..4] OF ST_SP_DispReq;
+    abReqPulse : ARRAY[1..4] OF BOOL;
+    astResRsp  : ARRAY[1..4] OF ST_SP_ResRsp;   (* Fast fills *)
+    abResDone  : ARRAY[1..4] OF BOOL;           (* Fast fills *)
+    astClRsp   : ARRAY[1..4] OF ST_SP_ClRsp;    (* Fast fills *)
+    ajobOffer  : ARRAY[1..4] OF ST_SP_Job;      (* Completed job offers per robot *)
+    abJobPulse : ARRAY[1..4] OF BOOL;
+    astJobRes  : ARRAY[1..4] OF ST_SP_Job;      (* Fast fills *)
+    abJobResDone : ARRAY[1..4] OF BOOL;         (* Fast fills *)
+    astCancel  : ARRAY[1..4] OF ST_SP_CancelReq;
+    abCancelPulse: ARRAY[1..4] OF BOOL;
+END_VAR
+VAR
+    (* Subordinate load balancer *)
     Bal : SP_LoadBalancer;
-    (* Public handshake to the wiring program *)
-    astReq   : ARRAY[1..GC_ROBOTS] OF ST_SP_DispReq;
-    (* Latched reservation request per robot (set by Run, cleared by the
-       executing program when the response is published) *)
-    abReqPulse : ARRAY[1..GC_ROBOTS] OF BOOL;
-    astResRsp  : ARRAY[1..GC_ROBOTS] OF ST_SP_ResRsp;   (* Main fills *)
-    abResDone  : ARRAY[1..GC_ROBOTS] OF BOOL;           (* Main fills *)
-    (* R-07: cluster reservation response (valid when the request was sent
-       with bCluster = TRUE; Main fills from feedN.out_stCl) *)
-    astClRsp : ARRAY[1..GC_ROBOTS] OF ST_SP_ClRsp;
-ajobOffer  : ARRAY[1..GC_ROBOTS] OF ST_SP_Job; (* Completed job offers published to the wiring program (per robot) *)
-    (* Latched job-offer request per robot (set by Run, cleared by the
-       executing program after OfferJob was applied) *)
-    abJobPulse : ARRAY[1..GC_ROBOTS] OF BOOL;
-    astJobRes  : ARRAY[1..GC_ROBOTS] OF ST_SP_Job;      (* Main fills *)
-    abJobResDone : ARRAY[1..GC_ROBOTS] OF BOOL;         (* Main fills *)
-    astCancel  : ARRAY[1..GC_ROBOTS] OF ST_SP_CancelReq;
-    (* Latched cancel request per robot (set by Run, cleared by the
-       executing program after the release was applied) *)
-    abCancelPulse: ARRAY[1..GC_ROBOTS] OF BOOL;
-    (* Per-robot dispatch state *)
-    m_aeDSt : ARRAY[1..GC_ROBOTS] OF SINT;
-    (* Job under construction per robot *)
-    m_astJob : ARRAY[1..GC_ROBOTS] OF ST_SP_Job;
-    (* Pick feed of the assigned offer *)
-    m_iPickFeed : ARRAY[1..GC_ROBOTS] OF SINT;
-    (* Place (out)feed derived from the batch *)
-    m_iPlaceFeed: ARRAY[1..GC_ROBOTS] OF SINT;
-    (* Tool id allocated for the job *)
-    m_uiTool : ARRAY[1..GC_ROBOTS] OF UINT;
-    m_astShare : ARRAY[1..GC_ROBOTS] OF ST_SP_RobShare; (* Snapshot cache *)
+    (* Per-robot dispatch state 1..GC_ROBOTS *)
+    m_aeDSt : ARRAY[1..4] OF SINT;
+    (* Job under construction per robot 1..GC_ROBOTS *)
+    m_astJob : ARRAY[1..4] OF ST_SP_Job;
+    (* Pick feed of the assigned offer 1..GC_ROBOTS *)
+    m_iPickFeed : ARRAY[1..4] OF SINT;
+    (* Place (out)feed derived from the batch 1..GC_ROBOTS *)
+    m_iPlaceFeed: ARRAY[1..4] OF SINT;
+    (* Tool id allocated for the job 1..GC_ROBOTS *)
+    m_uiTool : ARRAY[1..4] OF UINT;
+    m_astShare : ARRAY[1..4] OF ST_SP_RobShare; (* Snapshot cache 1..GC_ROBOTS *)
     (* R-07: request was a cluster reservation (latched for the response) *)
-    m_abClReq : ARRAY[1..GC_ROBOTS] OF BOOL;
+    m_abClReq : ARRAY[1..4] OF BOOL;
     (* R-07: job under construction is a cluster job (slot place flow) *)
-    m_abClJob : ARRAY[1..GC_ROBOTS] OF BOOL;
+    m_abClJob : ARRAY[1..4] OF BOOL;
     (* R-07: job slot whose place target is being reserved *)
-    m_iPlaceSlot : ARRAY[1..GC_ROBOTS] OF SINT;
+    m_iPlaceSlot : ARRAY[1..4] OF SINT;
 END_VAR
 
 (* ------------------------------- Body ---------------------------------- *)
 THIS.Run();
 END_FUNCTION_BLOCK
+
+
+(* -----------------------------------------------------------------------
+   METHOD: Configure (parent SP_Dispatch)
+   Configure the internal load balancer and store the distribution config.
+   ----------------------------------------------------------------------- *)
+METHOD Configure : ET_SP_RetCode
+VAR_INPUT
+    (* Load sharing configuration *)
+    stIn : ST_SP_ShareCfg;
+END_VAR
+    stShare := stIn;
+    aiOutfeed := stIn.aiOutfeedMap;
+    Configure := Bal.Configure(stIn);
+END_METHOD
 
 
 (* -----------------------------------------------------------------------
@@ -135,14 +144,14 @@ END_VAR
                 stOffer.stW := g_astFeedIo[k].stPickLineW;
                 stOffer.bTarget := FALSE;
 
-                iRobot := THIS.Bal.OfferProduct(stOffer, m_astShare);
+                iRobot := Bal.OfferProduct(stOffer, m_astShare);
                 IF (iRobot >= 1) AND (iRobot <= GC_ROBOTS) THEN
                     IF m_aeDSt[iRobot] = 1 THEN
                         m_iPickFeed[iRobot] := k;
                         m_astJob[iRobot].eKind := ET_SP_JobKind#PickPlace;
                         m_astJob[iRobot].iRobot := iRobot;
                         m_astJob[iRobot].uiCount := UINT#0;
-                        m_uiTool[iRobot] := 1;
+                        m_uiTool[iRobot] := UINT#1;
                         m_aeDSt[iRobot] := 2;
                     END_IF
                 END_IF
@@ -231,8 +240,9 @@ END_VAR
                 IF m_abClReq[iR] THEN
                     (* R-07: cluster response - store all members at once *)
                     IF astClRsp[iR].bOk THEN
-                        FOR k := 1 TO UINT_TO_DINT(astClRsp[iR].uiN) DO
-                            THIS.StoreItem(iR, DINT_TO_UINT(k),
+                        m_astJob[iR].uiCount := astClRsp[iR].uiN;
+                        FOR k := 1 TO UINT_TO_SINT(astClRsp[iR].uiN) DO
+                            THIS.StoreItem(iR, DINT_TO_UINT(SINT_TO_DINT(k)),
                                            astClRsp[iR].astRsp[k], TRUE,
                                            astClRsp[iR].aCup[k]);
                         END_FOR
@@ -307,7 +317,7 @@ END_VAR
                     IF m_abClJob[iR] THEN
                         THIS.StoreItem(iR, DINT_TO_UINT(SINT_TO_DINT(m_iPlaceSlot[iR])), stRsp, FALSE, -1);
                         m_iPlaceSlot[iR] := m_iPlaceSlot[iR] + 1;
-                        IF m_iPlaceSlot[iR] > SINT_TO_DINT(m_astJob[iR].uiCount) THEN
+                        IF m_iPlaceSlot[iR] > UINT_TO_SINT(m_astJob[iR].uiCount) THEN
                             m_aeDSt[iR] := 6;   (* All slots complete *)
                         ELSE
                             m_aeDSt[iR] := 4;   (* Next slot target *)
@@ -316,8 +326,11 @@ END_VAR
                         THIS.StoreItem(iR, m_astJob[iR].uiCount, stRsp, FALSE, -1);
                         m_aeDSt[iR] := 2;       (* Next cup *)
                     END_IF
+                ELSE
+                    (* No target available this cycle: re-arm DReqPlace so a
+                       fresh reservation pulse is issued on the next cycle *)
+                    m_aeDSt[iR] := 4;
                 END_IF
-                (* No target this cycle: keep waiting (batch generates) *)
             ELSIF NOT bEnable THEN
                 THIS.Abandon(iR);
             END_IF
@@ -380,9 +393,11 @@ END_VAR
             stJI.uiCup := uiCnt;    (* Legacy sequential cup mapping *)
         END_IF
         stJI.bPick := TRUE;
-        (* Round robin tool assignment for the next cup *)
+        (* Advance tool only if the next tool bit is present in uiToolMask *)
         m_uiTool[iR] := m_uiTool[iR] + UINT#1;
-        IF m_uiTool[iR] > UDINT_TO_UINT(SINT_TO_UDINT(GC_TOOLS)) THEN
+        IF (m_uiTool[iR] > UDINT_TO_UINT(SINT_TO_UDINT(GC_TOOLS)))
+           OR ((g_astRobStat[iR].uiToolMask
+                AND SHL(UINT#1, UINT_TO_INT(m_uiTool[iR] - UINT#1))) = UINT#0) THEN
             m_uiTool[iR] := UINT#1;
         END_IF
     ELSE

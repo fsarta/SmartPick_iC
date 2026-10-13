@@ -63,12 +63,12 @@ END_FUNCTION_BLOCK
 METHOD ExportBegin : BOOL
 VAR_INPUT
     (* Recipe file name (without extension) *)
-    sName : STRING(32);
+    sInName : STRING(32);
 END_VAR
     ExportBegin := TRUE;            (* Export iterator armed *)
     m_bExport := TRUE;
     m_iRow := UDINT#0;
-    sName := sName;
+    sName := sInName;
 END_METHOD
 
 
@@ -99,12 +99,12 @@ END_VAR
     END_IF
 
     (* Section sizes *)
-    udF := INT_TO_UDINT(GC_FEEDS);
-    udC := INT_TO_UDINT(GC_CAMS);
-    udP := INT_TO_UDINT(GC_PATT);
-    udB := INT_TO_UDINT(GC_BATCHES);
-    udSeq := INT_TO_UDINT(GC_SEQ);
-    udR := INT_TO_UDINT(GC_ROBOTS);
+    udF := SINT_TO_UDINT(GC_FEEDS);
+    udC := SINT_TO_UDINT(GC_CAMS);
+    udP := SINT_TO_UDINT(GC_PATT);
+    udB := SINT_TO_UDINT(GC_BATCHES);
+    udSeq := SINT_TO_UDINT(GC_SEQ);
+    udR := SINT_TO_UDINT(GC_ROBOTS);
     udMap := udC * udF;
     udMix := udB * udSeq;
 
@@ -116,45 +116,45 @@ END_VAR
     ELSE
         r := r - UDINT#1;
         IF r < udF THEN
-            iSec := 1;  iIdx := UDINT_TO_DINT(r) + 1;
+            iSec := 1;  iIdx := UDINT_TO_SINT(r) + 1;
         ELSE
             r := r - udF;
             IF r < udF THEN
-                iSec := 2;  iIdx := UDINT_TO_DINT(r) + 1;
+                iSec := 2;  iIdx := UDINT_TO_SINT(r) + 1;
             ELSE
                 r := r - udF;
                 IF r < udC THEN
-                    iSec := 3;  iIdx := UDINT_TO_DINT(r) + 1;
+                    iSec := 3;  iIdx := UDINT_TO_SINT(r) + 1;
                 ELSE
                     r := r - udC;
                     IF r < udMap THEN
                         iSec := 4;
-                        iIdx := UDINT_TO_DINT(r / udF) + 1;
-                        iSub := UDINT_TO_DINT(r MOD udF) + 1;
+                        iIdx := UDINT_TO_SINT(r / udF) + 1;
+                        iSub := UDINT_TO_SINT(r MOD udF) + 1;
                     ELSE
                         r := r - udMap;
                         IF r < udP THEN
-                            iSec := 5;  iIdx := UDINT_TO_DINT(r) + 1;
+                            iSec := 5;  iIdx := UDINT_TO_SINT(r) + 1;
                         ELSE
                             r := r - udP;
                             IF r < udB THEN
-                                iSec := 6;  iIdx := UDINT_TO_DINT(r) + 1;
+                                iSec := 6;  iIdx := UDINT_TO_SINT(r) + 1;
                             ELSE
                                 r := r - udB;
                                 IF r < udMix THEN
                                     iSec := 7;
-                                    iIdx := UDINT_TO_DINT(r / udSeq) + 1;
-                                    iSub := UDINT_TO_DINT(r MOD udSeq) + 1;
+                                    iIdx := UDINT_TO_SINT(r / udSeq) + 1;
+                                    iSub := UDINT_TO_SINT(r MOD udSeq) + 1;
                                 ELSE
                                     r := r - udMix;
                                     IF r < udF THEN
-                                        iSec := 8;  iIdx := UDINT_TO_DINT(r) + 1;
+                                        iSec := 8;  iIdx := UDINT_TO_SINT(r) + 1;
                                     ELSE
                                         r := r - udF;
                                         IF r < udF * udR THEN
                                             iSec := 9;
-                                            iIdx := UDINT_TO_DINT(r / udR) + 1;
-                                            iSub := UDINT_TO_DINT(r MOD udR) + 1;
+                                            iIdx := UDINT_TO_SINT(r / udR) + 1;
+                                            iSub := UDINT_TO_SINT(r MOD udR) + 1;
                                         END_IF
                                     END_IF
                                 END_IF
@@ -208,19 +208,26 @@ VAR
     stC : ST_SP_ConvCfg;
     (* CSV line under construction *)
     s : STRING(200);
+    (* Encoded enum value *)
+    uiE : UINT;
 END_VAR
     ExpConv := TRUE;                (* CONV line built *)
     stC := g_astConvCfg[i];
+    CASE stC.eDrive OF
+        ET_SP_ConvDrive#ServoAxis: uiE := UINT#1;
+        ET_SP_ConvDrive#External:  uiE := UINT#2;
+        ELSE                       uiE := UINT#0;
+    END_CASE
     s := CONCAT('CONV,', FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(i))));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stC.rEncScale, 6));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(stC.iDir))));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(BOOL_TO_UINT(stC.iDir >= 0)));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stC.rMaxSpeed, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stC.rWinStart, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stC.rWinLen, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stC.rSlowAhead, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stC.rStopAhead, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stC.rSlowFactor, 3));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(SINT_TO_UINT(stC.eDrive)));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(uiE));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(stC.uiAnaCh));
     out_sLine := s;
 END_METHOD
@@ -243,7 +250,7 @@ END_VAR
     ExpFeed := TRUE;                (* FEED line built *)
     stF := g_astFeedCfg[i];
     s := CONCAT('FEED,', FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(i))));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(stF.iDir))));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(BOOL_TO_UINT(stF.iDir >= 0)));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stF.rWinStart, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stF.rWinLen, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stF.rPickAhead, 2));
@@ -269,19 +276,33 @@ VAR
     stV : ST_SP_VisionCfg;
     (* CSV line under construction *)
     s : STRING(200);
+    (* Encoded driver / trigger enum values *)
+    uiDrv, uiTrg : UINT;
 END_VAR
     ExpCam := TRUE;                 (* CAM line built *)
     stV := g_astCamCfg[i];
+    CASE stV.eDrv OF
+        ET_SP_CamDrv#Keyence:    uiDrv := UINT#1;
+        ET_SP_CamDrv#GenericTCP: uiDrv := UINT#2;
+        ET_SP_CamDrv#Simulated:  uiDrv := UINT#3;
+        ELSE                     uiDrv := UINT#0;
+    END_CASE
+    CASE stV.eTrig OF
+        ET_SP_TrigMode#External: uiTrg := UINT#1;
+        ET_SP_TrigMode#Interval: uiTrg := UINT#2;
+        ET_SP_TrigMode#Manual:   uiTrg := UINT#3;
+        ELSE                     uiTrg := UINT#0;
+    END_CASE
     s := CONCAT('CAM,', FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(i))));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(SINT_TO_UINT(stV.eDrv)));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(uiDrv));
     s := CONCAT(s, ',');  s := CONCAT(s, stV.sIp);
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(stV.uiPort));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(SINT_TO_UINT(stV.eTrig)));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(uiTrg));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stV.astMap[1].rTrigDist, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stV.astMap[1].rRefSpeed, 2));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(stV.uiMaxItems));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(BOOL_TO_UINT(stV.bThInRad)));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(REAL_TO_LREAL(stV.rMinScore), 3));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(stV.rMinScore, 3));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UdToStr(TIME_TO_UDINT(stV.tDelay)));
     out_sLine := s;
 END_METHOD
@@ -362,15 +383,22 @@ VAR
     stB : ST_SP_BatchDef;
     (* CSV line under construction *)
     s : STRING(200);
+    (* Encoded trigger enum *)
+    uiTrg : UINT;
 END_VAR
     ExpBatch := TRUE;               (* BATCH line built *)
     stB := g_astBatchDef[i];
+    CASE stB.eTrig OF
+        ET_SP_TrayTrig#Sensor:     uiTrg := UINT#1;
+        ET_SP_TrayTrig#BatchStart: uiTrg := UINT#2;
+        ELSE                       uiTrg := UINT#0;
+    END_CASE
     s := CONCAT('BATCH,', FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(i))));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(stB.iOutFeed))));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(stB.uiPattId));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UdToStr(stB.udiQty));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(SINT_TO_UINT(stB.eTrig)));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(stB.iPriority))));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(uiTrg));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(SINT_TO_LREAL(stB.iPriority), 0));
     out_sLine := s;
 END_METHOD
 
@@ -404,11 +432,24 @@ END_VAR
 VAR
     (* CSV line under construction *)
     s : STRING(200);
+    (* Encoded strategy and match mode enum values *)
+    uiStr, uiMat : UINT;
 END_VAR
     ExpShare := TRUE;               (* SHARE line built *)
+    CASE g_stShareCfg.aeStrat[i] OF
+        ET_SP_BalStrat#Greedy:   uiStr := UINT#1;
+        ET_SP_BalStrat#Balanced: uiStr := UINT#2;
+        ET_SP_BalStrat#Manual:   uiStr := UINT#3;
+        ELSE                     uiStr := UINT#0;
+    END_CASE
+    CASE g_stShareCfg.eMatch OF
+        ET_SP_MatchMode#Unmatched: uiMat := UINT#1;
+        ET_SP_MatchMode#Mixed:     uiMat := UINT#2;
+        ELSE                       uiMat := UINT#0;
+    END_CASE
     s := CONCAT('SHARE,', FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(i))));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(SINT_TO_UINT(g_stShareCfg.aeStrat[i])));
-    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(SINT_TO_UINT(g_stShareCfg.eMatch)));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(uiStr));
+    s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(uiMat));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(BOOL_TO_UINT(g_stShareCfg.bStrictOrder)));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_LRealToStr(g_stShareCfg.rPickBias, 3));
     s := CONCAT(s, ',');  s := CONCAT(s, FUN_SP_UiToStr(DINT_TO_UINT(SINT_TO_DINT(g_stShareCfg.aiOutfeedMap[i]))));
@@ -496,29 +537,34 @@ END_VAR
     END_IF
 
     IF sRec = 'CONV' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_FEEDS);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_FEEDS)));
         stC := g_astConvCfg[i];
         stC.bUsed := TRUE;
         stC.rEncScale := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 3), stC.rEncScale);
-        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), 1);
-        IF uiV = 0 THEN stC.iDir := -1; ELSE stC.iDir := 1; END_IF
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), UINT#1);
+        IF uiV = UINT#0 THEN stC.iDir := -1; ELSE stC.iDir := 1; END_IF
         stC.rMaxSpeed := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 5), stC.rMaxSpeed);
         stC.rWinStart := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 6), stC.rWinStart);
         stC.rWinLen := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 7), stC.rWinLen);
         stC.rSlowAhead := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 8), stC.rSlowAhead);
         stC.rStopAhead := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 9), stC.rStopAhead);
         stC.rSlowFactor := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 10), stC.rSlowFactor);
-        stC.eDrive := UINT_TO_SINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 11), 0));
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 11), UINT#0);
+        CASE uiV OF
+            UINT#1: stC.eDrive := ET_SP_ConvDrive#ServoAxis;
+            UINT#2: stC.eDrive := ET_SP_ConvDrive#External;
+            ELSE    stC.eDrive := ET_SP_ConvDrive#Analog;
+        END_CASE
         stC.uiAnaCh := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 12), stC.uiAnaCh);
         g_astConvCfg[i] := stC;
         ImportLine := TRUE;
 
     ELSIF sRec = 'FEED' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_FEEDS);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_FEEDS)));
         stF := g_astFeedCfg[i];
         stF.bUsed := TRUE;
-        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), 1);
-        IF uiV = 0 THEN stF.iDir := -1; ELSE stF.iDir := 1; END_IF
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), UINT#1);
+        IF uiV = UINT#0 THEN stF.iDir := -1; ELSE stF.iDir := 1; END_IF
         stF.rWinStart := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 4), stF.rWinStart);
         stF.rWinLen := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 5), stF.rWinLen);
         stF.rPickAhead := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 6), stF.rPickAhead);
@@ -533,32 +579,44 @@ END_VAR
         ImportLine := TRUE;
 
     ELSIF sRec = 'CAM' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_CAMS);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_CAMS)));
         stV := g_astCamCfg[i];
         stV.bUsed := TRUE;
-        stV.eDrv := UINT_TO_SINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), SINT_TO_UINT(stV.eDrv)));
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), UINT#0);
+        CASE uiV OF
+            UINT#1: stV.eDrv := ET_SP_CamDrv#Keyence;
+            UINT#2: stV.eDrv := ET_SP_CamDrv#GenericTCP;
+            UINT#3: stV.eDrv := ET_SP_CamDrv#Simulated;
+            ELSE    stV.eDrv := ET_SP_CamDrv#Cognex;
+        END_CASE
         sIp := FUN_SP_TokN(sLine, ',', 4);
         IF LEN(sIp) > 0 THEN stV.sIp := sIp; END_IF
         stV.uiPort := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 5), stV.uiPort);
-        stV.eTrig := UINT_TO_SINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 6), SINT_TO_UINT(stV.eTrig)));
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 6), UINT#0);
+        CASE uiV OF
+            UINT#1: stV.eTrig := ET_SP_TrigMode#External;
+            UINT#2: stV.eTrig := ET_SP_TrigMode#Interval;
+            UINT#3: stV.eTrig := ET_SP_TrigMode#Manual;
+            ELSE    stV.eTrig := ET_SP_TrigMode#Distance;
+        END_CASE
         rL := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 7), -1.0);
         IF rL >= 0.0 THEN stV.astMap[1].rTrigDist := rL; END_IF
         rL := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 8), -1.0);
         IF rL >= 0.0 THEN stV.astMap[1].rRefSpeed := rL; END_IF
-        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 9), 0);
-        IF uiV > 0 THEN stV.uiMaxItems := uiV; END_IF
-        stV.bThInRad := (FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 10), 0) > 0);
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 9), UINT#0);
+        IF uiV > UINT#0 THEN stV.uiMaxItems := uiV; END_IF
+        stV.bThInRad := (FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 10), UINT#0) > UINT#0);
         rL := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 11), -1.0);
-        IF rL >= 0.0 THEN stV.rMinScore := LREAL_TO_REAL(rL); END_IF
+        IF rL >= 0.0 THEN stV.rMinScore := rL; END_IF
         stV.tDelay := UDINT_TO_TIME(FUN_SP_StrToUd(FUN_SP_TokN(sLine, ',', 12), TIME_TO_UDINT(stV.tDelay)));
         g_astCamCfg[i] := stV;
         ImportLine := TRUE;
 
     ELSIF sRec = 'CAMMAP' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_CAMS);
-        k := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), 0)), 1, GC_FEEDS);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_CAMS)));
+        k := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), UINT#0)), 1, SINT_TO_DINT(GC_FEEDS)));
         stM := g_astCamCfg[i].astMap[k];
-        stM.iFeed := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), 0)), 0, GC_FEEDS);
+        stM.iFeed := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), UINT#0)), 0, SINT_TO_DINT(GC_FEEDS)));
         stM.rYmin := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 5), stM.rYmin);
         stM.rYmax := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 6), stM.rYmax);
         stM.rTrigDist := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 7), stM.rTrigDist);
@@ -567,7 +625,7 @@ END_VAR
         ImportLine := TRUE;
 
     ELSIF sRec = 'PATT' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_PATT);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_PATT)));
         stP := g_astPatt[i];
         stP.bUsed := TRUE;
         stP.uiRows := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), stP.uiRows);
@@ -586,41 +644,57 @@ END_VAR
         ImportLine := TRUE;
 
     ELSIF sRec = 'BATCH' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_BATCHES);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_BATCHES)));
         stB := g_astBatchDef[i];
         stB.bUsed := TRUE;
-        stB.iOutFeed := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), 0)), 1, GC_FEEDS);
+        stB.iOutFeed := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), UINT#0)), 1, SINT_TO_DINT(GC_FEEDS)));
         stB.uiPattId := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), stB.uiPattId);
         stB.udiQty := FUN_SP_StrToUd(FUN_SP_TokN(sLine, ',', 5), UDINT#0);
-        stB.eTrig := UINT_TO_SINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 6), 0));
-        stB.iPriority := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 7), 0)), -100, 100);
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 6), UINT#0);
+        CASE uiV OF
+            UINT#1: stB.eTrig := ET_SP_TrayTrig#Sensor;
+            UINT#2: stB.eTrig := ET_SP_TrayTrig#BatchStart;
+            ELSE    stB.eTrig := ET_SP_TrayTrig#Distance;
+        END_CASE
+        stB.iPriority := DINT_TO_SINT(FUN_SP_ClampI(LREAL_TO_DINT(FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 7), 0.0)), -100, 100));
         g_astBatchDef[i] := stB;
         ImportLine := TRUE;
 
     ELSIF sRec = 'BATCHMIX' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_BATCHES);
-        k := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), 0)), 1, GC_SEQ);
-        g_astBatchDef[i].aiMix[k] := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), 0);
-        g_astBatchDef[i].aiMixCnt[k] := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 5), 0);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_BATCHES)));
+        k := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), UINT#0)), 1, SINT_TO_DINT(GC_SEQ)));
+        g_astBatchDef[i].aiMix[k] := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), UINT#0);
+        g_astBatchDef[i].aiMixCnt[k] := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 5), UINT#0);
         ImportLine := TRUE;
 
     ELSIF sRec = 'SHARE' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_FEEDS);
-        g_stShareCfg.aeStrat[i] := UINT_TO_SINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), 0));
-        g_stShareCfg.eMatch := UINT_TO_SINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), 0));
-        g_stShareCfg.bStrictOrder := (FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 5), 0) > 0);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_FEEDS)));
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), UINT#0);
+        CASE uiV OF
+            UINT#1: g_stShareCfg.aeStrat[i] := ET_SP_BalStrat#Greedy;
+            UINT#2: g_stShareCfg.aeStrat[i] := ET_SP_BalStrat#Balanced;
+            UINT#3: g_stShareCfg.aeStrat[i] := ET_SP_BalStrat#Manual;
+            ELSE    g_stShareCfg.aeStrat[i] := ET_SP_BalStrat#Organic;
+        END_CASE
+        uiV := FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 4), UINT#0);
+        CASE uiV OF
+            UINT#1: g_stShareCfg.eMatch := ET_SP_MatchMode#Unmatched;
+            UINT#2: g_stShareCfg.eMatch := ET_SP_MatchMode#Mixed;
+            ELSE    g_stShareCfg.eMatch := ET_SP_MatchMode#Matched;
+        END_CASE
+        g_stShareCfg.bStrictOrder := (FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 5), UINT#0) > UINT#0);
         g_stShareCfg.rPickBias := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 6), g_stShareCfg.rPickBias);
-        g_stShareCfg.aiOutfeedMap[i] := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 7), 0)), 0, GC_FEEDS);
+        g_stShareCfg.aiOutfeedMap[i] := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 7), UINT#0)), 0, SINT_TO_DINT(GC_FEEDS)));
         ImportLine := TRUE;
 
     ELSIF sRec = 'SHARER' THEN
-        i := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), 0)), 1, GC_FEEDS);
-        k := FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), 0)), 1, GC_ROBOTS);
+        i := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 2), UINT#0)), 1, SINT_TO_DINT(GC_FEEDS)));
+        k := DINT_TO_SINT(FUN_SP_ClampI(UINT_TO_DINT(FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 3), UINT#0)), 1, SINT_TO_DINT(GC_ROBOTS)));
         g_stShareCfg.arRatio[k] := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 4), g_stShareCfg.arRatio[k]);
         g_stShareCfg.arRangeFrom[i][k] := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 5), g_stShareCfg.arRangeFrom[i][k]);
         g_stShareCfg.arRangeTo[i][k] := FUN_SP_StrToLReal(FUN_SP_TokN(sLine, ',', 6), g_stShareCfg.arRangeTo[i][k]);
         g_stShareCfg.audTypeMask[k] := FUN_SP_StrToUd(FUN_SP_TokN(sLine, ',', 7), UDINT#0);
-        g_stShareCfg.aabManual[i][k] := (FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 8), 0) > 0);
+        g_stShareCfg.aabManual[i][k] := (FUN_SP_StrToUi(FUN_SP_TokN(sLine, ',', 8), UINT#0) > UINT#0);
         ImportLine := TRUE;
 
     ELSE

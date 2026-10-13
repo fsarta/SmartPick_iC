@@ -39,12 +39,12 @@ END_TYPE
 
 TYPE ST_SP_MaintCfg :
 STRUCT
-    (* Grip-cycle thresholds per robot (0 = counter disabled) *)
-    audiRobCycles : ARRAY[1..GC_ROBOTS] OF UDINT;
-    (* Camera shot thresholds (0 = disabled) *)
-    audiCamShots  : ARRAY[1..GC_CAMS] OF UDINT;
-    (* Conveyor run-time thresholds [min] (0 = disabled) *)
-    audiConvMin   : ARRAY[1..GC_FEEDS] OF UDINT;
+    (* Grip-cycle thresholds per robot (0 = counter disabled) 1..GC_ROBOTS *)
+    audiRobCycles : ARRAY[1..4] OF UDINT;
+    (* Camera shot thresholds (0 = disabled) 1..GC_CAMS *)
+    audiCamShots  : ARRAY[1..2] OF UDINT;
+    (* Conveyor run-time thresholds [min] (0 = disabled) 1..GC_FEEDS *)
+    audiConvMin   : ARRAY[1..8] OF UDINT;
     (* Vacuum pump run-time threshold [min] (0 = disabled) *)
     udiPumpMin    : UDINT;
 END_STRUCT
@@ -52,18 +52,18 @@ END_TYPE
 
 TYPE ST_SP_MaintStat :
 STRUCT
-    (* Grip-cycle counters per robot *)
-    audiRobCycles : ARRAY[1..GC_ROBOTS] OF UDINT;
-    audiRobPct    : ARRAY[1..GC_ROBOTS] OF LREAL;   (* Load 0..1 *)
-    abRobDue      : ARRAY[1..GC_ROBOTS] OF BOOL;    (* Maintenance due *)
-    (* Camera shot counters *)
-    audiCamShots  : ARRAY[1..GC_CAMS] OF UDINT;
-    audiCamPct    : ARRAY[1..GC_CAMS] OF LREAL;
-    abCamDue      : ARRAY[1..GC_CAMS] OF BOOL;
-    (* Conveyor run-time counters [min] *)
-    audiConvMin   : ARRAY[1..GC_FEEDS] OF UDINT;
-    audiConvPct   : ARRAY[1..GC_FEEDS] OF LREAL;
-    abConvDue     : ARRAY[1..GC_FEEDS] OF BOOL;
+    (* Grip-cycle counters per robot 1..GC_ROBOTS *)
+    audiRobCycles : ARRAY[1..4] OF UDINT;
+    audiRobPct    : ARRAY[1..4] OF LREAL;   (* Load 0..1 *)
+    abRobDue      : ARRAY[1..4] OF BOOL;    (* Maintenance due *)
+    (* Camera shot counters 1..GC_CAMS *)
+    audiCamShots  : ARRAY[1..2] OF UDINT;
+    audiCamPct    : ARRAY[1..2] OF LREAL;
+    abCamDue      : ARRAY[1..2] OF BOOL;
+    (* Conveyor run-time counters [min] 1..GC_FEEDS *)
+    audiConvMin   : ARRAY[1..8] OF UDINT;
+    audiConvPct   : ARRAY[1..8] OF LREAL;
+    abConvDue     : ARRAY[1..8] OF BOOL;
     (* Vacuum pump run-time counter [min] *)
     udiPumpMin    : UDINT;
     rPumpPct      : LREAL;

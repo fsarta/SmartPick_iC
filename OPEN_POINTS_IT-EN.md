@@ -199,6 +199,7 @@ protocol auto-presets.
 
 | Check | Esito / Result |
 |-------|----------------|
+| QA strutturale e tipizzazione rigorosa v1.9 (73 file ST: zero errori di cast, zero accessi `VAR_IN_OUT` nei metodi, zero `ADR()`, zero `DT`, zero costanti simboliche nei limiti array, incapsulamento FB completo) | **PASS** |
 | QA strutturale ST (73 file: bilanciamento FB/FUN/METHOD/TYPE/VAR, segnaposto, ASCII, vincoli metodo) | **PASS** |
 | Convenzione tipo di ritorno v1.8 (`scripts/sp_ret_test.py`): zero metodi/function void, ogni metodo assegna il proprio ritorno, 198 metodi tipizzati | **PASS** (36/36) |
 | Linter partizionamento multi-task v1.6 (`scripts/sp_task_test.py`) | **PASS** (155/155) |

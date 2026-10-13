@@ -48,7 +48,7 @@ VAR
     m_bCfgOk : BOOL;
     m_Sock   : SP_Socket;       (* TCP adapter *)
     m_sPend  : STRING(240);     (* Response accumulation buffer *)
-    m_astIt  : ARRAY[1..GC_VIS_MAX] OF ST_SP_VisionItem; (* Parsed items *)
+    m_astIt  : ARRAY[1..16] OF ST_SP_VisionItem; (* Parsed items 1..GC_VIS_MAX *)
     m_iCnt   : SINT := 0;       (* Parsed item count *)
     m_iRd    : SINT := 0;       (* Read index for GetItem *)
     m_bTrigPrev : BOOL;
@@ -164,7 +164,7 @@ END_FUNCTION_BLOCK
 METHOD BuildTrig : STRING(64)
 VAR
     (* Position of the {SEQ} macro inside the template *)
-    iPos : SINT;
+    iPos : INT;
     (* Template part left of {SEQ} *)
     sL   : STRING(32);
     (* Template part right of {SEQ} *)
@@ -176,7 +176,7 @@ END_VAR
             sL := LEFT(stCfg.sSendFmt, iPos - 1);
             sR := RIGHT(stCfg.sSendFmt, LEN(stCfg.sSendFmt) - iPos - 4);
             m_udiSeq := m_udiSeq + 1;
-            BuildTrig := CONCAT(sL, CONCAT(FUN_SP_UiToStr(m_udiSeq), sR));
+            BuildTrig := CONCAT(sL, CONCAT(FUN_SP_UdToStr(m_udiSeq), sR));
         ELSE
             BuildTrig := stCfg.sSendFmt;
         END_IF
@@ -219,15 +219,15 @@ END_METHOD
 METHOD m_ParseLine : BOOL
 VAR
     (* Position of CR in the pending buffer *)
-    iCR  : SINT;
+    iCR  : INT;
     (* Position of LF in the pending buffer *)
-    iLF  : SINT;
+    iLF  : INT;
     (* Line-break position inside the pending buffer *)
-    iPos : SINT;
+    iPos : INT;
     (* Line consumed from the pending buffer *)
     sLine: STRING(64);
     (* Pending-buffer length before the cut *)
-    iLen : SINT;
+    iLen : INT;
 END_VAR
     m_ParseLine   := FALSE;
     m_bLineValid  := FALSE;
@@ -296,7 +296,7 @@ END_VAR
     IF (uiType = 0) OR (uiType > UDINT_TO_UINT(SINT_TO_UDINT(GC_TYPES))) THEN
         RETURN;                     (* Invalid or unclassified result *)
     END_IF
-    IF REAL_TO_LREAL(rSc) < stCfg.rMinScore THEN
+    IF rSc < stCfg.rMinScore THEN
         RETURN;                     (* Below acceptance threshold *)
     END_IF
 
@@ -308,7 +308,8 @@ END_VAR
     m_stNew.p2.rX    := rX;
     m_stNew.p2.rY    := rY;
     m_stNew.p2.rTh   := FUN_SP_NormAng(rTh);
-    m_stNew.rScore   := REAL_TO_LREAL(rSc);
+    m_stNew.rScore   := rSc;
+    m_stNew.rWeight  := 0.0;
     m_stNew.rBeltPos := rBeltPos;
     m_stNew.bTarget  := FALSE;
     m_stNew.bValid   := TRUE;
@@ -327,7 +328,13 @@ METHOD GetItem : BOOL
         m_iRd := m_iRd + 1;
         out_stItem := m_astIt[m_iRd];
         GetItem := TRUE;
+        IF m_iRd >= m_iCnt THEN
+            bItemsAvail := FALSE;
+        END_IF
     ELSE
+        m_iCnt := 0;
+        m_iRd  := 0;
+        bItemsAvail := FALSE;
         GetItem := FALSE;
     END_IF
 END_METHOD
@@ -338,7 +345,7 @@ END_METHOD
    Drop parsed items (used by the manager after a harvest abort).
    ----------------------------------------------------------------------- *)
 METHOD ClearItems : UDINT
-    ClearItems := UDINT_TO_UDINT(SINT_TO_UDINT(m_iCnt));  (* Discarded items *)
+    ClearItems := SINT_TO_UDINT(m_iCnt);  (* Discarded items *)
     m_iCnt := 0;
     m_iRd  := 0;
     bItemsAvail := FALSE;
@@ -358,8 +365,8 @@ END_VAR
 
     IF LEN(stIn.sDelim) = 0 THEN
         Configure := ET_SP_RetCode#ErrParam;
-    ELSIF (stIn.uiIdxType < 1) OR (stIn.uiIdxX < 1) OR (stIn.uiIdxY < 1)
-          OR (stIn.uiIdxTh < 1) OR (stIn.uiIdxScore < 1) THEN
+    ELSIF (stIn.uiIdxType < UINT#1) OR (stIn.uiIdxX < UINT#1) OR (stIn.uiIdxY < UINT#1)
+          OR (stIn.uiIdxTh < UINT#1) OR (stIn.uiIdxScore < UINT#1) THEN
         Configure := ET_SP_RetCode#ErrParam;
     ELSIF (stIn.uiPort = 0) OR (LEN(stIn.sIp) = 0) THEN
         Configure := ET_SP_RetCode#ErrParam;

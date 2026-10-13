@@ -47,12 +47,12 @@ VAR
     g_File   : SP_FileIo;
 
     (* --------------------------- Locals ---------------------------------- *)
-    aRobPicks : ARRAY[1..GC_ROBOTS] OF UDINT;   (* Maintenance mirror: picks *)
-    aCamTrig  : ARRAY[1..GC_CAMS] OF UDINT;     (* Maintenance mirror: shots *)
+    aRobPicks : ARRAY[1..4] OF UDINT;   (* Maintenance mirror: picks 1..GC_ROBOTS *)
+    aCamTrig  : ARRAY[1..2] OF UDINT;   (* Maintenance mirror: shots 1..GC_CAMS *)
     (* R-16: alarm edge latches (raise once, clear on recovery) *)
     m_bMaintAlm : BOOL := FALSE;
     m_bTestAlm  : BOOL := FALSE;            (* Prev-scan self-test alarm edge *)
-    m_abSepAlm  : ARRAY[1..GC_ROBOTS] OF BOOL; (* Separation-stop edge mirrors *)
+    m_abSepAlm  : ARRAY[1..4] OF BOOL;      (* Separation-stop edge mirrors 1..GC_ROBOTS *)
     (* Recipe save / load state (0=idle 1=saving 2=loading) *)
     m_iRcpSt  : SINT := 0;
     m_iRcpIdle: SINT := 0;                  (* EOF detect counter (loading) *)
@@ -60,6 +60,8 @@ VAR
     m_iLogN   : DINT := 0;                  (* Log dump line cursor *)
     m_bFileClose : BOOL := FALSE;           (* Deferred file close request *)
     bRc       : BOOL;                       (* Boolean call result scratch *)
+    udiRc     : UDINT;                      (* Unsigned call result scratch *)
+    uiRc      : UINT;                       (* UINT call result scratch *)
     kD        : DINT;                       (* General loop index *)
 END_VAR
 
@@ -190,7 +192,7 @@ IF GVL_SP_Hmi.bSaveRecipe AND (m_iRcpSt = 0) THEN
         GVL_SP_Hmi.sHmiRecipeState := 'saving...';
     ELSE
         GVL_SP_Hmi.sHmiRecipeState := 'save error';
-        g_Log.LogError(ET_SP_LogSource#Persist, 1, 'Recipe open for write failed');
+        udiRc := g_Log.LogError(ET_SP_LogSource#Persist, UINT#1, 'Recipe open for write failed');
     END_IF
 END_IF
 
@@ -203,7 +205,7 @@ IF GVL_SP_Hmi.bLoadRecipe AND (m_iRcpSt = 0) THEN
         GVL_SP_Hmi.sHmiRecipeState := 'loading...';
     ELSE
         GVL_SP_Hmi.sHmiRecipeState := 'load error';
-        g_Log.LogError(ET_SP_LogSource#Persist, 1, 'Recipe open for read failed');
+        udiRc := g_Log.LogError(ET_SP_LogSource#Persist, UINT#1, 'Recipe open for read failed');
     END_IF
 END_IF
 
@@ -275,7 +277,7 @@ END_CASE
    ========================================================================= *)
 IF GVL_SP_Hmi.bAckAll THEN
     GVL_SP_Hmi.bAckAll := FALSE;
-    g_Alm.AckAll();
+    uiRc := g_Alm.AckAll();
 END_IF
 
 (* Production totals (application-task snapshot) *)

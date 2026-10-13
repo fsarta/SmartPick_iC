@@ -30,13 +30,13 @@ END_VAR
 VAR_OUTPUT
     uiCount : UINT;                   (* Entries currently stored *)
     udiSeq  : UDINT;                  (* Total entries ever logged *)
+    out_stEntry : ST_SP_LogEntry;     (* Result buffer of GetEntry/ExportLine *)
 END_VAR
 VAR
-    m_astBuf : ARRAY[1..GC_LOG_N] OF ST_SP_LogEntry;  (* Ring buffer *)
+    m_astBuf : ARRAY[1..256] OF ST_SP_LogEntry;  (* Ring buffer 1..GC_LOG_N *)
     m_iHead  : UINT := 1;             (* Next write slot (1-based) *)
     m_iCnt   : UINT := 0;             (* Stored entries *)
     m_udiSeq : UDINT := 0;            (* Sequence generator *)
-    out_stEntry : ST_SP_LogEntry;     (* Result buffer of GetEntry/ExportLine *)
 END_VAR
 
 (* ------------------------------- Body ---------------------------------- *)
@@ -75,10 +75,10 @@ END_VAR
     m_astBuf[iW].sText  := sText;
 
     m_iHead := m_iHead + 1;
-    IF m_iHead > UDINT_TO_UINT(GC_LOG_N) THEN
+    IF m_iHead > GC_LOG_N THEN
         m_iHead := 1;
     END_IF
-    IF m_iCnt < UDINT_TO_UINT(GC_LOG_N) THEN
+    IF m_iCnt < GC_LOG_N THEN
         m_iCnt := m_iCnt + 1;
     END_IF
 
@@ -151,13 +151,13 @@ VAR
 END_VAR
     GetEntry := FALSE;
     IF (iIdx >= 1) AND (iIdx <= m_iCnt) THEN
-        iPhys := m_iHead + UDINT_TO_UINT(GC_LOG_N);  (* avoid unsigned underflow *)
+        iPhys := m_iHead + GC_LOG_N;  (* avoid unsigned underflow *)
         iPhys := iPhys - iIdx;
-        IF iPhys > UDINT_TO_UINT(GC_LOG_N) THEN
-            iPhys := iPhys - UDINT_TO_UINT(GC_LOG_N);
+        IF iPhys > GC_LOG_N THEN
+            iPhys := iPhys - GC_LOG_N;
         END_IF
         IF iPhys = 0 THEN
-            iPhys := UDINT_TO_UINT(GC_LOG_N);
+            iPhys := GC_LOG_N;
         END_IF
         out_stEntry := m_astBuf[iPhys];
         GetEntry := TRUE;
@@ -193,17 +193,17 @@ END_VAR
             ELSE                  sLvl := 'ERROR';
         END_CASE
 
-        sTmp := FUN_SP_RtcToStr(out_stEntry.stTime);
-        sTmp := CONCAT(';', sTmp);
-        sTmp := CONCAT(sLvl, sTmp);
-        sTmp := CONCAT(';', sTmp);
-        sTmp := CONCAT(FUN_SP_SrcText(out_stEntry.eSrc), sTmp);
-        sTmp := CONCAT(';', sTmp);
-        sTmp := CONCAT(FUN_SP_UiToStr(out_stEntry.uiCode), sTmp);
-        sTmp := CONCAT(';', sTmp);
-        sTmp := CONCAT(out_stEntry.sText, sTmp);
-        sTmp := CONCAT(';', sTmp);
-        sTmp := CONCAT(FUN_SP_UiToStr(UDINT_TO_UINT(out_stEntry.udiSeq MOD UDINT#100000)), sTmp);
+        sTmp := FUN_SP_UiToStr(UDINT_TO_UINT(out_stEntry.udiSeq MOD UDINT#100000));
+        sTmp := CONCAT(sTmp, ';');
+        sTmp := CONCAT(sTmp, FUN_SP_RtcToStr(out_stEntry.stTime));
+        sTmp := CONCAT(sTmp, ';');
+        sTmp := CONCAT(sTmp, sLvl);
+        sTmp := CONCAT(sTmp, ';');
+        sTmp := CONCAT(sTmp, FUN_SP_SrcText(out_stEntry.eSrc));
+        sTmp := CONCAT(sTmp, ';');
+        sTmp := CONCAT(sTmp, FUN_SP_UiToStr(out_stEntry.uiCode));
+        sTmp := CONCAT(sTmp, ';');
+        sTmp := CONCAT(sTmp, out_stEntry.sText);
 
         out_stEntry.sText := sTmp;
         ExportLine := TRUE;

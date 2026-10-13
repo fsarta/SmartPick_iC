@@ -78,7 +78,7 @@ STRUCT
     iFeed   : SINT;             (* Feed to reserve from *)
     uiTypeId: UINT;             (* Type requested (0 = any) *)
     bTargetOnly : BOOL;         (* TRUE = target reservation (place) *)
-    rMaxWeight  : REAL;         (* Tool capacity *)
+    rMaxWeight  : LREAL;        (* Tool capacity [g] *)
     (* R-07 advanced multi-grip: cluster reservation request. Filled by
        PRG_SP_TaskFast from the robot tool configuration when bCluster = TRUE;
        the response then arrives in SP_Dispatch.astClRsp. *)

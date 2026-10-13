@@ -48,10 +48,20 @@ IF m_bInit OR GVL_SP_Hmi.bApplyConfig THEN
     GVL_SP_Hmi.bApplyConfig := FALSE;
     GVL_SP_Sync.bCfgPend   := TRUE;     (* -> TaskFast re-configure pulse *)
 
-    eRc := g_Disp.Bal.Configure(g_stShareCfg);
-    g_Disp.stShare := g_stShareCfg;
+    eRc := g_Disp.Configure(g_stShareCfg);
     g_Disp.uiMaxGrip := g_astRobCfg[1].uiMaxGrip;   (* System-wide multi-grip *)
     g_Sys.stSysCfg := g_stSysCfg;
+
+    (* Load batch definitions into the system batch registry *)
+    FOR iD := 1 TO SINT_TO_DINT(GC_BATCHES) DO
+        eRc := g_Sys.SetBatch(DINT_TO_SINT(iD), g_astBatchDef[iD]);
+    END_FOR
+
+    (* Populate camera ownership matrix for resiliency (OnRobotLoss) *)
+    FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
+        g_abCamOwnerCfg[1][iD] := g_astRobCfg[iD].abiCamOwner[1];
+        g_abCamOwnerCfg[2][iD] := g_astRobCfg[iD].abiCamOwner[2];
+    END_FOR
 
     (* R-07: per-robot synchronized multi-grip enable for the dispatcher *)
     FOR iD := 1 TO SINT_TO_DINT(GC_ROBOTS) DO
@@ -77,13 +87,13 @@ END_IF
 IF g_Sys.aiPattStart[7] > 0 THEN
     iBatch := g_Sys.aiPattStart[7];
     g_Sys.aiPattStart[7] := 0;          (* Consume the pulse (owner task) *)
-    bRc := g_Sys.Batch.GetDef(iBatch);
+    bRc := g_Sys.GetBatchDef(iBatch);
     IF bRc THEN
-        iD := UINT_TO_DINT(g_Sys.Batch.out_stDef.uiPattId);
-        bRc := g_Sys.Batch.GetStat(iBatch);
-        GVL_SP_Sync.stPattCmd[1].stDef      := g_Sys.Batch.out_stDef;
+        iD := UINT_TO_DINT(g_Sys.out_stBatchDef.uiPattId);
+        bRc := g_Sys.GetBatchStat(iBatch);
+        GVL_SP_Sync.stPattCmd[1].stDef      := g_Sys.out_stBatchDef;
         GVL_SP_Sync.stPattCmd[1].stPatt     := g_astPatt[iD];
-        GVL_SP_Sync.stPattCmd[1].udiBatchId := g_Sys.Batch.out_stStat.udiBatchId;
+        GVL_SP_Sync.stPattCmd[1].udiBatchId := g_Sys.out_stBatchStat.udiBatchId;
         GVL_SP_Sync.stPattCmd[1].iBatch     := iBatch;
         GVL_SP_Sync.stPattCmd[1].iFeed      := 7;
         GVL_SP_Sync.stPattCmd[1].bStart     := TRUE;   (* Latched request *)
@@ -92,13 +102,13 @@ END_IF
 IF g_Sys.aiPattStart[8] > 0 THEN
     iBatch := g_Sys.aiPattStart[8];
     g_Sys.aiPattStart[8] := 0;
-    bRc := g_Sys.Batch.GetDef(iBatch);
+    bRc := g_Sys.GetBatchDef(iBatch);
     IF bRc THEN
-        iD := UINT_TO_DINT(g_Sys.Batch.out_stDef.uiPattId);
-        bRc := g_Sys.Batch.GetStat(iBatch);
-        GVL_SP_Sync.stPattCmd[2].stDef      := g_Sys.Batch.out_stDef;
+        iD := UINT_TO_DINT(g_Sys.out_stBatchDef.uiPattId);
+        bRc := g_Sys.GetBatchStat(iBatch);
+        GVL_SP_Sync.stPattCmd[2].stDef      := g_Sys.out_stBatchDef;
         GVL_SP_Sync.stPattCmd[2].stPatt     := g_astPatt[iD];
-        GVL_SP_Sync.stPattCmd[2].udiBatchId := g_Sys.Batch.out_stStat.udiBatchId;
+        GVL_SP_Sync.stPattCmd[2].udiBatchId := g_Sys.out_stBatchStat.udiBatchId;
         GVL_SP_Sync.stPattCmd[2].iBatch     := iBatch;
         GVL_SP_Sync.stPattCmd[2].iFeed      := 8;
         GVL_SP_Sync.stPattCmd[2].bStart     := TRUE;
@@ -120,10 +130,10 @@ IF g_Sys.aiPattAbort[8] > 0 THEN
 END_IF
 
 (* Batch progress: consume the pattern status published by the fast task *)
-iBatch := g_Sys.Batch.GetActive(7);
-IF iBatch > 0 THEN g_Sys.Batch.SyncProgress(iBatch, GVL_SP_Sync.stPattStat[1]); END_IF
-iBatch := g_Sys.Batch.GetActive(8);
-IF iBatch > 0 THEN g_Sys.Batch.SyncProgress(iBatch, GVL_SP_Sync.stPattStat[2]); END_IF
+iBatch := g_Sys.GetActiveBatch(7);
+IF iBatch > 0 THEN bRc := g_Sys.SyncBatchProgress(iBatch, GVL_SP_Sync.stPattStat[1]); END_IF
+iBatch := g_Sys.GetActiveBatch(8);
+IF iBatch > 0 THEN bRc := g_Sys.SyncBatchProgress(iBatch, GVL_SP_Sync.stPattStat[2]); END_IF
 
 (* =========================================================================
    3) DISPATCHER (decision layer)
@@ -132,7 +142,7 @@ IF iBatch > 0 THEN g_Sys.Batch.SyncProgress(iBatch, GVL_SP_Sync.stPattStat[2]); 
       in PRG_SP_TaskFast (latched requests, latched responses).
    ========================================================================= *)
 g_Disp.bEnable := g_Sys.abDispatchOn;
-g_Disp.Run();
+bRc := g_Disp.Run();
 
 (* =========================================================================
    3b) SYSTEM ORCHESTRATOR + COMMAND WIRING
@@ -176,11 +186,11 @@ WHILE (udiDlt > UDINT#0) AND (udiGuard < UDINT#64) DO
     udiDlt  := GVL_SP_Sync.udiStatWr - GVL_SP_Sync.udiStatRd;
 
     IF eStEv.bCycle THEN
-        g_Sys.Stats.AddCycle();
+        bRc := g_Sys.AddCycleStat();
     ELSIF eStEv.bPlace THEN
-        g_Sys.Stats.AddPlace(eStEv.bOk, eStEv.iFeed);
+        bRc := g_Sys.AddPlaceStat(eStEv.bOk, eStEv.iFeed);
     ELSE
-        g_Sys.Stats.AddPick(eStEv.bOk, eStEv.iFeed);
+        bRc := g_Sys.AddPickStat(eStEv.bOk, eStEv.iFeed);
     END_IF
 END_WHILE
 
@@ -189,7 +199,7 @@ END_WHILE
       Counters snapshot (HMI-grade: cosmetic tear acceptable, never used
       for control) - single writer, written once per scan.
    ========================================================================= *)
-GVL_SP_Sync.stTotPub := g_Sys.Stats.stTot;
-GVL_SP_Sync.rPphPub  := g_Sys.Stats.rPiecesPerH;
+GVL_SP_Sync.stTotPub := g_Sys.stTot;
+GVL_SP_Sync.rPphPub  := g_Sys.rPiecesPerH;
 
 END_PROGRAM

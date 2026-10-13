@@ -23,8 +23,8 @@ STRUCT
     udiId    : UDINT;         (* Globally unique item id (system counter) *)
     uiTypeId : UINT;          (* Product type 1..GC_TYPES, 0 = unknown *)
     p2       : ST_SP_Pose2D;  (* Pose in the producer frame (camera or feed) *)
-    rScore   : REAL;          (* Vision match score [0..1] *)
-    rWeight  : REAL;          (* Part weight [g], 0 = unknown *)
+    rScore   : LREAL;         (* Vision match score [0..1] *)
+    rWeight  : LREAL;         (* Part weight [g], 0 = unknown *)
     rBeltPos : LREAL;         (* Belt encoder coordinate at capture [mm] *)
     bTarget  : BOOL;          (* TRUE = placement target, FALSE = product *)
     bValid   : BOOL;          (* Record validity *)
@@ -51,6 +51,7 @@ STRUCT
     uiPort     : UINT;          (* Camera TCP port *)
     tTimeout   : TIME;          (* Response timeout *)
     tDelay     : TIME;          (* Delayed acquisition time after trigger *)
+    tInterval  : TIME;          (* Periodic trigger interval (Interval mode) *)
     eTrig      : ET_SP_TrigMode;(* Trigger policy *)
     uiMaxItems : UINT;          (* Max items parsed per image *)
     sTrigStr   : STRING(32);    (* Trigger command (Cognex/Keyence/Generic) *)
@@ -63,8 +64,8 @@ STRUCT
     uiIdxTh    : UINT;          (* 1-based token index: theta *)
     uiIdxScore : UINT;          (* 1-based token index: score *)
     bThInRad   : BOOL;          (* TRUE = theta from vision in radians (converted to deg); FALSE = degrees *)
-    rMinScore  : REAL;          (* Minimum accepted match score [0..1] *)
-    astMap     : ARRAY[1..GC_FEEDS] OF ST_SP_CamFeedMap; (* Feed region table *)
+    rMinScore  : LREAL;         (* Minimum accepted match score [0..1] *)
+    astMap     : ARRAY[1..8] OF ST_SP_CamFeedMap; (* Feed region table 1..GC_FEEDS *)
 END_STRUCT
 END_TYPE
 

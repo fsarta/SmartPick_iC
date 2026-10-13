@@ -42,13 +42,19 @@ VAR CONSTANT
     GC_PATT     : SINT  := 8;           (* Max place patterns *)
     GC_PATT_SLOTS : SINT := 16;         (* Max slots per pattern (rows x cols) *)
     GC_BATCHES  : SINT  := 8;           (* Max batch definitions *)
-    GC_LOG_N    : SINT  := 256;         (* Logger ring buffer depth *)
-    GC_ALARM_N  : SINT  := 64;          (* Alarm registry depth *)
+    GC_LOG_N    : UINT  := 256;         (* Logger ring buffer depth *)
+    GC_ALARM_N  : UINT  := 64;          (* Alarm registry depth *)
     GC_MOVAVG_N : SINT  := 8;           (* Speed filter taps *)
-    GC_STRCFG   : SINT  := 128;         (* Generic config string length *)
-    GC_STRMSG   : SINT  := 120;         (* Message string length *)
+    GC_STRCFG   : INT   := 128;         (* Generic config string length *)
+    GC_STRMSG   : INT   := 120;         (* Message string length *)
     GC_ZONES    : SINT  := 4;           (* Max interlock zones (R-05 zone guard) *)
     GC_ZONE_NONE: SINT  := 0;           (* Zone id "unguarded" *)
+    GC_CALIB_PTS: SINT  := 8;           (* Max 2D calibration point pairs *)
+    GC_RATE_WIN : UDINT := 10000;       (* Rolling throughput window [ms] *)
+
+    (* Printable ASCII table, codes 32..126 (95 characters).
+       Used by FUN_SP_ByteCh: char = MID(table, 1, byte-31). *)
+    GC_ASCII95  : STRING(95) := ' !"#$%&''()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
 
     (* ------------------- Physical / mathematical constants --------------- *)
     (* Trig-boundary helpers: the application stores angles in DEGREES;
@@ -62,12 +68,6 @@ VAR CONSTANT
     GC_360      : LREAL := 360.0;                    (* Full turn [deg] *)
 
     (* ------------------- Timing / housekeeping --------------------------- *)
-    (* Nil timestamp sentinel for the v1.8.0 RTC structs: an all-zero
-       Yt_YA_RTC_Struct means "no timestamp" (e.g. alarm never cleared).
-       The type comes from the Y_Yaskawa_Toolbox library (vendor RTC). *)
-    GC_stRtcNil     : Yt_YA_RTC_Struct := (Year := 0, Month := 0, Day := 0,
-                                           Hour := 0, Minute := 0, Second := 0,
-                                           mSec := 0);  (* Nil timestamp (no stamp) *)
     GC_ITEM_AGE_MS  : UDINT := 60000;   (* Default item tracking timeout [ms] *)
     GC_SPEED_MIN    : LREAL := 0.5;     (* Deadband for speed filter [u/s] *)
     GC_DIST_EPS     : LREAL := 0.01;    (* Distance epsilon [u] *)

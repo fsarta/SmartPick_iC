@@ -284,7 +284,7 @@ IF m_bGo THEN
 
             (* ---- Two simulated cameras, distance-triggered ---- *)
             g_astCamCfg[1].bUsed := TRUE;   g_astCamCfg[1].sName := 'cam_a';
-            g_astCamCfg[1].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[1].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[1].sIp := '127.0.0.1';  g_astCamCfg[1].uiPort := UINT#0;
             g_astCamCfg[1].tTimeout := T#800ms; g_astCamCfg[1].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[1].uiMaxItems := UINT#12;   g_astCamCfg[1].bThInRad := FALSE;
@@ -299,7 +299,7 @@ IF m_bGo THEN
                 g_astCamCfg[1].astMap[m_i].rRefSpeed := 500.0;
             END_FOR
             g_astCamCfg[2].bUsed := TRUE;   g_astCamCfg[2].sName := 'cam_b';
-            g_astCamCfg[2].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[2].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[2].sIp := '127.0.0.1';  g_astCamCfg[2].uiPort := UINT#0;
             g_astCamCfg[2].tTimeout := T#800ms; g_astCamCfg[2].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[2].uiMaxItems := UINT#12;   g_astCamCfg[2].bThInRad := FALSE;
@@ -464,7 +464,7 @@ IF m_bGo THEN
 
             (* ---- Two Cognex cameras (adapt IPs to the site) ---- *)
             g_astCamCfg[1].bUsed := TRUE;   g_astCamCfg[1].sName := 'cam_cgx1';
-            g_astCamCfg[1].eDrv := ET_SP_VisionDrv#Cognex;
+            g_astCamCfg[1].eDrv := ET_SP_CamDrv#Cognex;
             g_astCamCfg[1].sIp := '192.168.10.10';  g_astCamCfg[1].uiPort := UINT#5000;
             g_astCamCfg[1].tTimeout := T#800ms; g_astCamCfg[1].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[1].uiMaxItems := UINT#12;   g_astCamCfg[1].bThInRad := FALSE;
@@ -474,7 +474,7 @@ IF m_bGo THEN
             g_astCamCfg[1].astMap[1].rTrigDist := 300.0;
             g_astCamCfg[1].astMap[1].rRefSpeed := 500.0;
             g_astCamCfg[2].bUsed := TRUE;   g_astCamCfg[2].sName := 'cam_cgx2';
-            g_astCamCfg[2].eDrv := ET_SP_VisionDrv#Cognex;
+            g_astCamCfg[2].eDrv := ET_SP_CamDrv#Cognex;
             g_astCamCfg[2].sIp := '192.168.10.11';  g_astCamCfg[2].uiPort := UINT#5000;
             g_astCamCfg[2].tTimeout := T#800ms; g_astCamCfg[2].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[2].uiMaxItems := UINT#12;   g_astCamCfg[2].bThInRad := FALSE;
@@ -598,7 +598,7 @@ IF m_bGo THEN
             END_FOR
 
             g_astCamCfg[1].bUsed := TRUE;   g_astCamCfg[1].sName := 'cam_a';
-            g_astCamCfg[1].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[1].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[1].sIp := '127.0.0.1';  g_astCamCfg[1].uiPort := UINT#0;
             g_astCamCfg[1].tTimeout := T#800ms; g_astCamCfg[1].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[1].uiMaxItems := UINT#12;   g_astCamCfg[1].bThInRad := FALSE;
@@ -608,7 +608,7 @@ IF m_bGo THEN
             g_astCamCfg[1].astMap[1].rTrigDist := 300.0;
             g_astCamCfg[1].astMap[1].rRefSpeed := 500.0;
             g_astCamCfg[2].bUsed := TRUE;   g_astCamCfg[2].sName := 'cam_b';
-            g_astCamCfg[2].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[2].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[2].sIp := '127.0.0.1';  g_astCamCfg[2].uiPort := UINT#0;
             g_astCamCfg[2].tTimeout := T#800ms; g_astCamCfg[2].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[2].uiMaxItems := UINT#12;   g_astCamCfg[2].bThInRad := FALSE;
@@ -731,7 +731,7 @@ IF m_bGo THEN
             END_FOR
 
             g_astCamCfg[1].bUsed := TRUE;   g_astCamCfg[1].sName := 'cam_a';
-            g_astCamCfg[1].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[1].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[1].sIp := '127.0.0.1';  g_astCamCfg[1].uiPort := UINT#0;
             g_astCamCfg[1].tTimeout := T#800ms; g_astCamCfg[1].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[1].uiMaxItems := UINT#12;   g_astCamCfg[1].bThInRad := FALSE;
@@ -741,7 +741,7 @@ IF m_bGo THEN
             g_astCamCfg[1].astMap[1].rTrigDist := 300.0;
             g_astCamCfg[1].astMap[1].rRefSpeed := 500.0;
             g_astCamCfg[2].bUsed := TRUE;   g_astCamCfg[2].sName := 'cam_b';
-            g_astCamCfg[2].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[2].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[2].sIp := '127.0.0.1';  g_astCamCfg[2].uiPort := UINT#0;
             g_astCamCfg[2].tTimeout := T#800ms; g_astCamCfg[2].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[2].uiMaxItems := UINT#12;   g_astCamCfg[2].bThInRad := FALSE;
@@ -920,7 +920,7 @@ IF m_bGo THEN
 
             (* ONE camera wide enough to watch four infeeds at once *)
             g_astCamCfg[1].bUsed := TRUE;   g_astCamCfg[1].sName := 'cam_wide';
-            g_astCamCfg[1].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[1].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[1].sIp := '127.0.0.1';  g_astCamCfg[1].uiPort := UINT#0;
             g_astCamCfg[1].tTimeout := T#800ms; g_astCamCfg[1].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[1].uiMaxItems := UINT#16;   g_astCamCfg[1].bThInRad := FALSE;
@@ -1050,7 +1050,7 @@ IF m_bGo THEN
             END_FOR
 
             g_astCamCfg[1].bUsed := TRUE;   g_astCamCfg[1].sName := 'cam_a';
-            g_astCamCfg[1].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[1].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[1].sIp := '127.0.0.1';  g_astCamCfg[1].uiPort := UINT#0;
             g_astCamCfg[1].tTimeout := T#800ms; g_astCamCfg[1].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[1].uiMaxItems := UINT#12;   g_astCamCfg[1].bThInRad := FALSE;
@@ -1194,7 +1194,7 @@ IF m_bGo THEN
 
             (* ONE camera, FOUR different feed regions *)
             g_astCamCfg[1].bUsed := TRUE;   g_astCamCfg[1].sName := 'cam_multi';
-            g_astCamCfg[1].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[1].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[1].sIp := '127.0.0.1';  g_astCamCfg[1].uiPort := UINT#0;
             g_astCamCfg[1].tTimeout := T#800ms; g_astCamCfg[1].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[1].uiMaxItems := UINT#16;   g_astCamCfg[1].bThInRad := FALSE;
@@ -1400,7 +1400,7 @@ IF m_bGo THEN
             END_FOR
 
             g_astCamCfg[1].bUsed := TRUE;   g_astCamCfg[1].sName := 'cam_a';
-            g_astCamCfg[1].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[1].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[1].sIp := '127.0.0.1';  g_astCamCfg[1].uiPort := UINT#0;
             g_astCamCfg[1].tTimeout := T#800ms; g_astCamCfg[1].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[1].uiMaxItems := UINT#16;   g_astCamCfg[1].bThInRad := FALSE;
@@ -1414,7 +1414,7 @@ IF m_bGo THEN
                 g_astCamCfg[1].astMap[m_i].rRefSpeed := 600.0;
             END_FOR
             g_astCamCfg[2].bUsed := TRUE;   g_astCamCfg[2].sName := 'cam_b';
-            g_astCamCfg[2].eDrv := ET_SP_VisionDrv#Simulated;
+            g_astCamCfg[2].eDrv := ET_SP_CamDrv#Simulated;
             g_astCamCfg[2].sIp := '127.0.0.1';  g_astCamCfg[2].uiPort := UINT#0;
             g_astCamCfg[2].tTimeout := T#800ms; g_astCamCfg[2].eTrig := ET_SP_TrigMode#Distance;
             g_astCamCfg[2].uiMaxItems := UINT#16;   g_astCamCfg[2].bThInRad := FALSE;

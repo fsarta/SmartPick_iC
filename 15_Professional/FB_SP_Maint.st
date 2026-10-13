@@ -34,51 +34,49 @@ VAR_INPUT
     (* Configuration: thresholds (0 = counter disabled). Main/HMI write. *)
     stCfg   : ST_SP_MaintCfg;
     (* Live mirrors written by Main before this call (same cycle) *)
-    audiRobPicks : ARRAY[1..GC_ROBOTS] OF UDINT;    (* Lifetime picks per robot *)
-    audiCamTrig  : ARRAY[1..GC_CAMS] OF UDINT;      (* Lifetime triggers per camera *)
-    abConvRun    : ARRAY[1..GC_FEEDS] OF BOOL;      (* Conveyor running *)
+    audiRobPicks : ARRAY[1..4] OF UDINT;    (* Lifetime picks per robot 1..GC_ROBOTS *)
+    audiCamTrig  : ARRAY[1..2] OF UDINT;    (* Lifetime triggers per camera 1..GC_CAMS *)
+    abConvRun    : ARRAY[1..8] OF BOOL;     (* Conveyor running 1..GC_FEEDS *)
 END_VAR
 VAR_OUTPUT
     (* Published maintenance state (mirrored to the HMI by Main) *)
     stStat : ST_SP_MaintStat;
 END_VAR
 VAR
+    (* Effective thresholds with defaults applied *)
+    m_stCfg : ST_SP_MaintCfg;
     (* Previous-cycle mirror scans (delta sources) *)
-    m_audiRobPrev : ARRAY[1..GC_ROBOTS] OF UDINT;
-m_audiCamPrev : ARRAY[1..GC_CAMS] OF UDINT; (* Prev-cycle shot counters (delta scan for maintenance) *)
+    m_audiRobPrev : ARRAY[1..4] OF UDINT;
+    m_audiCamPrev : ARRAY[1..2] OF UDINT; (* Prev-cycle shot counters (delta scan for maintenance) *)
     (* Conveyor minute accumulator (ms -> minutes) *)
-    m_audiConvMs  : ARRAY[1..GC_FEEDS] OF UDINT;
+    m_audiConvMs  : ARRAY[1..8] OF UDINT;
     (* Pump minute accumulator (ms -> minutes) *)
     m_udiPumpMs   : UDINT := 0;
-    (* Fill-if-empty guard: thresholds applied once *)
-    m_bCfgDef : BOOL := FALSE;
     (* Loop indices *)
     i : SINT;
 END_VAR
 
 (* ------------------------------- Body ---------------------------------- *)
-(* 0) Default thresholds on the first call (fill-if-empty) ----------------- *)
-IF NOT m_bCfgDef THEN
-    m_bCfgDef := TRUE;
-    IF stCfg.udiPumpMin = UDINT#0 THEN
-        stCfg.udiPumpMin := UDINT#20000;        (* ~333 h service window *)
-    END_IF
-    FOR i := 1 TO GC_ROBOTS DO
-        IF stCfg.audiRobCycles[i] = UDINT#0 THEN
-            stCfg.audiRobCycles[i] := UDINT#1000000;    (* Grip service count *)
-        END_IF
-    END_FOR
-    FOR i := 1 TO GC_CAMS DO
-        IF stCfg.audiCamShots[i] = UDINT#0 THEN
-            stCfg.audiCamShots[i] := UDINT#5000000;     (* Illumination life *)
-        END_IF
-    END_FOR
-    FOR i := 1 TO GC_FEEDS DO
-        IF stCfg.audiConvMin[i] = UDINT#0 THEN
-            stCfg.audiConvMin[i] := UDINT#100000;       (* Belt service time *)
-        END_IF
-    END_FOR
+(* 0) Effective thresholds (fill defaults when 0) -------------------------- *)
+m_stCfg := stCfg;
+IF m_stCfg.udiPumpMin = UDINT#0 THEN
+    m_stCfg.udiPumpMin := UDINT#20000;        (* ~333 h service window *)
 END_IF
+FOR i := 1 TO GC_ROBOTS DO
+    IF m_stCfg.audiRobCycles[i] = UDINT#0 THEN
+        m_stCfg.audiRobCycles[i] := UDINT#1000000;    (* Grip service count *)
+    END_IF
+END_FOR
+FOR i := 1 TO GC_CAMS DO
+    IF m_stCfg.audiCamShots[i] = UDINT#0 THEN
+        m_stCfg.audiCamShots[i] := UDINT#5000000;     (* Illumination life *)
+    END_IF
+END_FOR
+FOR i := 1 TO GC_FEEDS DO
+    IF m_stCfg.audiConvMin[i] = UDINT#0 THEN
+        m_stCfg.audiConvMin[i] := UDINT#100000;       (* Belt service time *)
+    END_IF
+END_FOR
 
 (* 1) Grip cycles per robot (delta of the lifetime pick counters) ---------- *)
 stStat.bAnyDue := FALSE;
@@ -88,9 +86,9 @@ FOR i := 1 TO GC_ROBOTS DO
                                    + (audiRobPicks[i] - m_audiRobPrev[i]);
     END_IF
     m_audiRobPrev[i] := audiRobPicks[i];
-    IF stCfg.audiRobCycles[i] > UDINT#0 THEN
+    IF m_stCfg.audiRobCycles[i] > UDINT#0 THEN
         stStat.audiRobPct[i] := UDINT_TO_LREAL(stStat.audiRobCycles[i])
-                                / UDINT_TO_LREAL(stCfg.audiRobCycles[i]);
+                                / UDINT_TO_LREAL(m_stCfg.audiRobCycles[i]);
         stStat.abRobDue[i] := (stStat.audiRobPct[i] >= 1.0);
         IF stStat.abRobDue[i] THEN stStat.bAnyDue := TRUE; END_IF
     ELSE
@@ -106,9 +104,9 @@ FOR i := 1 TO GC_CAMS DO
                                   + (audiCamTrig[i] - m_audiCamPrev[i]);
     END_IF
     m_audiCamPrev[i] := audiCamTrig[i];
-    IF stCfg.audiCamShots[i] > UDINT#0 THEN
+    IF m_stCfg.audiCamShots[i] > UDINT#0 THEN
         stStat.audiCamPct[i] := UDINT_TO_LREAL(stStat.audiCamShots[i])
-                                / UDINT_TO_LREAL(stCfg.audiCamShots[i]);
+                                / UDINT_TO_LREAL(m_stCfg.audiCamShots[i]);
         stStat.abCamDue[i] := (stStat.audiCamPct[i] >= 1.0);
         IF stStat.abCamDue[i] THEN stStat.bAnyDue := TRUE; END_IF
     ELSE
@@ -126,9 +124,9 @@ FOR i := 1 TO GC_FEEDS DO
             stStat.audiConvMin[i] := stStat.audiConvMin[i] + UDINT#1;
         END_IF
     END_IF
-    IF stCfg.audiConvMin[i] > UDINT#0 THEN
+    IF m_stCfg.audiConvMin[i] > UDINT#0 THEN
         stStat.audiConvPct[i] := UDINT_TO_LREAL(stStat.audiConvMin[i])
-                                 / UDINT_TO_LREAL(stCfg.audiConvMin[i]);
+                                 / UDINT_TO_LREAL(m_stCfg.audiConvMin[i]);
         stStat.abConvDue[i] := (stStat.audiConvPct[i] >= 1.0);
         IF stStat.abConvDue[i] THEN stStat.bAnyDue := TRUE; END_IF
     ELSE
@@ -145,9 +143,9 @@ IF bPumpOn THEN
         stStat.udiPumpMin := stStat.udiPumpMin + UDINT#1;
     END_IF
 END_IF
-IF stCfg.udiPumpMin > UDINT#0 THEN
+IF m_stCfg.udiPumpMin > UDINT#0 THEN
     stStat.rPumpPct := UDINT_TO_LREAL(stStat.udiPumpMin)
-                       / UDINT_TO_LREAL(stCfg.udiPumpMin);
+                       / UDINT_TO_LREAL(m_stCfg.udiPumpMin);
     stStat.bPumpDue := (stStat.rPumpPct >= 1.0);
     IF stStat.bPumpDue THEN stStat.bAnyDue := TRUE; END_IF
 ELSE
