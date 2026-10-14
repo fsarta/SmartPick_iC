@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rEncNow;LREAL;Input;False;Current belt encoder [mm] (housekeeping);;None;False;False;False;
+VAR_INPUT;uiDtMs;UDINT;Input;False;Task period [ms] for item aging;;None;False;False;False;

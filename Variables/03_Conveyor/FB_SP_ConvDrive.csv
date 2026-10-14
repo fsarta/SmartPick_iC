@@ -1,0 +1,14 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bEnable;BOOL;Input;False;Drive enable;;None;False;False;False;
+VAR_INPUT;eMode;ET_SP_ConvDriveMode;Input;False;Drive enable;;None;False;False;False;
+VAR_INPUT;rFactor;LREAL;Input;False;Requested speed factor [0..1];;None;False;False;False;
+VAR_INPUT;rMaxSpeed;LREAL;Input;False;Belt speed at factor = 1 [mm/s];;None;False;False;False;
+VAR_INPUT;rAccel;LREAL;Input;False;Belt acceleration [mm/s2];;None;False;False;False;
+VAR_INPUT;uiAnaCh;UINT;Input;False;Analog channel index;;None;False;False;False;
+VAR_OUTPUT;rCmdSpeed;LREAL;Output;False;Commanded belt speed [mm/s];;None;False;False;False;
+VAR_IN_OUT;ioAxis;AXIS_REF;InOut;False;Belt servo axis (ServoAxis mode);;None;False;False;False;
+VAR;m_fbVel;MC_MoveVelocity;Local;False;CONFIRM: PLCopen Part 1 velocity FB instance;;None;False;False;False;
+VAR;m_bExec;BOOL;Local;False;Execute edge generator;FALSE;None;False;False;False;
+VAR;m_bPrev;BOOL;Local;False;Execute edge generator;FALSE;None;False;False;False;
+VAR;m_rLastF;LREAL;Local;False;Last issued factor;-1.0;None;False;False;False;
+VAR;m_iCh;DINT;Local;False;Clamped analog channel index;;None;False;False;False;

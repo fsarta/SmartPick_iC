@@ -1,0 +1,23 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;oee;SP_Oee;Local;False;OEE / KPI engine (R-16);;None;False;False;False;
+VAR;g_Maint;SP_Maint;Local;False;Predictive maintenance counters (R-16);;None;False;False;False;
+VAR;g_Test;SP_SelfTest;Local;False;Startup self-test suite (R-16);;None;False;False;False;
+VAR;g_Log;SP_Logger;Local;False;Ring-buffer logger (single writer: this task);;None;False;False;False;
+VAR;g_Alm;SP_AlarmMgr;Local;False;Central alarm registry;;None;False;False;False;
+VAR;g_Retain;SP_RetainMgr;Local;False;Retain blob manager (power-failure continuity);;None;False;False;False;
+VAR;g_Recipy;SP_RecipeMgr;Local;False;CSV recipe import/export manager (optional backup format);;None;False;False;False;
+VAR;g_File;SP_FileIo;Local;False;File adapter (recipe + log files, ADR confined);;None;False;False;False;
+VAR;aRobPicks;ARRAY[1..4] OF UDINT;Local;False;Maintenance mirror: picks 1..GC_ROBOTS;;None;False;False;False;
+VAR;aCamTrig;ARRAY[1..2] OF UDINT;Local;False;Maintenance mirror: shots 1..GC_CAMS;;None;False;False;False;
+VAR;m_bMaintAlm;BOOL;Local;False;R-16: alarm edge latches (raise once, clear on recovery);FALSE;None;False;False;False;
+VAR;m_bTestAlm;BOOL;Local;False;Prev-scan self-test alarm edge;FALSE;None;False;False;False;
+VAR;m_abSepAlm;ARRAY[1..4] OF BOOL;Local;False;Separation-stop edge mirrors 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_iRcpSt;SINT;Local;False;Recipe save / load state (0=idle 1=saving 2=loading);0;None;False;False;False;
+VAR;m_iRcpIdle;SINT;Local;False;EOF detect counter (loading);0;None;False;False;False;
+VAR;m_iLogSt;SINT;Local;False;0=idle 1=writing;0;None;False;False;False;
+VAR;m_iLogN;DINT;Local;False;Log dump line cursor;0;None;False;False;False;
+VAR;m_bFileClose;BOOL;Local;False;Deferred file close request;FALSE;None;False;False;False;
+VAR;bRc;BOOL;Local;False;Boolean call result scratch;;None;False;False;False;
+VAR;udiRc;UDINT;Local;False;Unsigned call result scratch;;None;False;False;False;
+VAR;uiRc;UINT;Local;False;UINT call result scratch;;None;False;False;False;
+VAR;kD;DINT;Local;False;General loop index;;None;False;False;False;

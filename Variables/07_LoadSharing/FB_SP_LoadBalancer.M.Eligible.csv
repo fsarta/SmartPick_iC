@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stRob;ST_SP_RobShare;Input;False;Candidate robot snapshot;;None;False;False;False;
+VAR_INPUT;stOffer;ST_SP_Offer;Input;False;Offer to assign (Manual pass);;None;False;False;False;
+VAR_INPUT;bCheckType;BOOL;Input;False;FALSE disables the type mask (Unmatched);;None;False;False;False;
+VAR;udBit;UDINT;Local;False;Type bit built from the offer type id;;None;False;False;False;
+VAR;uiShift;UDINT;Local;False;Bit position (typeId - 1, clamped 0..31);;None;False;False;False;
+VAR;bTypeOk;BOOL;Local;False;Type-mask eligibility result;;None;False;False;False;

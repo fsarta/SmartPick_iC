@@ -1,0 +1,14 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;udiMs;UDINT;Input;False;Monotonic milliseconds since boot (GVL_SP_Rtc.g_udiTickMs);;None;False;False;False;
+VAR;udiSec;UDINT;Local;False;Whole seconds since epoch (working copy);;None;False;False;False;
+VAR;udiDay;UDINT;Local;False;Days since epoch;;None;False;False;False;
+VAR;udiT;UDINT;Local;False;Seconds of the current day;;None;False;False;False;
+VAR;diZ;DINT;Local;False;Days since epoch (Howard Hinnant civil-calendar algorithm);;None;False;False;False;
+VAR;diEra;DINT;Local;False;400-year era index of diZ;;None;False;False;False;
+VAR;diDoe;DINT;Local;False;Day of era (0..146096);;None;False;False;False;
+VAR;diYoe;DINT;Local;False;Year of era (0..399);;None;False;False;False;
+VAR;diY;DINT;Local;False;Absolute year (calendar);;None;False;False;False;
+VAR;diDoy;DINT;Local;False;Day of year (0..365);;None;False;False;False;
+VAR;diMp;DINT;Local;False;Month index in the shifted 5-month-per-year mapping;;None;False;False;False;
+VAR;diM;DINT;Local;False;Month (1..12);;None;False;False;False;
+VAR;diD;DINT;Local;False;Day of month (1..31);;None;False;False;False;

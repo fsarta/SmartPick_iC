@@ -1,0 +1,23 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;AsyncCup;ET_SP_GripExec;Local;False;;0;None;False;False;False;
+ENUM;SyncAll;ET_SP_GripExec;Local;False;;1;None;False;False;False;
+STRUCT;iRobotId;SINT;Local;False;Requesting robot 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;rRangeFrom;LREAL;Local;False;Robot work range, belt offset [mm];;None;False;False;False;
+STRUCT;rRangeTo;LREAL;Local;False;Robot work range, belt offset [mm];;None;False;False;False;
+STRUCT;uiTypeId;UINT;Local;False;Required type, 0 = any;;None;False;False;False;
+STRUCT;rMaxWeight;LREAL;Local;False;Tool payload capacity [g], 0 = unlimited;;None;False;False;False;
+STRUCT;uiCups;UINT;Local;False;Active cups offered to the planner 1..GC_CUPS;;None;False;False;False;
+STRUCT;astCup;ARRAY[1..4] OF ST_SP_Point3D;Local;False;Cup offsets rel. TCP [mm] 1..GC_CUPS;;None;False;False;False;
+STRUCT;bSingleType;BOOL;Local;False;TRUE = no mixed product types per cluster;;None;False;False;False;
+STRUCT;rMatchTol;LREAL;Local;False;Max cup-to-item residual [mm];;None;False;False;False;
+STRUCT;rMinGap;LREAL;Local;False;Min distance between picked items [mm], 0 = off;;None;False;False;False;
+STRUCT;rMaxCog;LREAL;Local;False;Max CoG offset from TCP [mm], 0 = check off;;None;False;False;False;
+STRUCT;bOk;BOOL;Local;False;TRUE = at least the anchor was reserved;;None;False;False;False;
+STRUCT;bSync;BOOL;Local;False;TRUE = synchronized multi-pick possible;;None;False;False;False;
+STRUCT;uiN;UINT;Local;False;Members reserved 1..GC_CUPS;;None;False;False;False;
+STRUCT;aiIdx;ARRAY[1..4] OF SINT;Local;False;Queue slot per member 1..GC_CUPS;;None;False;False;False;
+STRUCT;aCup;ARRAY[1..4] OF SINT;Local;False;Cup id per member (1-based) 1..GC_CUPS;;None;False;False;False;
+STRUCT;astRsp;ARRAY[1..4] OF ST_SP_ResRsp;Local;False;Per-member reservation 1..GC_CUPS;;None;False;False;False;
+STRUCT;stTcp;ST_SP_Pose3D;Local;False;Synchronized TCP pose at the pick event;;None;False;False;False;
+STRUCT;rTotWeight;LREAL;Local;False;Cluster total weight [g], 0 = unknown;;None;False;False;False;
+STRUCT;rCogOff;LREAL;Local;False;CoG offset from TCP [mm] (0 = unknown);;None;False;False;False;

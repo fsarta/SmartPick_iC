@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;uiId;UINT;Input;False;Id of the alarm to acknowledge;;None;False;False;False;
+VAR;i;UINT;Local;False;Loop index over registry slots (Clear);;None;False;False;False;

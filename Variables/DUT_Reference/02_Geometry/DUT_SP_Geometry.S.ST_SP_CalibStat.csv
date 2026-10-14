@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;iPairs;SINT;Local;False;Number of registered point pairs;;None;False;False;False;
+STRUCT;rRms;LREAL;Local;False;RMS residual of the fit [user unit];;None;False;False;False;
+STRUCT;bValid;BOOL;Local;False;TRUE when a valid transform is available;;None;False;False;False;

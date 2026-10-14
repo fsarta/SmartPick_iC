@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stT;ST_SP_Pose3D;Input;False;World target (used by the fallback cut-off path);;None;False;False;False;
+VAR_INPUT;stB;ST_SP_Pose3D;Input;False;Belt-frame target (used by the native PCS path);;None;False;False;False;
+VAR_INPUT;rVel;LREAL;Input;False;Motion speed [mm/s];;None;False;False;False;
+VAR_INPUT;ePrec;ET_SP_Precision;Input;False;Positioning precision class;;None;False;False;False;

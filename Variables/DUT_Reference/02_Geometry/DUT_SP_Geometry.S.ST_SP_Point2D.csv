@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;rX;LREAL;Local;False;X coordinate [mm];;None;False;False;False;
+STRUCT;rY;LREAL;Local;False;Y coordinate [mm];;None;False;False;False;

@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;aiFeedZone;ARRAY[1..8] OF SINT;Input;False;Feed -> zone map (0 = unguarded) 1..GC_FEEDS;;None;False;False;False;
+VAR;i;SINT;Local;False;Feed loop index (map validation);;None;False;False;False;
+VAR;iZ;SINT;Local;False;Zone id being validated;;None;False;False;False;

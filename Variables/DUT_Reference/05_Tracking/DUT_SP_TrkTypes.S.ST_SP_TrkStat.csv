@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;uiTracked;UINT;Local;False;Items currently tracked;;None;False;False;False;
+STRUCT;uiReserved;UINT;Local;False;Items reserved by robots;;None;False;False;False;
+STRUCT;udiFed;UDINT;Local;False;Total unique items fed into the queue;;None;False;False;False;
+STRUCT;udiDup;UDINT;Local;False;Duplicate detections merged/suppressed across shots;;None;False;False;False;
+STRUCT;udiPicked;UDINT;Local;False;Total items picked;;None;False;False;False;
+STRUCT;udiLost;UDINT;Local;False;Items lost (timeout / window exit);;None;False;False;False;
+STRUCT;bWindowBusy;BOOL;Local;False;Window saturated (backpressure signal);;None;False;False;False;

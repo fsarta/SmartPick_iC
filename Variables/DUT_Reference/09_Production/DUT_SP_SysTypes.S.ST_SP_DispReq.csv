@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bReq;BOOL;Local;False;Request valid this cycle;;None;False;False;False;
+STRUCT;iFeed;SINT;Local;False;Feed to reserve from;;None;False;False;False;
+STRUCT;uiTypeId;UINT;Local;False;Type requested (0 = any);;None;False;False;False;
+STRUCT;bTargetOnly;BOOL;Local;False;TRUE = target reservation (place);;None;False;False;False;
+STRUCT;rMaxWeight;LREAL;Local;False;Tool capacity [g];;None;False;False;False;
+STRUCT;bCluster;BOOL;Local;False;TRUE = cluster reservation (Sync grip);;None;False;False;False;
+STRUCT;stCl;ST_SP_ClReq;Local;False;Cluster request payload;;None;False;False;False;

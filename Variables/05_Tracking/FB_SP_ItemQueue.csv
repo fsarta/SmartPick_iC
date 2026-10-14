@@ -1,0 +1,16 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;uiTracked;UINT;Output;False;Items in state Tracked;;None;False;False;False;
+VAR_OUTPUT;uiReserved;UINT;Output;False;Items in state Reserved;;None;False;False;False;
+VAR_OUTPUT;out_stItem;ST_SP_TrkItem;Output;False;Result buffer of GetItem;;None;False;False;False;
+VAR_OUTPUT;out_rNear;LREAL;Output;False;Result buffer of NearDist [mm];;None;False;False;False;
+VAR_OUTPUT;out_stRes;ST_SP_ResRsp;Output;False;Result buffer of Reserve;;None;False;False;False;
+VAR_OUTPUT;out_stCl;ST_SP_ClRsp;Output;False;Result buffer of ReserveCluster (R-07);;None;False;False;False;
+VAR_OUTPUT;out_uiPurged;UINT;Output;False;Result buffer of Housekeeping (total);;None;False;False;False;
+VAR_OUTPUT;out_uiPurgedFlow;UINT;Output;False;Housekeeping: lost/timed-out items;;None;False;False;False;
+VAR_OUTPUT;out_uiPurgedTerm;UINT;Output;False;Housekeeping: closed picks/placements;;None;False;False;False;
+VAR_OUTPUT;out_bDup;BOOL;Output;False;TRUE when Add merged/suppressed a duplicate item;;None;False;False;False;
+VAR;m_astQ;ARRAY[1..64] OF ST_SP_TrkItem;Local;False;Ring of tracked items (fixed slots, bValid = occupancy, 1..GC_QUEUE);;None;False;False;False;
+VAR;m_iFree;SINT;Local;False;Free slot count;0;None;False;False;False;
+VAR;m_stCfg;ST_SP_TrkCfg;Local;False;Feed tracking config (copy);;None;False;False;False;
+VAR;m_bCfgOk;BOOL;Local;False;Feed tracking config (copy);;None;False;False;False;
+VAR;m_Plan;SP_GripPlanner;Local;False;Multi-grip cluster planner (R-07, pull API, module 13);;None;False;False;False;

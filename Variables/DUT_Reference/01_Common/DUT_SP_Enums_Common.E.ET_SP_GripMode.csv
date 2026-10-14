@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Sync;ET_SP_GripMode;Local;False;;0;None;False;False;False;
+ENUM;Partial;ET_SP_GripMode;Local;False;;1;None;False;False;False;
+ENUM;Async;ET_SP_GripMode;Local;False;;2;None;False;False;False;

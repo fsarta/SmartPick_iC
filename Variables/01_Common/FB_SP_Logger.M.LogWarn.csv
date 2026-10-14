@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;eSrc;ET_SP_LogSource;Input;False;Originating module tag;;None;False;False;False;
+VAR_INPUT;sText;STRING(120);Input;False;Message text;;None;False;False;False;

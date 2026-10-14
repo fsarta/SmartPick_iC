@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iTool;SINT;Input;False;Tool selector;;None;False;False;False;
+VAR_INPUT;uiCups;UINT;Input;False;Cups covered by this grip 1..GC_CUPS;;None;False;False;False;
+VAR;uiN;UINT;Local;False;Clamped cup count (defensive);;None;False;False;False;

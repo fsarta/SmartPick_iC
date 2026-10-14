@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;DINT;Local;False;Spawn loop index;;None;False;False;False;
+VAR;uiN;UINT;Local;False;Items to spawn for this trigger;;None;False;False;False;
+VAR;stIt;ST_SP_VisionItem;Local;False;Simulated item under construction;;None;False;False;False;
+VAR;rX;LREAL;Local;False;Random X / speed-scaled offset / yaw of the item [deg];;None;False;False;False;
+VAR;rV;LREAL;Local;False;Random X / speed-scaled offset / yaw of the item [deg];;None;False;False;False;
+VAR;rTh;LREAL;Local;False;Random X / speed-scaled offset / yaw of the item [deg];;None;False;False;False;
+VAR;uiType;UINT;Local;False;Random product type id;;None;False;False;False;
+VAR;uiQ;UINT;Local;False;Items actually queued by this call;UINT#0;None;False;False;False;

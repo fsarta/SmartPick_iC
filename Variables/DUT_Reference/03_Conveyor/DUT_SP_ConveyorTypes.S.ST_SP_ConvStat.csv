@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;rPos;LREAL;Local;False;Belt position [mm, monotonic encoder];;None;False;False;False;
+STRUCT;rSpeed;LREAL;Local;False;Signed belt speed [mm/s];;None;False;False;False;
+STRUCT;bActive;BOOL;Local;False;Belt enabled and position valid;;None;False;False;False;
+STRUCT;bInSlow;BOOL;Local;False;Slow region active;;None;False;False;False;
+STRUCT;bInStop;BOOL;Local;False;Stop region active;;None;False;False;False;
+STRUCT;rReqFactor;LREAL;Local;False;Requested speed factor [0..1];;None;False;False;False;
+STRUCT;udiTrigCnt;UDINT;Local;False;Distance trigger counter (camera support);;None;False;False;False;
+STRUCT;bSim;BOOL;Local;False;TRUE = simulated conveyor;;None;False;False;False;

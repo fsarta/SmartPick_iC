@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;rDX;LREAL;Local;False;Path deltas and 3D length for simulated travel;;None;False;False;False;
+VAR;rDY;LREAL;Local;False;Path deltas and 3D length for simulated travel;;None;False;False;False;
+VAR;rDZ;LREAL;Local;False;Path deltas and 3D length for simulated travel;;None;False;False;False;
+VAR;rD;LREAL;Local;False;Path deltas and 3D length for simulated travel;;None;False;False;False;

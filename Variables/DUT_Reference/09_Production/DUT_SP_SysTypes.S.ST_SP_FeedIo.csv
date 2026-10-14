@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;iFeed;SINT;Local;False;1..GC_FEEDS;;None;False;False;False;
+STRUCT;bUsed;BOOL;Local;False;1..GC_FEEDS;;None;False;False;False;
+STRUCT;rEnc;LREAL;Local;False;Current belt encoder [mm];;None;False;False;False;
+STRUCT;rSpeed;LREAL;Local;False;Signed belt speed [mm/s];;None;False;False;False;
+STRUCT;stStat;ST_SP_TrkStat;Local;False;Queue statistics;;None;False;False;False;
+STRUCT;rNearOff;LREAL;Local;False;Nearest item offset upstream [mm];;None;False;False;False;
+STRUCT;stPickLineW;ST_SP_Pose2D;Local;False;Pick line origin in world (greedy metric);;None;False;False;False;
+STRUCT;bCalibOk;BOOL;Local;False;At least one camera calibrated;;None;False;False;False;
+STRUCT;bIsOutfeed;BOOL;Local;False;TRUE = placement feed (pattern engine);;None;False;False;False;

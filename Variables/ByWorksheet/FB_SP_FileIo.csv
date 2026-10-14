@@ -1,0 +1,23 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bCloseReq;BOOL;Input;False;TRUE = close the open file;;None;False;False;False;
+VAR_OUTPUT;eState;ET_SP_FileState;Output;False;File operation lifecycle (Idle/Reading/Writing/Done/Error);;None;False;False;False;
+VAR_OUTPUT;uiErr;UINT;Output;False;Last file error code (firmware / adapter specific);;None;False;False;False;
+VAR_OUTPUT;bLineRdy;BOOL;Output;False;A line is available in out_sLine;;None;False;False;False;
+VAR_OUTPUT;out_sLine;STRING(200);Output;False;Last read line;;None;False;False;False;
+VAR;m_hFile;UDINT;Local;False;Firmware file handle (0 = closed);UDINT#0;None;False;False;False;
+VAR;m_bWrite;BOOL;Local;False;TRUE = write mode open, FALSE = read mode;;None;False;False;False;
+VAR;m_abBuf;ARRAY[1..512] OF BYTE;Local;False;Raw byte buffer bound to the firmware API;;None;False;False;False;
+VAR;m_sPend;STRING(240);Local;False;Pending line accumulation;;None;False;False;False;
+VAR;m_bEof;BOOL;Local;False;Pending line accumulation;;None;False;False;False;
+VAR_INPUT;sPath;STRING(64);Input;False;Absolute file path to open for writing;;None;False;False;False;
+VAR_INPUT;sPath;STRING(64);Input;False;Absolute file path to open for reading;;None;False;False;False;
+VAR_INPUT;sLine;STRING(200);Input;False;Line to append (CRLF added by the adapter);;None;False;False;False;
+VAR;udiPut;UDINT;Local;False;Bytes actually written by the firmware call;;None;False;False;False;
+VAR;sOut;STRING(202);Local;False;Line normalized to CRLF termination;;None;False;False;False;
+VAR;udiGot;UDINT;Local;False;Bytes read by the firmware call this cycle;;None;False;False;False;
+VAR;i;INT;Local;False;Byte loop index (buffer to string);;None;False;False;False;
+VAR;iPos;INT;Local;False;Line-break search position;;None;False;False;False;
+VAR;iLen;INT;Local;False;Accumulated byte count;;None;False;False;False;
+VAR;sChunk;STRING(200);Local;False;String view of the raw bytes read;;None;False;False;False;
+VAR;sCh;STRING(1);Local;False;One printable character of the chunk;;None;False;False;False;
+VAR;sLine;STRING(200);Local;False;Line assembled from the raw bytes;;None;False;False;False;

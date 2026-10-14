@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stWorld;ST_SP_Transf2D;Input;False;Feed -> world transform;;None;False;False;False;
+VAR_INPUT;rZBelt;LREAL;Input;False;Belt surface Z [mm];;None;False;False;False;
+VAR_INPUT;iDir;SINT;Input;False;Belt direction sign;;None;False;False;False;

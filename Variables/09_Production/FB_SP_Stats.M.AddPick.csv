@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bOk;BOOL;Input;False;TRUE = successful place (else counted as fail);;None;False;False;False;
+VAR_INPUT;iFeed;SINT;Input;False;0 = system totals only;;None;False;False;False;
+VAR;iF;SINT;Local;False;Clamped feed index (0 = totals only);;None;False;False;False;

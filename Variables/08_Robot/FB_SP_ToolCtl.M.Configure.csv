@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;astTools;ARRAY[1..4] OF ST_SP_ToolCfg;Input;False;Tool configurations (cup offsets, timings) 1..GC_TOOLS;;None;False;False;False;
+VAR_INPUT;iRobot;SINT;Input;False;Owner robot id (1..GC_ROBOTS);;None;False;False;False;

@@ -1,0 +1,15 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bUsed;BOOL;Local;False;Feed enabled in the system layout;;None;False;False;False;
+STRUCT;sName;STRING(16);Local;False;Human readable conveyor name;;None;False;False;False;
+STRUCT;rEncScale;LREAL;Local;False;User units per encoder unit [mm/cnt];;None;False;False;False;
+STRUCT;iDir;SINT;Local;False;Belt direction vs encoder: +1 / -1;;None;False;False;False;
+STRUCT;rMaxSpeed;LREAL;Local;False;Max belt speed [mm/s];;None;False;False;False;
+STRUCT;rWinStart;LREAL;Local;False;Distance pick-line -> window start, upstream [mm];;None;False;False;False;
+STRUCT;rWinLen;LREAL;Local;False;Tracking window length [mm];;None;False;False;False;
+STRUCT;rSlowAhead;LREAL;Local;False;Slow-down threshold ahead of pick line [mm];;None;False;False;False;
+STRUCT;rStopAhead;LREAL;Local;False;Stop threshold ahead of pick line [mm];;None;False;False;False;
+STRUCT;rSlowFactor;LREAL;Local;False;Speed factor inside slow region [0.05..1];;None;False;False;False;
+STRUCT;eDrive;ET_SP_ConvDriveMode;Local;False;Drive technology;;None;False;False;False;
+STRUCT;uiAnaCh;UINT;Local;False;Analog channel index (GVL_SP_Io.grConvDrive);;None;False;False;False;
+STRUCT;rAccel;LREAL;Local;False;Belt acceleration [mm/s2] (servo mode);;None;False;False;False;
+STRUCT;bStopIdle;BOOL;Local;False;Stop belt when no items are tracked;;None;False;False;False;

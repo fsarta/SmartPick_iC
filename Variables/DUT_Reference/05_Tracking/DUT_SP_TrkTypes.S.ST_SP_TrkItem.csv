@@ -1,0 +1,18 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;udiId;UDINT;Local;False;Globally unique id (from camera);;None;False;False;False;
+STRUCT;uiTypeId;UINT;Local;False;Product type 1..GC_TYPES;;None;False;False;False;
+STRUCT;rCrossCap;LREAL;Local;False;Across-belt coordinate u at capture [mm];;None;False;False;False;
+STRUCT;rBeltCap;LREAL;Local;False;Belt offset v at capture, upstream of pick line [mm];;None;False;False;False;
+STRUCT;rEncCap;LREAL;Local;False;Belt encoder coordinate at capture [mm];;None;False;False;False;
+STRUCT;p2World;ST_SP_Pose2D;Local;False;World pose at capture (feed frame);;None;False;False;False;
+STRUCT;rWeight;LREAL;Local;False;Part weight [g], 0 = unknown;;None;False;False;False;
+STRUCT;rScore;LREAL;Local;False;Vision score [0..1];;None;False;False;False;
+STRUCT;eState;ET_SP_ItemState;Local;False;Vision score [0..1];;None;False;False;False;
+STRUCT;iReservedBy;SINT;Local;False;Robot id holding the reservation (0 = none);;None;False;False;False;
+STRUCT;uiAttempts;UINT;Local;False;Pick attempts (retry policy);;None;False;False;False;
+STRUCT;bTarget;BOOL;Local;False;TRUE = placement target (pattern slot);;None;False;False;False;
+STRUCT;udiBatchId;UDINT;Local;False;Owning batch for targets;;None;False;False;False;
+STRUCT;uiSlot;UINT;Local;False;Pattern slot for targets (0 = none);;None;False;False;False;
+STRUCT;rZWorld;LREAL;Local;False;Working Z in world [mm]: belt height for products, layer Z for placement targets;;None;False;False;False;
+STRUCT;tAgeMs;UDINT;Local;False;Age since capture [ms], for timeouts;;None;False;False;False;
+STRUCT;bValid;BOOL;Local;False;Age since capture [ms], for timeouts;;None;False;False;False;

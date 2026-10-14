@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;uiId;UINT;Local;False;Unique alarm identifier (>0);;None;False;False;False;
+STRUCT;eState;ET_SP_AckState;Local;False;Active / Acked lifecycle;;None;False;False;False;
+STRUCT;eLevel;ET_SP_LogLevel;Local;False;Severity of the alarm;;None;False;False;False;
+STRUCT;eSrc;ET_SP_LogSource;Local;False;Originating module;;None;False;False;False;
+STRUCT;sText;STRING(80);Local;False;Alarm text, English;;None;False;False;False;
+STRUCT;stRaised;Yt_YA_RTC_Struct;Local;False;Wall clock of raise (Yaskawa RTC);;None;False;False;False;
+STRUCT;stCleared;Yt_YA_RTC_Struct;Local;False;Wall clock of clear (nil when active);;None;False;False;False;
+STRUCT;udiCnt;UDINT;Local;False;Number of occurrences;;None;False;False;False;

@@ -1,0 +1,17 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;stItem;ST_SP_TrkItem;Local;False;Reserved source item (product or target);;None;False;False;False;
+STRUCT;iIdx;SINT;Local;False;Queue index in the pick feed;;None;False;False;False;
+STRUCT;iIdxPlace;SINT;Local;False;Queue index of the target in the place feed;;None;False;False;False;
+STRUCT;iFeedPick;SINT;Local;False;Pick feed (0 for place-only items);;None;False;False;False;
+STRUCT;iFeedPlace;SINT;Local;False;Place feed (0 for pick-only items);;None;False;False;False;
+STRUCT;stTgt;ST_SP_TrkItem;Local;False;v1.4 placement target snapshot (belt capture data driving the native tracked place);;None;False;False;False;
+STRUCT;uiTool;UINT;Local;False;Tool used;;None;False;False;False;
+STRUCT;uiCup;UINT;Local;False;Cup used 1..GC_CUPS;;None;False;False;False;
+STRUCT;p3Pick;ST_SP_Pose3D;Local;False;Pick pose (world, predicted);;None;False;False;False;
+STRUCT;p3Place;ST_SP_Pose3D;Local;False;Place pose (world, target);;None;False;False;False;
+STRUCT;bPick;BOOL;Local;False;Job includes the pick;;None;False;False;False;
+STRUCT;bPlace;BOOL;Local;False;Job includes the place;;None;False;False;False;
+STRUCT;bPicked;BOOL;Local;False;Progress flags;;None;False;False;False;
+STRUCT;bPlaced;BOOL;Local;False;Progress flags;;None;False;False;False;
+STRUCT;bVerified;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bNg;BOOL;Local;False;Item failed (retry exhausted);;None;False;False;False;

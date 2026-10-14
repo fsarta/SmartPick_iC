@@ -1,0 +1,14 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sLine;STRING(200);Input;False;Raw line from the recipe file;;None;False;False;False;
+VAR;sRec;STRING(16);Local;False;Record keyword (first token of the line);;None;False;False;False;
+VAR;i;SINT;Local;False;Token/field parse index;;None;False;False;False;
+VAR;k;SINT;Local;False;Sub-field parse index;;None;False;False;False;
+VAR;rL;LREAL;Local;False;Parsed floating-point value;;None;False;False;False;
+VAR;uiV;UINT;Local;False;Parsed integer value;;None;False;False;False;
+VAR;stC;ST_SP_ConvCfg;Local;False;CONV record accumulator;;None;False;False;False;
+VAR;stF;ST_SP_TrkCfg;Local;False;FEED record accumulator;;None;False;False;False;
+VAR;stV;ST_SP_VisionCfg;Local;False;CAM record accumulator;;None;False;False;False;
+VAR;stM;ST_SP_CamFeedMap;Local;False;CAMMAP record accumulator;;None;False;False;False;
+VAR;stP;ST_SP_PattDef;Local;False;PATT record accumulator;;None;False;False;False;
+VAR;stB;ST_SP_BatchDef;Local;False;BATCH record accumulator;;None;False;False;False;
+VAR;sIp;STRING(16);Local;False;Parsed camera IP address;;None;False;False;False;

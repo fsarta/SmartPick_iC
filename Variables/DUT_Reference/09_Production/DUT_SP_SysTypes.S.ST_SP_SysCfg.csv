@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;tStartStage;TIME;Local;False;Delay between startup stages;;None;False;False;False;
+STRUCT;bResilience;BOOL;Local;False;TRUE = continue on robot loss;;None;False;False;False;
+STRUCT;bAutoRestart;BOOL;Local;False;Automatic restart after fault clear;;None;False;False;False;
+STRUCT;bStopConvsOnPause;BOOL;Local;False;Stop conveyors during pause;;None;False;False;False;
+STRUCT;bZoneGuard;BOOL;Local;False;TRUE = enforce shared-zone exclusion;;None;False;False;False;
+STRUCT;bColAdv;BOOL;Local;False;TRUE = use SP_Collision (zones + speed + separation);;None;False;False;False;

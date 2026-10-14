@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sCh;STRING(1);Input;False;Character to classify as digit;;None;False;False;False;
+VAR;iPos;INT;Local;False;Position inside the digits table (0 = not a digit);;None;False;False;False;
+VAR;i;SINT;Local;False;Digit loop index 0..9;;None;False;False;False;
+VAR;sD;STRING(1);Local;False;Digit character compared with sCh;;None;False;False;False;

@@ -1,0 +1,11 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bCloseReq;BOOL;Input;False;TRUE = close the open file;;None;False;False;False;
+VAR_OUTPUT;eState;ET_SP_FileState;Output;False;File operation lifecycle (Idle/Reading/Writing/Done/Error);;None;False;False;False;
+VAR_OUTPUT;uiErr;UINT;Output;False;Last file error code (firmware / adapter specific);;None;False;False;False;
+VAR_OUTPUT;bLineRdy;BOOL;Output;False;A line is available in out_sLine;;None;False;False;False;
+VAR_OUTPUT;out_sLine;STRING(200);Output;False;Last read line;;None;False;False;False;
+VAR;m_hFile;UDINT;Local;False;Firmware file handle (0 = closed);UDINT#0;None;False;False;False;
+VAR;m_bWrite;BOOL;Local;False;TRUE = write mode open, FALSE = read mode;;None;False;False;False;
+VAR;m_abBuf;ARRAY[1..512] OF BYTE;Local;False;Raw byte buffer bound to the firmware API;;None;False;False;False;
+VAR;m_sPend;STRING(240);Local;False;Pending line accumulation;;None;False;False;False;
+VAR;m_bEof;BOOL;Local;False;Pending line accumulation;;None;False;False;False;

@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Closed;ET_SP_FileState;Local;False;;0;None;False;False;False;
+ENUM;Opening;ET_SP_FileState;Local;False;;10;None;False;False;False;
+ENUM;Open;ET_SP_FileState;Local;False;;20;None;False;False;False;
+ENUM;Working;ET_SP_FileState;Local;False;;30;None;False;False;False;
+ENUM;Closing;ET_SP_FileState;Local;False;;40;None;False;False;False;
+ENUM;Fault;ET_SP_FileState;Local;False;;90;None;False;False;False;

@@ -1,0 +1,22 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;None;ET_SP_ColAct;Local;False;;0;None;False;False;False;
+ENUM;WaitZone;ET_SP_ColAct;Local;False;;1;None;False;False;False;
+ENUM;SlowZone;ET_SP_ColAct;Local;False;;2;None;False;False;False;
+ENUM;SepSlow;ET_SP_ColAct;Local;False;;3;None;False;False;False;
+ENUM;SepStop;ET_SP_ColAct;Local;False;;4;None;False;False;False;
+STRUCT;bEnable;BOOL;Local;False;Master switch (FALSE = guard fully transparent);;None;False;False;False;
+STRUCT;bDynaSep;BOOL;Local;False;Dynamic TCP separation monitoring between robots;;None;False;False;False;
+STRUCT;bSepAll;BOOL;Local;False;TRUE = monitor ALL pairs, FALSE = only pairs sharing a zone;;None;False;False;False;
+STRUCT;rSlowDist;LREAL;Local;False;Separation thresholds [mm]: below rSlowDist the lower-priority robot is slowed (linear ramp), below rStopDist it is frozen.;;None;False;False;False;
+STRUCT;rStopDist;LREAL;Local;False;;;None;False;False;False;
+STRUCT;aiPriority;ARRAY[1..4] OF SINT;Local;False;Service priority per robot: 1 = highest. Ties break by robot id. 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;arZoneLim;ARRAY[1..8] OF LREAL;Local;False;Zone speed limits [0.1..1.0], 1.0 = full speed (transfer areas) 1..GC_ZONES;;None;False;False;False;
+STRUCT;bHeld;BOOL;Local;False;Zone occupied by at least one robot;;None;False;False;False;
+STRUCT;iHolder;SINT;Local;False;Current holder robot id (0 = free);;None;False;False;False;
+STRUCT;uiWaiters;UINT;Local;False;Robots currently waiting for this zone;;None;False;False;False;
+STRUCT;udiGrant;UDINT;Local;False;Total grants handed out (statistics);;None;False;False;False;
+STRUCT;udiCont;UDINT;Local;False;Contention events (request while held);;None;False;False;False;
+STRUCT;bGrant;BOOL;Local;False;TRUE = robot free to move;;None;False;False;False;
+STRUCT;rVelScale;LREAL;Local;False;Velocity scale 0.1..1.0;;None;False;False;False;
+STRUCT;eWhy;ET_SP_ColAct;Local;False;Reason of the current limitation;;None;False;False;False;
+STRUCT;udiWaitMs;UDINT;Local;False;Accumulated frozen time [ms] (layout KPI);;None;False;False;False;

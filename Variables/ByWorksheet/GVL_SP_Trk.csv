@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR CONSTANT;GC_WIN_BEHIND;LREAL;Global;False;Belt offset behind pick line before an unreserved item is declared Lost [mm];20.0;None;False;True;False;
+VAR CONSTANT;GC_DUP_TOL_MM;LREAL;Global;False;Default duplicate suppression radius on the belt across overlapping shots [mm];25.0;None;False;True;False;

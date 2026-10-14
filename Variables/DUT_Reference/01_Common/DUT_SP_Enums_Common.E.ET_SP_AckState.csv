@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Inactive;ET_SP_AckState;Local;False;;0;None;False;False;False;
+ENUM;Active;ET_SP_AckState;Local;False;;1;None;False;False;False;
+ENUM;Acked;ET_SP_AckState;Local;False;;2;None;False;False;False;

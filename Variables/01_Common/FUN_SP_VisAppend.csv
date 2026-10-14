@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sBuf;STRING(240);Input;False;Current accumulation;;None;False;False;False;
+VAR_INPUT;sChunk;STRING(255);Input;False;Data to append;;None;False;False;False;
+VAR;sAll;STRING(255);Local;False;Concatenation of buffer and new chunk;;None;False;False;False;
+VAR;iLen;INT;Local;False;Length of the concatenation result;;None;False;False;False;

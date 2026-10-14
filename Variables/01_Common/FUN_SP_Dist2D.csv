@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rX1;LREAL;Input;False;First point, X;;None;False;False;False;
+VAR_INPUT;rY1;LREAL;Input;False;First point, Y;;None;False;False;False;
+VAR_INPUT;rX2;LREAL;Input;False;Second point, X;;None;False;False;False;
+VAR_INPUT;rY2;LREAL;Input;False;Second point, Y;;None;False;False;False;

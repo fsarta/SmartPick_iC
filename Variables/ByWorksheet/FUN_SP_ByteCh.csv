@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;byVal;BYTE;Input;False;Byte code received from the socket (ASCII expected);;None;False;False;False;
+VAR;iPos;DINT;Local;False;Index into the printable-ASCII lookup table GC_ASCII95;;None;False;False;False;

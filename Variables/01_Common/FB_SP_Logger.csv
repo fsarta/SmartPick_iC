@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stNow;Yt_YA_RTC_Struct;Input;False;Wall clock stamp (from TaskSvc);;None;False;False;False;
+VAR_OUTPUT;uiCount;UINT;Output;False;Entries currently stored;;None;False;False;False;
+VAR_OUTPUT;udiSeq;UDINT;Output;False;Total entries ever logged;;None;False;False;False;
+VAR_OUTPUT;out_stEntry;ST_SP_LogEntry;Output;False;Result buffer of GetEntry/ExportLine;;None;False;False;False;
+VAR;m_astBuf;ARRAY[1..256] OF ST_SP_LogEntry;Local;False;Ring buffer 1..GC_LOG_N;;None;False;False;False;
+VAR;m_iHead;UINT;Local;False;Next write slot (1-based);1;None;False;False;False;
+VAR;m_iCnt;UINT;Local;False;Stored entries;0;None;False;False;False;
+VAR;m_udiSeq;UDINT;Local;False;Sequence generator;0;None;False;False;False;

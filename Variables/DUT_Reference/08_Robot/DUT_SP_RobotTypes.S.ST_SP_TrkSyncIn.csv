@@ -1,0 +1,2 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;ConveyorDistance;LREAL;Local;False;Sync-in conveyor distance [mm], must be > 0 (FW 2026.6: 0 => error 9006);;None;False;False;False;

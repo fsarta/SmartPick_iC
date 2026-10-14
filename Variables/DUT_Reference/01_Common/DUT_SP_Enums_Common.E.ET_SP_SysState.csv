@@ -1,0 +1,12 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Init;ET_SP_SysState;Local;False;;0;None;False;False;False;
+ENUM;Standby;ET_SP_SysState;Local;False;;10;None;False;False;False;
+ENUM;Starting;ET_SP_SysState;Local;False;;20;None;False;False;False;
+ENUM;Running;ET_SP_SysState;Local;False;;30;None;False;False;False;
+ENUM;Pausing;ET_SP_SysState;Local;False;;40;None;False;False;False;
+ENUM;Paused;ET_SP_SysState;Local;False;;50;None;False;False;False;
+ENUM;Resuming;ET_SP_SysState;Local;False;;60;None;False;False;False;
+ENUM;Stopping;ET_SP_SysState;Local;False;;70;None;False;False;False;
+ENUM;Stopped;ET_SP_SysState;Local;False;;80;None;False;False;False;
+ENUM;Recovering;ET_SP_SysState;Local;False;;90;None;False;False;False;
+ENUM;Fault;ET_SP_SysState;Local;False;;100;None;False;False;False;

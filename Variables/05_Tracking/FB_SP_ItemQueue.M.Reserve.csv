@@ -1,0 +1,11 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stReq;ST_SP_ResReq;Input;False;Robot, range, filters;;None;False;False;False;
+VAR_INPUT;rEncNow;LREAL;Input;False;Current belt encoder [mm];;None;False;False;False;
+VAR_INPUT;rBeltSpd;LREAL;Input;False;Current signed belt speed [mm/s];;None;False;False;False;
+VAR;iBest;SINT;Local;False;Slot of the best (nearest) candidate (0 = none);;None;False;False;False;
+VAR;rBest;LREAL;Local;False;Best candidate offset [mm];;None;False;False;False;
+VAR;i;SINT;Local;False;Slot loop index (aging);;None;False;False;False;
+VAR;rOff;LREAL;Local;False;Candidate offset upstream of the pick line [mm];;None;False;False;False;
+VAR;stC;ST_SP_TrkItem;Local;False;Working copy of the candidate record;;None;False;False;False;
+VAR;rD;LREAL;Local;False;Remaining travel to the pick line [mm];;None;False;False;False;
+VAR;rAng;LREAL;Local;False;Item motion direction in world [deg];;None;False;False;False;

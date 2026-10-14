@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iIdx;SINT;Input;False;Batch table slot 1..GC_BATCHES;;None;False;False;False;
+VAR_INPUT;stPatt;ST_SP_BatchStat;Input;False;Pattern generator status snapshot;;None;False;False;False;

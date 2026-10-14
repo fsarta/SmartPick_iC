@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stOffer;ST_SP_Offer;Input;False;Offer to assign (Manual pass);;None;False;False;False;
+VAR_INPUT;astRob;ARRAY[1..4] OF ST_SP_RobShare;Input;False;Live robot snapshot array 1..GC_ROBOTS;;None;False;False;False;
+VAR_INPUT;bTryAny;BOOL;Input;False;Type-mask bypass flag (fallback pass);;None;False;False;False;
+VAR;i;SINT;Local;False;Robot loop index;;None;False;False;False;
+VAR;iRes;SINT;Local;False;Robot id returned by the helper (0 = none);;None;False;False;False;

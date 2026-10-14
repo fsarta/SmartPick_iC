@@ -1,0 +1,27 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stNow;Yt_YA_RTC_Struct;Input;False;Wall clock stamp (from TaskSvc);;None;False;False;False;
+VAR_OUTPUT;uiCount;UINT;Output;False;Entries currently stored;;None;False;False;False;
+VAR_OUTPUT;udiSeq;UDINT;Output;False;Total entries ever logged;;None;False;False;False;
+VAR_OUTPUT;out_stEntry;ST_SP_LogEntry;Output;False;Result buffer of GetEntry/ExportLine;;None;False;False;False;
+VAR;m_astBuf;ARRAY[1..256] OF ST_SP_LogEntry;Local;False;Ring buffer 1..GC_LOG_N;;None;False;False;False;
+VAR;m_iHead;UINT;Local;False;Next write slot (1-based);1;None;False;False;False;
+VAR;m_iCnt;UINT;Local;False;Stored entries;0;None;False;False;False;
+VAR;m_udiSeq;UDINT;Local;False;Sequence generator;0;None;False;False;False;
+VAR_INPUT;eLevel;ET_SP_LogLevel;Input;False;Severity of the entry (Debug/Info/Warn/Error);;None;False;False;False;
+VAR_INPUT;eSrc;ET_SP_LogSource;Input;False;Originating module tag;;None;False;False;False;
+VAR_INPUT;uiCode;UINT;Input;False;Module-specific event/alarm code (0 = none);;None;False;False;False;
+VAR_INPUT;sText;STRING(120);Input;False;Message text (without level/code);;None;False;False;False;
+VAR;iW;UINT;Local;False;Write slot computed from ring head;;None;False;False;False;
+VAR_INPUT;eSrc;ET_SP_LogSource;Input;False;Originating module tag;;None;False;False;False;
+VAR_INPUT;sText;STRING(120);Input;False;Message text;;None;False;False;False;
+VAR_INPUT;eSrc;ET_SP_LogSource;Input;False;Originating module tag;;None;False;False;False;
+VAR_INPUT;sText;STRING(120);Input;False;Message text;;None;False;False;False;
+VAR_INPUT;eSrc;ET_SP_LogSource;Input;False;Originating module tag;;None;False;False;False;
+VAR_INPUT;uiCode;UINT;Input;False;Error code shown beside the message;;None;False;False;False;
+VAR_INPUT;sText;STRING(120);Input;False;Message text;;None;False;False;False;
+VAR_INPUT;iIdx;UINT;Input;False;1-based, 1 = newest;;None;False;False;False;
+VAR;iPhys;UINT;Local;False;Physical ring index derived from head and iIdx;;None;False;False;False;
+VAR_INPUT;iIdx;UINT;Input;False;Entry selector, 1 = newest;;None;False;False;False;
+VAR;bOk;BOOL;Local;False;TRUE when the requested entry exists;;None;False;False;False;
+VAR;sLvl;STRING(6);Local;False;Level rendered as fixed-width ASCII tag;;None;False;False;False;
+VAR;sTmp;STRING(120);Local;False;Line under construction (built right-to-left);;None;False;False;False;

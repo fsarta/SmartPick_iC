@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stReq;ST_SP_ClReq;Input;False;Cluster request (rules + cup layout, copied);;None;False;False;False;
+VAR_INPUT;p2Anchor;ST_SP_Pose2D;Input;False;Anchor world pose (capture frame);;None;False;False;False;
+VAR_INPUT;uiTypeA;UINT;Input;False;Anchor product type;;None;False;False;False;
+VAR_INPUT;rZAnchor;LREAL;Input;False;Anchor world Z height [mm];;None;False;False;False;
+VAR_INPUT;rWAnchor;LREAL;Input;False;Anchor item weight [g];;None;False;False;False;
+VAR;i;SINT;Local;False;Cup loop index (state reset);;None;False;False;False;

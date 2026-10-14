@@ -1,0 +1,21 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bOpen;BOOL;Input;False;TRUE = connection desired;;None;False;False;False;
+VAR_INPUT;sHost;STRING(16);Input;False;Remote IP;;None;False;False;False;
+VAR_INPUT;uiPort;UINT;Input;False;Remote port;;None;False;False;False;
+VAR_INPUT;sTx;STRING(128);Input;False;Payload to transmit;;None;False;False;False;
+VAR_INPUT;bSend;BOOL;Input;False;Rising edge: transmit sTx;;None;False;False;False;
+VAR_INPUT;tTimeout;TIME;Input;False;Connection timeout;;None;False;False;False;
+VAR_INPUT;udiTickMs;UDINT;Input;False;Monotonic ms tick (GVL_SP_Rtc, v1.8.0);;None;False;False;False;
+VAR_OUTPUT;eState;ET_SP_SocketState;Output;False;Socket lifecycle (Closed/Connecting/Connected/Fault);;None;False;False;False;
+VAR_OUTPUT;bConn;BOOL;Output;False;TRUE when Connected;;None;False;False;False;
+VAR_OUTPUT;uiErr;UINT;Output;False;Last socket error code;;None;False;False;False;
+VAR_OUTPUT;out_sRx;STRING(255);Output;False;Drained payload (filled by TakeRx);;None;False;False;False;
+VAR;m_hSock;UDINT;Local;False;Socket handle (opaque firmware token);;None;False;False;False;
+VAR;m_abRx;ARRAY[1..512] OF BYTE;Local;False;Accumulated receive data 1..GC_SOCK_RX;;None;False;False;False;
+VAR;m_abTmp;ARRAY[1..512] OF BYTE;Local;False;Firmware receive target 1..GC_SOCK_RX;;None;False;False;False;
+VAR;m_sView;STRING(255);Local;False;String view of accumulated bytes;;None;False;False;False;
+VAR;m_uiRxLen;UINT;Local;False;Bytes pending;;None;False;False;False;
+VAR;m_bRxDrop;BOOL;Local;False;Overflow diagnostic flag;;None;False;False;False;
+VAR;m_uiSent;UDINT;Local;False;Bytes sent confirmation;;None;False;False;False;
+VAR;m_udiConn;UDINT;Local;False;Connection attempt tick [ms];;None;False;False;False;
+VAR;m_bSendPrev;BOOL;Local;False;Connection attempt tick [ms];;None;False;False;False;

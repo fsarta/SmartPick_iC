@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;uiGot;UDINT;Local;False;Bytes received this cycle (0 = nothing);;None;False;False;False;
+VAR;i;UINT;Local;False;Byte copy loop index;;None;False;False;False;
+VAR;iWant;DINT;Local;False;Free space offered to the firmware receive call;;None;False;False;False;
+VAR;sCh;STRING(1);Local;False;One printable character of the string view;;None;False;False;False;
+VAR;uiLim;UINT;Local;False;Bytes mirrored into the string view (capped at 200);;None;False;False;False;
+VAR;iSpace;DINT;Local;False;Remaining room in the accumulation buffer;;None;False;False;False;

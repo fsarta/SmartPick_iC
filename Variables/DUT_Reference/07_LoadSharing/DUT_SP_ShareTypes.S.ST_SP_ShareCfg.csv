@@ -1,0 +1,11 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;aeStrat;ARRAY[1..8] OF ET_SP_ShareStrategy;Local;False;Per feed 1..GC_FEEDS;;None;False;False;False;
+STRUCT;aabManual;ARRAY[1..8] OF ARRAY[1..4] OF BOOL;Local;False;Manual matrix 1..GC_FEEDS x 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;arRatio;ARRAY[1..4] OF LREAL;Local;False;User share ratios (>0) 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;arRangeFrom;ARRAY[1..8] OF ARRAY[1..4] OF LREAL;Local;False;mm 1..GC_FEEDS x 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;arRangeTo;ARRAY[1..8] OF ARRAY[1..4] OF LREAL;Local;False;mm 1..GC_FEEDS x 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;audTypeMask;ARRAY[1..4] OF UDINT;Local;False;Bit i-1 = type i allowed 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;eMatch;ET_SP_MatchMode;Local;False;Matched/Unmatched/Mixed;;None;False;False;False;
+STRUCT;bStrictOrder;BOOL;Local;False;Strict priority order mode (organic);;None;False;False;False;
+STRUCT;rPickBias;LREAL;Local;False;Pick vs place planning bias [0..1];;None;False;False;False;
+STRUCT;aiOutfeedMap;ARRAY[1..8] OF SINT;Local;False;Infeed -> outfeed, 0=none 1..GC_FEEDS;;None;False;False;False;

@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR CONSTANT;GC_SOCK_RX;DINT;Global;False;Socket receive buffer size [bytes];512;None;False;True;False;
+VAR CONSTANT;GC_SOCK_TX;DINT;Global;False;Socket transmit buffer size [bytes];128;None;False;True;False;
+VAR CONSTANT;GC_VIS_MAX;SINT;Global;False;Max items parsed per image;16;None;False;True;False;
+VAR CONSTANT;GC_VIS_MAX2;SINT;Global;False;Camera out-queue depth (harvest);32;None;False;True;False;
+VAR CONSTANT;GC_VIS_IDLE;UDINT;Global;False;Idle time considered end-of-response [ms];60;None;False;True;False;

@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;p3;ST_SP_Pose3D;Input;False;Item pose the cup is attached to;;None;False;False;False;
+VAR_INPUT;uiTool;UINT;Input;False;Tool index (1-based);;None;False;False;False;
+VAR_INPUT;uiCup;UINT;Input;False;Cup index inside the tool (1-based);;None;False;False;False;
+VAR;stCup;ST_SP_Point3D;Local;False;Cup offset from the tool frame;;None;False;False;False;
+VAR;stRes;ST_SP_Pose3D;Local;False;Result pose after offset rotation;;None;False;False;False;

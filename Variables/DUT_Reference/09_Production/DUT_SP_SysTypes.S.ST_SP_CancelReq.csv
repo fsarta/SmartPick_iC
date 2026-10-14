@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bCancel;BOOL;Local;False;Cancel request valid;;None;False;False;False;
+STRUCT;stJob;ST_SP_Job;Local;False;Partial job whose items must be released;;None;False;False;False;

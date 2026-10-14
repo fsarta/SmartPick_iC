@@ -1,0 +1,2 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Tool loop index (abort scan);;None;False;False;False;

@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;udiSeq;UDINT;Local;False;Monotonic sequence number;;None;False;False;False;
+STRUCT;stTime;Yt_YA_RTC_Struct;Local;False;Wall clock stamp (Yaskawa RTC, v1.8.0);;None;False;False;False;
+STRUCT;eLevel;ET_SP_LogLevel;Local;False;Severity;;None;False;False;False;
+STRUCT;eSrc;ET_SP_LogSource;Local;False;Originating module;;None;False;False;False;
+STRUCT;uiCode;UINT;Local;False;Optional module specific code;;None;False;False;False;
+STRUCT;sText;STRING(120);Local;False;Message text, English;;None;False;False;False;

@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;out_sLine;STRING(200);Output;False;Export: line to write;;None;False;False;False;
+VAR_OUTPUT;uiProgress;UINT;Output;False;Export row counter (diagnostic);;None;False;False;False;
+VAR_OUTPUT;bErr;BOOL;Output;False;Last import line rejected;;None;False;False;False;
+VAR_OUTPUT;sName;STRING(32);Output;False;Recipe name;;None;False;False;False;
+VAR;m_bExport;BOOL;Local;False;TRUE = export phase active, FALSE = import;;None;False;False;False;
+VAR;m_iRow;UDINT;Local;False;Export row cursor;UDINT#0;None;False;False;False;

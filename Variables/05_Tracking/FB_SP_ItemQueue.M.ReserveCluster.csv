@@ -1,0 +1,26 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stCl;ST_SP_ClReq;Input;False;Cluster request: tool geometry + rules (from the robot cfg);;None;False;False;False;
+VAR_INPUT;rEncNow;LREAL;Input;False;Current belt encoder [mm];;None;False;False;False;
+VAR_INPUT;rBeltSpd;LREAL;Input;False;Current signed belt speed [mm/s];;None;False;False;False;
+VAR;i;SINT;Local;False;Slot loop index (enumeration / commit);;None;False;False;False;
+VAR;iPass;SINT;Local;False;Selection pass index (bounded enumeration);;None;False;False;False;
+VAR;uiOrd;UINT;Local;False;Ordered candidate list (front-to-rear);;None;False;False;False;
+VAR;aiOrd;ARRAY[1..64] OF SINT;Local;False;Cluster pick order (queue indices, front to rear);;None;False;False;False;
+VAR;aOff;ARRAY[1..64] OF LREAL;Local;False;Per-ordered-item belt offset for the rigid prediction [mm];;None;False;False;False;
+VAR;abDone;ARRAY[1..64] OF BOOL;Local;False;TRUE once the item index is committed to the cluster;;None;False;False;False;
+VAR;iAnchor;SINT;Local;False;Anchor slot, capture encoder and upstream offset (cluster travel);;None;False;False;False;
+VAR;rOffA;LREAL;Local;False;Belt offset of the anchor item (cluster reference) [mm];;None;False;False;False;
+VAR;rEncCapA;LREAL;Local;False;Capture encoder of the anchor item [mm];;None;False;False;False;
+VAR;rDltSync;LREAL;Local;False;Encoder travel between anchor shot and candidate shot [mm];;None;False;False;False;
+VAR;stC;ST_SP_TrkItem;Local;False;Candidate scan working data;;None;False;False;False;
+VAR;stCSync;ST_SP_TrkItem;Local;False;Candidate synchronized to the anchor capture encoder;;None;False;False;False;
+VAR;rOff;LREAL;Local;False;Belt offset of the candidate relative to the anchor [mm];;None;False;False;False;
+VAR;rAng;LREAL;Local;False;Belt motion direction unit vector in world;;None;False;False;False;
+VAR;rDx;LREAL;Local;False;Belt motion direction unit vector in world;;None;False;False;False;
+VAR;rDy;LREAL;Local;False;Belt motion direction unit vector in world;;None;False;False;False;
+VAR;iSel;SINT;Local;False;Selection-scan helpers;;None;False;False;False;
+VAR;rSel;LREAL;Local;False;Best residual score so far (lower = better fit);;None;False;False;False;
+VAR;bTake;BOOL;Local;False;Planner call results;;None;False;False;False;
+VAR;eRc;ET_SP_RetCode;Local;False;Cluster reservation result accumulator;;None;False;False;False;
+VAR;k;SINT;Local;False;Commit loop index;;None;False;False;False;
+VAR;iS;SINT;Local;False;Ordered-slot scan index;;None;False;False;False;

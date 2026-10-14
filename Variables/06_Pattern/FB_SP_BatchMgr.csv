@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;uiActive;UINT;Output;False;Number of running batches;;None;False;False;False;
+VAR_OUTPUT;out_stDef;ST_SP_BatchDef;Output;False;Result buffer of GetDef;;None;False;False;False;
+VAR_OUTPUT;out_stStat;ST_SP_BatchStat;Output;False;Result buffer of GetStat;;None;False;False;False;
+VAR;m_astDef;ARRAY[1..8] OF ST_SP_BatchDef;Local;False;Batch definitions (per outfeed, 1..GC_BATCHES);;None;False;False;False;
+VAR;m_astStat;ARRAY[1..8] OF ST_SP_BatchStat;Local;False;Live batch progress (placed/remaining, 1..GC_BATCHES);;None;False;False;False;
+VAR;m_udiIdGen;UDINT;Local;False;Runtime batch id generator;0;None;False;False;False;

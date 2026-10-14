@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bGripping;BOOL;Local;False;Grip sequence running;;None;False;False;False;
+STRUCT;bHolding;BOOL;Local;False;Part held (feedback based when available);;None;False;False;False;
+STRUCT;bFbk;BOOL;Local;False;Raw feedback input;;None;False;False;False;
+STRUCT;udiPicks;UDINT;Local;False;Raw feedback input;;None;False;False;False;
+STRUCT;udiPlaces;UDINT;Local;False;;;None;False;False;False;
+STRUCT;abCupFbk;ARRAY[1..4] OF BOOL;Local;False;Per-cup vacuum feedback at grip end 1..GC_CUPS;;None;False;False;False;
+STRUCT;uiCupOk;UINT;Local;False;Cups confirmed holding at the last sync grip;;None;False;False;False;

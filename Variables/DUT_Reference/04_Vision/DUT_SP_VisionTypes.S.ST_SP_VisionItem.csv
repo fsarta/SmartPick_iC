@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;udiId;UDINT;Local;False;Globally unique item id (system counter);;None;False;False;False;
+STRUCT;uiTypeId;UINT;Local;False;Product type 1..GC_TYPES, 0 = unknown;;None;False;False;False;
+STRUCT;p2;ST_SP_Pose2D;Local;False;Pose in the producer frame (camera or feed);;None;False;False;False;
+STRUCT;rScore;LREAL;Local;False;Vision match score [0..1];;None;False;False;False;
+STRUCT;rWeight;LREAL;Local;False;Part weight [g], 0 = unknown;;None;False;False;False;
+STRUCT;rBeltPos;LREAL;Local;False;Belt encoder coordinate at capture [mm];;None;False;False;False;
+STRUCT;bTarget;BOOL;Local;False;TRUE = placement target, FALSE = product;;None;False;False;False;
+STRUCT;bValid;BOOL;Local;False;Record validity;;None;False;False;False;

@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sLine;STRING(64);Input;False;Line to field-parse;;None;False;False;False;
+VAR;uiType;UINT;Local;False;Parsed product type id (0 = invalid);;None;False;False;False;
+VAR;rX;LREAL;Local;False;Parsed pose fields and score of the line;;None;False;False;False;
+VAR;rY;LREAL;Local;False;Parsed pose fields and score of the line;;None;False;False;False;
+VAR;rTh;LREAL;Local;False;Parsed pose fields and score of the line;;None;False;False;False;
+VAR;rSc;LREAL;Local;False;Parsed pose fields and score of the line;;None;False;False;False;

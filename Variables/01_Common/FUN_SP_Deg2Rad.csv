@@ -1,0 +1,2 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rDeg;LREAL;Input;False;Angle in degrees;;None;False;False;False;

@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;UINT;Local;False;Loop index over registry slots (ActiveCount);;None;False;False;False;
+VAR;uiC;UINT;Local;False;Active-alarm counter accumulated during the scan;;None;False;False;False;

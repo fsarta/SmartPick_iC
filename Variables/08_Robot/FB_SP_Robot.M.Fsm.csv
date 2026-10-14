@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;stJI;ST_SP_JobItem;Local;False;Job item being closed;;None;False;False;False;
+VAR;bOk;BOOL;Local;False;Result of the pick/place completion call;;None;False;False;False;
+VAR;i;SINT;Local;False;Job item scan index (R-07 per-cup evaluation);;None;False;False;False;

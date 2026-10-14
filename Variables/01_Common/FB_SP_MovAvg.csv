@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rIn;LREAL;Input;False;Raw input sample;;None;False;False;False;
+VAR_INPUT;bEnable;BOOL;Input;False;TRUE = filter active, FALSE = bypass/reset;;None;False;False;False;
+VAR_OUTPUT;rOut;LREAL;Output;False;Filtered output;;None;False;False;False;
+VAR_OUTPUT;bFilled;BOOL;Output;False;TRUE once the window is completely filled;;None;False;False;False;
+VAR;m_arBuf;ARRAY[1..16] OF LREAL;Local;False;Sample window 1..GC_MOVAVG_N;;None;False;False;False;
+VAR;m_iHead;SINT;Local;False;Next write index (1-based);1;None;False;False;False;
+VAR;m_iCnt;SINT;Local;False;Valid sample count;0;None;False;False;False;
+VAR;m_rSum;LREAL;Local;False;Running sum for O(1) evaluation;0.0;None;False;False;False;

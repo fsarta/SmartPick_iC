@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bEnable;BOOL;Local;False;Master switch (FALSE = guard fully transparent);;None;False;False;False;
+STRUCT;bDynaSep;BOOL;Local;False;Dynamic TCP separation monitoring between robots;;None;False;False;False;
+STRUCT;bSepAll;BOOL;Local;False;TRUE = monitor ALL pairs, FALSE = only pairs sharing a zone;;None;False;False;False;
+STRUCT;rSlowDist;LREAL;Local;False;Separation thresholds [mm]: below rSlowDist the lower-priority robot is slowed (linear ramp), below rStopDist it is frozen.;;None;False;False;False;
+STRUCT;rStopDist;LREAL;Local;False;;;None;False;False;False;
+STRUCT;aiPriority;ARRAY[1..4] OF SINT;Local;False;Service priority per robot: 1 = highest. Ties break by robot id. 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;arZoneLim;ARRAY[1..8] OF LREAL;Local;False;Zone speed limits [0.1..1.0], 1.0 = full speed (transfer areas) 1..GC_ZONES;;None;False;False;False;

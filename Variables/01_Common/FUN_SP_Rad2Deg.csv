@@ -1,0 +1,2 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rRad;LREAL;Input;False;Angle in radians;;None;False;False;False;

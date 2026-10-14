@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Robot loop index (publish scan);;None;False;False;False;
+VAR;bAllIdle;BOOL;Local;False;TRUE when every robot is idle (stop complete);;None;False;False;False;
+VAR;bAnyRob;BOOL;Local;False;TRUE when at least one robot exists/enabled;;None;False;False;False;
+VAR;uiRun;UINT;Local;False;Running-robot counter;;None;False;False;False;
+VAR;uiFault;UINT;Local;False;Faulted-robot counter;;None;False;False;False;
+VAR;udiItems;UDINT;Local;False;Item total accumulated for publish;;None;False;False;False;

@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;out_rBestScore;LREAL;Output;False;Score of the chosen robot (diagnostic);;None;False;False;False;
+VAR_OUTPUT;out_iEligible;SINT;Output;False;Number of eligible robots (diagnostic);;None;False;False;False;
+VAR;m_stCfg;ST_SP_ShareCfg;Local;False;Strategy table, ratios, type masks and work ranges;;None;False;False;False;
+VAR;m_bCfgOk;BOOL;Local;False;TRUE after a valid Configure();;None;False;False;False;
+VAR;m_iRing;SINT;Local;False;Organic ring rotation state;0;None;False;False;False;

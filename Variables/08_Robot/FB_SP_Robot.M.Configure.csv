@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stIn;ST_SP_RobCfg;Input;False;Configuration to validate and store;;None;False;False;False;
+VAR_INPUT;iRobot;SINT;Input;False;Robot id bound to this instance (1..GC_ROBOTS);;None;False;False;False;
+VAR;eRc;ET_SP_RetCode;Local;False;Subordinate Configure() result accumulator;;None;False;False;False;

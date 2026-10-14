@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Organic;ET_SP_ShareStrategy;Local;False;;0;None;False;False;False;
+ENUM;Greedy;ET_SP_ShareStrategy;Local;False;;1;None;False;False;False;
+ENUM;Balanced;ET_SP_ShareStrategy;Local;False;;2;None;False;False;False;
+ENUM;Manual;ET_SP_ShareStrategy;Local;False;;3;None;False;False;False;

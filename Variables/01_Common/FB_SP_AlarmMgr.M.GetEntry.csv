@@ -1,0 +1,2 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iIdx;UINT;Input;False;Registry position to copy (1-based);;None;False;False;False;

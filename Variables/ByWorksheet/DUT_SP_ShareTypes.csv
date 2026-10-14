@@ -1,0 +1,25 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;iRobotId;SINT;Local;False;1..GC_ROBOTS;;None;False;False;False;
+STRUCT;bOnline;BOOL;Local;False;Group enabled and homed;;None;False;False;False;
+STRUCT;bFault;BOOL;Local;False;Robot in fault (excluded);;None;False;False;False;
+STRUCT;bIdle;BOOL;Local;False;Ready to accept a job now;;None;False;False;False;
+STRUCT;uiToolMask;UINT;Local;False;Bitmask of idle tools (bit i-1 = tool i);;None;False;False;False;
+STRUCT;rLoadPct;LREAL;Local;False;Estimated busyness [0..1];;None;False;False;False;
+STRUCT;udiPicks;UDINT;Local;False;Lifetime picks (balancing metric);;None;False;False;False;
+STRUCT;udiPlaces;UDINT;Local;False;Lifetime placements;;None;False;False;False;
+STRUCT;p2Now;ST_SP_Pose2D;Local;False;Current world pose (greedy distance metric);;None;False;False;False;
+STRUCT;iFeed;SINT;Local;False;Feed offering the item 1..GC_FEEDS;;None;False;False;False;
+STRUCT;uiTypeId;UINT;Local;False;Product type (0 = unknown);;None;False;False;False;
+STRUCT;rBeltOff;LREAL;Local;False;Current upstream offset [mm];;None;False;False;False;
+STRUCT;stW;ST_SP_Pose2D;Local;False;Item world pose (greedy metric);;None;False;False;False;
+STRUCT;bTarget;BOOL;Local;False;TRUE = placement target offer;;None;False;False;False;
+STRUCT;aeStrat;ARRAY[1..8] OF ET_SP_ShareStrategy;Local;False;Per feed 1..GC_FEEDS;;None;False;False;False;
+STRUCT;aabManual;ARRAY[1..8] OF ARRAY[1..4] OF BOOL;Local;False;Manual matrix 1..GC_FEEDS x 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;arRatio;ARRAY[1..4] OF LREAL;Local;False;User share ratios (>0) 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;arRangeFrom;ARRAY[1..8] OF ARRAY[1..4] OF LREAL;Local;False;mm 1..GC_FEEDS x 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;arRangeTo;ARRAY[1..8] OF ARRAY[1..4] OF LREAL;Local;False;mm 1..GC_FEEDS x 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;audTypeMask;ARRAY[1..4] OF UDINT;Local;False;Bit i-1 = type i allowed 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;eMatch;ET_SP_MatchMode;Local;False;Matched/Unmatched/Mixed;;None;False;False;False;
+STRUCT;bStrictOrder;BOOL;Local;False;Strict priority order mode (organic);;None;False;False;False;
+STRUCT;rPickBias;LREAL;Local;False;Pick vs place planning bias [0..1];;None;False;False;False;
+STRUCT;aiOutfeedMap;ARRAY[1..8] OF SINT;Local;False;Infeed -> outfeed, 0=none 1..GC_FEEDS;;None;False;False;False;

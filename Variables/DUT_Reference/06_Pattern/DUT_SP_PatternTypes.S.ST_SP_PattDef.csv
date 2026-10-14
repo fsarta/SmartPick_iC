@@ -1,0 +1,13 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bUsed;BOOL;Local;False;Pattern slot in use;;None;False;False;False;
+STRUCT;sName;STRING(24);Local;False;Human readable pattern name;;None;False;False;False;
+STRUCT;uiRows;UINT;Local;False;Rows (along belt);;None;False;False;False;
+STRUCT;uiCols;UINT;Local;False;Columns (across belt);;None;False;False;False;
+STRUCT;rDx;LREAL;Local;False;Column pitch, across belt [mm];;None;False;False;False;
+STRUCT;rDy;LREAL;Local;False;Row pitch, along belt [mm];;None;False;False;False;
+STRUCT;rRotStep;LREAL;Local;False;Rotation step per slot [deg], 0 = keep;;None;False;False;False;
+STRUCT;pBase;ST_SP_Pose2D;Local;False;Base slot pose in FEED frame (u across, v upstream);;None;False;False;False;
+STRUCT;uiLayers;UINT;Local;False;Number of tray layers (1 = single tier);;None;False;False;False;
+STRUCT;rLayerH;LREAL;Local;False;Layer height [mm];;None;False;False;False;
+STRUCT;rZBase;LREAL;Local;False;Z of layer 0 in world [mm];;None;False;False;False;
+STRUCT;rTrigDist;LREAL;Local;False;Pattern repetition distance [mm] (Distance mode);;None;False;False;False;

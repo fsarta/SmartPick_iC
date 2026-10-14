@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;p3;ST_SP_Pose3D;Input;False;Pose to test (X/Y used, Z ignored);;None;False;False;False;
+VAR_INPUT;rXmin;LREAL;Input;False;Window lower X bound;;None;False;False;False;
+VAR_INPUT;rXmax;LREAL;Input;False;Window upper X bound;;None;False;False;False;
+VAR_INPUT;rYmin;LREAL;Input;False;Window lower Y bound;;None;False;False;False;
+VAR_INPUT;rYmax;LREAL;Input;False;Window upper Y bound;;None;False;False;False;

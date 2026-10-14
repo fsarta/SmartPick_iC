@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;astP;ARRAY[1..4] OF ST_SP_Pose3D;Input;False;Member item poses (world) 1..GC_CUPS;;None;False;False;False;
+VAR_INPUT;uiN;UINT;Input;False;Number of valid members 1..GC_CUPS;;None;False;False;False;
+VAR;i;SINT;Local;False;Member loop index (yaw accumulation);;None;False;False;False;
+VAR;rS;LREAL;Local;False;Sine / cosine accumulators of the unit vectors;;None;False;False;False;
+VAR;rC;LREAL;Local;False;Sine / cosine accumulators of the unit vectors;;None;False;False;False;

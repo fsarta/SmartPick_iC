@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;udiGot;UDINT;Local;False;Bytes read by the firmware call this cycle;;None;False;False;False;
+VAR;i;INT;Local;False;Byte loop index (buffer to string);;None;False;False;False;
+VAR;iPos;INT;Local;False;Line-break search position;;None;False;False;False;
+VAR;iLen;INT;Local;False;Accumulated byte count;;None;False;False;False;
+VAR;sChunk;STRING(200);Local;False;String view of the raw bytes read;;None;False;False;False;
+VAR;sCh;STRING(1);Local;False;One printable character of the chunk;;None;False;False;False;
+VAR;sLine;STRING(200);Local;False;Line assembled from the raw bytes;;None;False;False;False;

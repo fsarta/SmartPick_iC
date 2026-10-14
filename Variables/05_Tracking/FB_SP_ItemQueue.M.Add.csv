@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stItem;ST_SP_TrkItem;Input;False;Item to insert;;None;False;False;False;
+VAR;i;SINT;Local;False;Slot loop index / duplicate slot index;;None;False;False;False;
+VAR;iDup;SINT;Local;False;;;None;False;False;False;

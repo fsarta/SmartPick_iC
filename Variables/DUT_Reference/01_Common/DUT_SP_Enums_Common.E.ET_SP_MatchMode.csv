@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Matched;ET_SP_MatchMode;Local;False;;0;None;False;False;False;
+ENUM;Unmatched;ET_SP_MatchMode;Local;False;;1;None;False;False;False;
+ENUM;Mixed;ET_SP_MatchMode;Local;False;;2;None;False;False;False;

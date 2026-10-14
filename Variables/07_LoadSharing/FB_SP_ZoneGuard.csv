@@ -1,0 +1,17 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bEnable;BOOL;Input;False;FALSE = all grants TRUE;;None;False;False;False;
+VAR_INPUT;abRobReq;ARRAY[1..4] OF BOOL;Input;False;Robot requests its feed zone 1..GC_ROBOTS;;None;False;False;False;
+VAR_INPUT;aiRobFeed;ARRAY[1..4] OF SINT;Input;False;Feed each robot works on 1..GC_ROBOTS;;None;False;False;False;
+VAR_OUTPUT;abGrant;ARRAY[1..4] OF BOOL;Output;False;TRUE = robot free to move 1..GC_ROBOTS;;None;False;False;False;
+VAR_OUTPUT;abHold;ARRAY[1..4] OF BOOL;Output;False;Latched grant (diagnostic) 1..GC_ROBOTS;;None;False;False;False;
+VAR_OUTPUT;auiCnt;ARRAY[1..4] OF UINT;Output;False;Current holders per zone 1..GC_ZONES;;None;False;False;False;
+VAR_OUTPUT;uiWait;UINT;Output;False;Robots waiting for a zone;;None;False;False;False;
+VAR;m_aiFeedZone;ARRAY[1..8] OF SINT;Local;False;Feed -> zone (0 = unguarded) 1..GC_FEEDS;;None;False;False;False;
+VAR;m_abHold;ARRAY[1..4] OF BOOL;Local;False;Latch state 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_aiHeldZone;ARRAY[1..4] OF SINT;Local;False;Zone id currently held per robot;;None;False;False;False;
+VAR;m_aiRobZone;ARRAY[1..4] OF SINT;Local;False;Resolved zone per robot 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_bInit;BOOL;Local;False;Resolved zone per robot 1..GC_ROBOTS;FALSE;None;False;False;False;
+VAR;i;SINT;Local;False;Body working variables;;None;False;False;False;
+VAR;k;SINT;Local;False;Body working variables;;None;False;False;False;
+VAR;iZ;SINT;Local;False;Body working variables;;None;False;False;False;
+VAR;bFree;BOOL;Local;False;TRUE when no other robot holds the requested zone;;None;False;False;False;

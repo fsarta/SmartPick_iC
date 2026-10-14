@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iR;SINT;Input;False;Robot whose item is being stored;;None;False;False;False;
+VAR_INPUT;uiCnt;UINT;Input;False;Job item position being filled;;None;False;False;False;
+VAR_INPUT;stRsp;ST_SP_ResRsp;Input;False;Reservation response carrying the pick pose;;None;False;False;False;
+VAR_INPUT;bPick;BOOL;Input;False;TRUE = pick side record, FALSE = place side;;None;False;False;False;
+VAR_INPUT;iCup;SINT;Input;False;Cup id (1..GC_CUPS, -1 = uiCnt legacy mapping);;None;False;False;False;
+VAR;stJI;ST_SP_JobItem;Local;False;Job item record being completed;;None;False;False;False;

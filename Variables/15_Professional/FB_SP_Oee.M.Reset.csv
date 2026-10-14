@@ -1,0 +1,2 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stCnt;ST_SP_Counters;Input;False;Current totals snapshot (new shift base);;None;False;False;False;

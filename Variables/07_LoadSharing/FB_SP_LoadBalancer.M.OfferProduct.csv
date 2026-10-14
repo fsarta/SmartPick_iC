@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stOffer;ST_SP_Offer;Input;False;Offer to assign (Manual pass);;None;False;False;False;
+VAR_INPUT;astRob;ARRAY[1..4] OF ST_SP_RobShare;Input;False;Live robot snapshot array 1..GC_ROBOTS;;None;False;False;False;
+VAR;eStrat;ET_SP_ShareStrategy;Local;False;Strategy configured for the feed;;None;False;False;False;
+VAR;iRes;SINT;Local;False;Robot id returned by the helper (0 = none);;None;False;False;False;
+VAR;bTryAny;BOOL;Local;False;TRUE on pass 2: ignore the type mask (Mixed fallback);;None;False;False;False;
+VAR;iPass;SINT;Local;False;Pass counter (1 = strict, 2 = fallback);;None;False;False;False;

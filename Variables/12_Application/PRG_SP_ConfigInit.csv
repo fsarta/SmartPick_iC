@@ -1,0 +1,21 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iCfg;SINT;Input;False;Configuration selector 1..8 (see map);;None;False;False;False;
+VAR_INPUT;bApply;BOOL;Input;False;Rising edge: apply configuration iCfg;;None;False;False;False;
+VAR_INPUT;bAutoBoot;BOOL;Input;False;TRUE: apply iBootCfg on the first cycle;TRUE;None;False;False;False;
+VAR_INPUT;iBootCfg;SINT;Input;False;Configuration id applied at boot;1;None;False;False;False;
+VAR_OUTPUT;bDone;BOOL;Output;False;TRUE for one cycle after a successful apply;;None;False;False;False;
+VAR_OUTPUT;sMsg;STRING(80);Output;False;Human-readable result of the last apply;;None;False;False;False;
+VAR_OUTPUT;iLastCfg;SINT;Output;False;Last applied configuration id (diagnostic);;None;False;False;False;
+VAR;m_bOld;BOOL;Local;False;Previous bApply sample (edge detection);;None;False;False;False;
+VAR;m_bBooted;BOOL;Local;False;Boot auto-apply already done;FALSE;None;False;False;False;
+VAR;m_bGo;BOOL;Local;False;Internal apply trigger (edge OR boot);;None;False;False;False;
+VAR;m_iSel;SINT;Local;False;Resolved configuration id for this apply;;None;False;False;False;
+VAR;m_i;SINT;Local;False;Loop index (feeds / cams / patterns);;None;False;False;False;
+VAR;m_k;SINT;Local;False;Loop index (robots);;None;False;False;False;
+VAR;m_stConvClr;ST_SP_ConvCfg;Local;False;Zero template for conveyor configs;;None;False;False;False;
+VAR;m_stFeedClr;ST_SP_TrkCfg;Local;False;Zero template for feed configs;;None;False;False;False;
+VAR;m_stCamClr;ST_SP_VisionCfg;Local;False;Zero template for camera configs;;None;False;False;False;
+VAR;m_stPattClr;ST_SP_PattDef;Local;False;Zero template for pattern defs;;None;False;False;False;
+VAR;m_stBatchClr;ST_SP_BatchDef;Local;False;Zero template for batch defs;;None;False;False;False;
+VAR;m_stShareClr;ST_SP_ShareCfg;Local;False;Zero template for load sharing;;None;False;False;False;
+VAR;m_stSysClr;ST_SP_SysCfg;Local;False;Zero template for system flags;;None;False;False;False;

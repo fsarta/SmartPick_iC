@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;None;ET_SP_MvKind;Local;False;;0;None;False;False;False;
+ENUM;Home;ET_SP_MvKind;Local;False;;1;None;False;False;False;
+ENUM;LinearAbs;ET_SP_MvKind;Local;False;;2;None;False;False;False;
+ENUM;TrackAbs;ET_SP_MvKind;Local;False;;3;None;False;False;False;

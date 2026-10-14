@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;iRobotId;SINT;Local;False;1..GC_ROBOTS;;None;False;False;False;
+STRUCT;bOnline;BOOL;Local;False;Group enabled and homed;;None;False;False;False;
+STRUCT;bFault;BOOL;Local;False;Robot in fault (excluded);;None;False;False;False;
+STRUCT;bIdle;BOOL;Local;False;Ready to accept a job now;;None;False;False;False;
+STRUCT;uiToolMask;UINT;Local;False;Bitmask of idle tools (bit i-1 = tool i);;None;False;False;False;
+STRUCT;rLoadPct;LREAL;Local;False;Estimated busyness [0..1];;None;False;False;False;
+STRUCT;udiPicks;UDINT;Local;False;Lifetime picks (balancing metric);;None;False;False;False;
+STRUCT;udiPlaces;UDINT;Local;False;Lifetime placements;;None;False;False;False;
+STRUCT;p2Now;ST_SP_Pose2D;Local;False;Current world pose (greedy distance metric);;None;False;False;False;

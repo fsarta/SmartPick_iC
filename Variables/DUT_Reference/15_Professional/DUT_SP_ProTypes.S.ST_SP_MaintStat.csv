@@ -1,0 +1,14 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;audiRobCycles;ARRAY[1..4] OF UDINT;Local;False;Grip-cycle counters per robot 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;audiRobPct;ARRAY[1..4] OF LREAL;Local;False;Load 0..1;;None;False;False;False;
+STRUCT;abRobDue;ARRAY[1..4] OF BOOL;Local;False;Maintenance due;;None;False;False;False;
+STRUCT;audiCamShots;ARRAY[1..2] OF UDINT;Local;False;Camera shot counters 1..GC_CAMS;;None;False;False;False;
+STRUCT;audiCamPct;ARRAY[1..2] OF LREAL;Local;False;;;None;False;False;False;
+STRUCT;abCamDue;ARRAY[1..2] OF BOOL;Local;False;;;None;False;False;False;
+STRUCT;audiConvMin;ARRAY[1..8] OF UDINT;Local;False;Conveyor run-time counters [min] 1..GC_FEEDS;;None;False;False;False;
+STRUCT;audiConvPct;ARRAY[1..8] OF LREAL;Local;False;;;None;False;False;False;
+STRUCT;abConvDue;ARRAY[1..8] OF BOOL;Local;False;;;None;False;False;False;
+STRUCT;udiPumpMin;UDINT;Local;False;Vacuum pump run-time counter [min];;None;False;False;False;
+STRUCT;rPumpPct;LREAL;Local;False;;;None;False;False;False;
+STRUCT;bPumpDue;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bAnyDue;BOOL;Local;False;TRUE when at least one threshold is reached;;None;False;False;False;

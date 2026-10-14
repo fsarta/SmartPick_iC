@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;stOut;ST_SP_TrkStat;Output;False;Published statistics;;None;False;False;False;
+VAR_OUTPUT;out_stRes;ST_SP_ResRsp;Output;False;Reservation result buffer;;None;False;False;False;
+VAR_OUTPUT;out_stCl;ST_SP_ClRsp;Output;False;Cluster reservation result buffer (R-07);;None;False;False;False;
+VAR_OUTPUT;out_rNear;LREAL;Output;False;Nearest item distance [mm];;None;False;False;False;
+VAR_OUTPUT;bNearFound;BOOL;Output;False;TRUE when an item is in flow;;None;False;False;False;
+VAR;stCfg;ST_SP_TrkCfg;Local;False;Feed configuration;;None;False;False;False;
+VAR;m_bCfgOk;BOOL;Local;False;Feed configuration;;None;False;False;False;
+VAR;m_Q;SP_ItemQueue;Local;False;Item ring buffer;;None;False;False;False;
+VAR;m_udiLost;UDINT;Local;False;Item ring buffer;0;None;False;False;False;

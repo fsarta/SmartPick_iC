@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;uiId;UINT;Input;False;Id of the alarm to deactivate;;None;False;False;False;
+VAR_INPUT;eSrc;ET_SP_LogSource;Input;False;Originating module tag;;None;False;False;False;
+VAR_INPUT;eLevel;ET_SP_LogLevel;Input;False;Severity shown on HMI / in the log;;None;False;False;False;
+VAR_INPUT;sText;STRING(80);Input;False;Short operator-facing description;;None;False;False;False;
+VAR;i;UINT;Local;False;Loop index over registry slots (Raise);;None;False;False;False;
+VAR;iFree;UINT;Local;False;Target slot for a new record (0 = none found yet);;None;False;False;False;
+VAR;bHit;BOOL;Local;False;TRUE when the alarm id already exists;;None;False;False;False;
+VAR;stNil;Yt_YA_RTC_Struct;Local;False;Nil RTC stamp for cleared field;;None;False;False;False;

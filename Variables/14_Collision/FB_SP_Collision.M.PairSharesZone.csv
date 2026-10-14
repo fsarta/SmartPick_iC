@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;i;SINT;Input;False;First robot id;;None;False;False;False;
+VAR_INPUT;j;SINT;Input;False;Second robot id;;None;False;False;False;
+VAR;k;SINT;Local;False;Hold slot loop indices;;None;False;False;False;
+VAR;m;SINT;Local;False;Hold slot loop indices;;None;False;False;False;

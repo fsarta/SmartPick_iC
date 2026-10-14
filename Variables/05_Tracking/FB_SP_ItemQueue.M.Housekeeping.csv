@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rEncNow;LREAL;Input;False;Current belt encoder [mm];;None;False;False;False;
+VAR;i;SINT;Local;False;Slot loop index (aging);;None;False;False;False;
+VAR;rOff;LREAL;Local;False;Item offset re-read for prediction;;None;False;False;False;
+VAR;uiPurge;UINT;Local;False;Total purged records this call;;None;False;False;False;
+VAR;uiFlow;UINT;Local;False;Purged flow records (Lost/TimedOut);;None;False;False;False;
+VAR;uiTerm;UINT;Local;False;Purged terminal records (Picked/Placed);;None;False;False;False;
+VAR;uiToMs;UDINT;Local;False;Tracking timeout in ms (from config);;None;False;False;False;

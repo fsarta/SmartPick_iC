@@ -1,0 +1,28 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bEnable;BOOL;Input;False;TRUE = driver operational;;None;False;False;False;
+VAR_INPUT;bTrig;BOOL;Input;False;Rising edge = image trigger;;None;False;False;False;
+VAR_INPUT;udiTickMs;UDINT;Input;False;Monotonic ms tick (GVL_SP_Rtc, v1.8.0);;None;False;False;False;
+VAR_INPUT;rBeltPos;LREAL;Input;False;Belt position at trigger [mm] (stamping);;None;False;False;False;
+VAR_OUTPUT;eState;ET_SP_VisionState;Output;False;Driver lifecycle state (Offline/Connecting/Online/Triggered);;None;False;False;False;
+VAR_OUTPUT;bDone;BOOL;Output;False;One-cycle pulse: image fully processed;;None;False;False;False;
+VAR_OUTPUT;bErr;BOOL;Output;False;Protocol/communication error pulse;;None;False;False;False;
+VAR_OUTPUT;uiErr;UINT;Output;False;Error code: 1=open,2=timeout,3=send,4=parse;;None;False;False;False;
+VAR_OUTPUT;bItemsAvail;BOOL;Output;False;Parsed items waiting for GetItem;;None;False;False;False;
+VAR_OUTPUT;out_stItem;ST_SP_VisionItem;Output;False;Current item for GetItem;;None;False;False;False;
+VAR;stCfg;ST_SP_VisionCfg;Local;False;Configuration (validated by Configure);;None;False;False;False;
+VAR;m_bCfgOk;BOOL;Local;False;Configuration (validated by Configure);;None;False;False;False;
+VAR;m_Sock;SP_Socket;Local;False;TCP adapter;;None;False;False;False;
+VAR;m_sPend;STRING(240);Local;False;Response accumulation buffer;;None;False;False;False;
+VAR;m_astIt;ARRAY[1..16] OF ST_SP_VisionItem;Local;False;Parsed items 1..GC_VIS_MAX;;None;False;False;False;
+VAR;m_iCnt;SINT;Local;False;Parsed item count;0;None;False;False;False;
+VAR;m_iRd;SINT;Local;False;Read index for GetItem;0;None;False;False;False;
+VAR;m_bTrigPrev;BOOL;Local;False;Read index for GetItem;;None;False;False;False;
+VAR;m_bSendPulse;BOOL;Local;False;One-cycle transmit request;;None;False;False;False;
+VAR;m_sTx;STRING(128);Local;False;Transmit payload;;None;False;False;False;
+VAR;m_udiSeq;UDINT;Local;False;{SEQ} macro generator;0;None;False;False;False;
+VAR;m_udiTrig;UDINT;Local;False;Trigger tick [ms] (monotonic);;None;False;False;False;
+VAR;m_udiLast;UDINT;Local;False;Last received byte tick [ms];;None;False;False;False;
+VAR;m_bLineValid;BOOL;Local;False;m_ParseLine: last consumed line held an item;;None;False;False;False;
+VAR;m_stNew;ST_SP_VisionItem;Local;False;m_ParseFields: parsed record;;None;False;False;False;
+VAR;m_udiItems;UDINT;Local;False;Lifetime parsed items;0;None;False;False;False;
+VAR;m_udiErrs;UDINT;Local;False;Lifetime errors;0;None;False;False;False;

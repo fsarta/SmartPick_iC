@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;rX;LREAL;Local;False;X position [mm];;None;False;False;False;
+STRUCT;rY;LREAL;Local;False;Y position [mm];;None;False;False;False;
+STRUCT;rTh;LREAL;Local;False;Yaw angle [deg];;None;False;False;False;

@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bGrant;BOOL;Local;False;TRUE = robot free to move;;None;False;False;False;
+STRUCT;rVelScale;LREAL;Local;False;Velocity scale 0.1..1.0;;None;False;False;False;
+STRUCT;eWhy;ET_SP_ColAct;Local;False;Reason of the current limitation;;None;False;False;False;
+STRUCT;udiWaitMs;UDINT;Local;False;Accumulated frozen time [ms] (layout KPI);;None;False;False;False;

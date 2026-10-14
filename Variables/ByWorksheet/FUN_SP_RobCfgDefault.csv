@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stIn;ST_SP_RobCfg;Input;False;Current configuration (fill-if-empty);;None;False;False;False;
+VAR_INPUT;iRob;SINT;Input;False;Robot index 1..GC_ROBOTS;;None;False;False;False;
+VAR;stOut;ST_SP_RobCfg;Local;False;Generic robot profile assembled (suction, speeds, retries);;None;False;False;False;
+VAR;iF;SINT;Local;False;Feed / type / cup loop indices;;None;False;False;False;
+VAR;iT;SINT;Local;False;Feed / type / cup loop indices;;None;False;False;False;
+VAR;iC;SINT;Local;False;Feed / type / cup loop indices;;None;False;False;False;

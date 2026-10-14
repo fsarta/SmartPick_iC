@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Robot and general loop indices;;None;False;False;False;
+VAR;k;SINT;Local;False;Robot and general loop indices;;None;False;False;False;
+VAR;stOffer;ST_SP_Offer;Local;False;Offer assembled for the balancer;;None;False;False;False;
+VAR;iRobot;SINT;Local;False;Robot id returned by the balancer (0 = none);;None;False;False;False;

@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;astTrk;ARRAY[1..8] OF ST_SP_TrkCfg;Input;False;Feed configurations (source frames, directions, window data) 1..GC_FEEDS;;None;False;False;False;
+VAR;i;SINT;Local;False;Feed scan index;;None;False;False;False;
+VAR;stFr;ST_SP_BeltFrame;Local;False;Belt frame under construction;;None;False;False;False;

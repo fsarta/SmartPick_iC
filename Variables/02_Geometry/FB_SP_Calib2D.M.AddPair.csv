@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rCx;LREAL;Input;False;Camera-frame X of the teaching point;;None;False;False;False;
+VAR_INPUT;rCy;LREAL;Input;False;Camera-frame Y of the teaching point;;None;False;False;False;
+VAR_INPUT;rWx;LREAL;Input;False;World-frame X of the same physical point;;None;False;False;False;
+VAR_INPUT;rWy;LREAL;Input;False;World-frame Y of the same physical point;;None;False;False;False;

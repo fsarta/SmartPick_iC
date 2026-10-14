@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;out_stT;ST_SP_Transf2D;Output;False;Solved transform (bValid set);;None;False;False;False;
+VAR_OUTPUT;out_rRms;LREAL;Output;False;RMS residual [user unit];;None;False;False;False;
+VAR_OUTPUT;out_iPairs;SINT;Output;False;Registered pairs;;None;False;False;False;
+VAR_OUTPUT;out_bValid;BOOL;Output;False;Transform usable;;None;False;False;False;
+VAR;m_acstCam;ARRAY[1..8] OF ST_SP_Point2D;Local;False;Camera points 1..GC_CALIB_PTS;;None;False;False;False;
+VAR;m_acstWrld;ARRAY[1..8] OF ST_SP_Point2D;Local;False;World points 1..GC_CALIB_PTS;;None;False;False;False;
+VAR;m_iCnt;SINT;Local;False;Stored pairs;0;None;False;False;False;

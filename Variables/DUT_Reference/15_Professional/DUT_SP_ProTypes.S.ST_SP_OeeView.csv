@@ -1,0 +1,14 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;rAvail;LREAL;Local;False;Availability = run time / planned time [0..1];;None;False;False;False;
+STRUCT;rPerf;LREAL;Local;False;Performance = ideal cycle x count / run time [0..1];;None;False;False;False;
+STRUCT;rQual;LREAL;Local;False;Quality = good picks / total picks [0..1];;None;False;False;False;
+STRUCT;rOee;LREAL;Local;False;OEE = A x P x Q [0..1];;None;False;False;False;
+STRUCT;udiPlanMs;UDINT;Local;False;Planned (shift) time [ms];;None;False;False;False;
+STRUCT;udiRunMs;UDINT;Local;False;Productive time [ms];;None;False;False;False;
+STRUCT;udiDownMs;UDINT;Local;False;Downtime (fault) [ms];;None;False;False;False;
+STRUCT;udiCycles;UDINT;Local;False;Cycles in the current shift;;None;False;False;False;
+STRUCT;udiGood;UDINT;Local;False;Good picks in the current shift;;None;False;False;False;
+STRUCT;udiNg;UDINT;Local;False;Failed picks in the current shift;;None;False;False;False;
+STRUCT;udiFaults;UDINT;Local;False;Fault events in the current shift;;None;False;False;False;
+STRUCT;rMtbfMin;LREAL;Local;False;Mean time between faults [min], EMA smoothed;;None;False;False;False;
+STRUCT;rMttrMin;LREAL;Local;False;Mean time to repair [min], EMA smoothed;;None;False;False;False;

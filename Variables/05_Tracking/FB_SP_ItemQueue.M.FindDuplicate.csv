@@ -1,0 +1,11 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stItem;ST_SP_TrkItem;Input;False;Newly detected item in feed/world coordinates;;None;False;False;False;
+VAR;i;SINT;Local;False;Slot loop index;;None;False;False;False;
+VAR;iBest;SINT;Local;False;Best matching slot so far (0 = none);;None;False;False;False;
+VAR;rTol;LREAL;Local;False;Effective duplicate suppression tolerance [mm];;None;False;False;False;
+VAR;rBestD;LREAL;Local;False;Best Euclidean distance on belt [mm];;None;False;False;False;
+VAR;rVOld;LREAL;Local;False;Projected along-belt offset of existing item at stItem.rEncCap [mm];;None;False;False;False;
+VAR;rDu;LREAL;Local;False;Belt-plane deltas (across belt u, along belt v) and distance [mm];;None;False;False;False;
+VAR;rDv;LREAL;Local;False;;;None;False;False;False;
+VAR;rDist;LREAL;Local;False;;;None;False;False;False;
+VAR;bTypeOk;BOOL;Local;False;Type match flag;;None;False;False;False;

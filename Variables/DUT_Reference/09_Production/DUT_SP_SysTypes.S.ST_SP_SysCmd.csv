@@ -1,0 +1,11 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bStart;BOOL;Local;False;One-shot system commands (HMI mirror);;None;False;False;False;
+STRUCT;bStop;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bPause;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bResume;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bReset;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bHomeAll;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bDryRun;BOOL;Local;False;Trial run lock (system wide);;None;False;False;False;
+STRUCT;iStartBatch;SINT;Local;False;Batch index to start (0 = none);;None;False;False;False;
+STRUCT;iStopBatch;SINT;Local;False;Batch index to stop (0 = none);;None;False;False;False;
+STRUCT;bClearItems;BOOL;Local;False;Purge all tracking queues;;None;False;False;False;

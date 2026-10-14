@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Job item scan index (place side);;None;False;False;False;
+VAR;uiN;UINT;Local;False;Pending place item counter;;None;False;False;False;
+VAR;k;SINT;Local;False;Cup loop index (place retry reset);;None;False;False;False;

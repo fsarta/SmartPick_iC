@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;iFeed;SINT;Local;False;Feed offering the item 1..GC_FEEDS;;None;False;False;False;
+STRUCT;uiTypeId;UINT;Local;False;Product type (0 = unknown);;None;False;False;False;
+STRUCT;rBeltOff;LREAL;Local;False;Current upstream offset [mm];;None;False;False;False;
+STRUCT;stW;ST_SP_Pose2D;Local;False;Item world pose (greedy metric);;None;False;False;False;
+STRUCT;bTarget;BOOL;Local;False;TRUE = placement target offer;;None;False;False;False;

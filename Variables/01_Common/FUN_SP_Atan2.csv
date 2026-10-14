@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rY;LREAL;Input;False;Y coordinate (ordinate);;None;False;False;False;
+VAR_INPUT;rX;LREAL;Input;False;X coordinate (abscissa);;None;False;False;False;
+VAR;rAbsX;LREAL;Local;False;Absolute value of rX;;None;False;False;False;
+VAR;rAbsY;LREAL;Local;False;Absolute value of rY;;None;False;False;False;
+VAR;rA;LREAL;Local;False;Start value (t = 0) [rad];;None;False;False;False;
+VAR;rRes;LREAL;Local;False;Result being assembled per quadrant [rad];;None;False;False;False;

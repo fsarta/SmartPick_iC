@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;None;ET_SP_ColAct;Local;False;;0;None;False;False;False;
+ENUM;WaitZone;ET_SP_ColAct;Local;False;;1;None;False;False;False;
+ENUM;SlowZone;ET_SP_ColAct;Local;False;;2;None;False;False;False;
+ENUM;SepSlow;ET_SP_ColAct;Local;False;;3;None;False;False;False;
+ENUM;SepStop;ET_SP_ColAct;Local;False;;4;None;False;False;False;

@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Exact;ET_SP_Precision;Local;False;;0;None;False;False;False;
+ENUM;ZoneTight;ET_SP_Precision;Local;False;;1;None;False;False;False;
+ENUM;ZoneWide;ET_SP_Precision;Local;False;;2;None;False;False;False;

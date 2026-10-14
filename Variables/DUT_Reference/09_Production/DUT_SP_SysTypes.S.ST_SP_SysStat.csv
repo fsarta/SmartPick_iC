@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;eState;ET_SP_SysState;Local;False;;;None;False;False;False;
+STRUCT;bReady;BOOL;Local;False;All stages up, production possible;;None;False;False;False;
+STRUCT;bRunning;BOOL;Local;False;All stages up, production possible;;None;False;False;False;
+STRUCT;bPaused;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bDryRun;BOOL;Local;False;;;None;False;False;False;
+STRUCT;uiRobotsRun;UINT;Local;False;Robots in production;;None;False;False;False;
+STRUCT;uiRobotsFault;UINT;Local;False;Robots in production;;None;False;False;False;
+STRUCT;udiItemsInSys;UDINT;Local;False;Items currently tracked (sum);;None;False;False;False;
+STRUCT;uiErrId;UINT;Local;False;Items currently tracked (sum);;None;False;False;False;

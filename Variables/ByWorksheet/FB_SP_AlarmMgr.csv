@@ -1,0 +1,26 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stNow;Yt_YA_RTC_Struct;Input;False;Wall clock stamp (from TaskSvc);;None;False;False;False;
+VAR_OUTPUT;uiActive;UINT;Output;False;Active, not yet acknowledged;;None;False;False;False;
+VAR_OUTPUT;uiStored;UINT;Output;False;Records currently in registry;;None;False;False;False;
+VAR_OUTPUT;out_stAlarm;ST_SP_Alarm;Output;False;Result buffer of GetEntry;;None;False;False;False;
+VAR;m_astReg;ARRAY[1..64] OF ST_SP_Alarm;Local;False;Fixed alarm registry (slot reuse, no dynamic memory, 1..GC_ALARM_N);;None;False;False;False;
+VAR;m_iCnt;UINT;Local;False;Used registry slots;0;None;False;False;False;
+VAR;m_udiAcks;UDINT;Local;False;Total acknowledge events;0;None;False;False;False;
+VAR;i;UINT;Local;False;Loop index over registry slots (ActiveCount);;None;False;False;False;
+VAR;uiC;UINT;Local;False;Active-alarm counter accumulated during the scan;;None;False;False;False;
+VAR_INPUT;uiId;UINT;Input;False;Id of the alarm to deactivate;;None;False;False;False;
+VAR_INPUT;eSrc;ET_SP_LogSource;Input;False;Originating module tag;;None;False;False;False;
+VAR_INPUT;eLevel;ET_SP_LogLevel;Input;False;Severity shown on HMI / in the log;;None;False;False;False;
+VAR_INPUT;sText;STRING(80);Input;False;Short operator-facing description;;None;False;False;False;
+VAR;i;UINT;Local;False;Loop index over registry slots (Raise);;None;False;False;False;
+VAR;iFree;UINT;Local;False;Target slot for a new record (0 = none found yet);;None;False;False;False;
+VAR;bHit;BOOL;Local;False;TRUE when the alarm id already exists;;None;False;False;False;
+VAR;stNil;Yt_YA_RTC_Struct;Local;False;Nil RTC stamp for cleared field;;None;False;False;False;
+VAR_INPUT;uiId;UINT;Input;False;Id of the alarm to acknowledge;;None;False;False;False;
+VAR;i;UINT;Local;False;Loop index over registry slots (Clear);;None;False;False;False;
+VAR_INPUT;uiId;UINT;Input;False;Id of the alarm to acknowledge;;None;False;False;False;
+VAR;i;UINT;Local;False;Loop index over registry slots (Ack);;None;False;False;False;
+VAR;i;UINT;Local;False;Loop index over registry slots (AckAll);;None;False;False;False;
+VAR_INPUT;iIdx;UINT;Input;False;Registry position to copy (1-based);;None;False;False;False;
+VAR_INPUT;iFromId;UINT;Input;False;Scan starts from this id (HMI polling pattern);;None;False;False;False;
+VAR;i;UINT;Local;False;Loop index over registry slots (GetActive);;None;False;False;False;

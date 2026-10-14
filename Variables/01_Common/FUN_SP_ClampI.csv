@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iVal;DINT;Input;False;Value to constrain;;None;False;False;False;
+VAR_INPUT;iLo;DINT;Input;False;Lower bound;;None;False;False;False;
+VAR_INPUT;iHi;DINT;Input;False;Upper bound;;None;False;False;False;

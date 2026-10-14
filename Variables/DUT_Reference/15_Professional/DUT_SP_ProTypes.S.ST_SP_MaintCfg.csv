@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;audiRobCycles;ARRAY[1..4] OF UDINT;Local;False;Grip-cycle thresholds per robot (0 = counter disabled) 1..GC_ROBOTS;;None;False;False;False;
+STRUCT;audiCamShots;ARRAY[1..2] OF UDINT;Local;False;Camera shot thresholds (0 = disabled) 1..GC_CAMS;;None;False;False;False;
+STRUCT;audiConvMin;ARRAY[1..8] OF UDINT;Local;False;Conveyor run-time thresholds [min] (0 = disabled) 1..GC_FEEDS;;None;False;False;False;
+STRUCT;udiPumpMin;UDINT;Local;False;Vacuum pump run-time threshold [min] (0 = disabled);;None;False;False;False;

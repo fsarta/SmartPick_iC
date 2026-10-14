@@ -1,0 +1,26 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;g_hmiCmd;ST_SP_SysCmd;Global;False;---------------- Commands (HMI writes, logic consumes) -------------;;None;False;False;False;
+VAR;bSaveRecipe;BOOL;Global;False;Export g_sRecipeName;;None;False;False;False;
+VAR;bLoadRecipe;BOOL;Global;False;Import g_sRecipeName;;None;False;False;False;
+VAR;sRecipeName;STRING(32);Global;False;Import g_sRecipeName;'recipe1';None;False;False;False;
+VAR;bAckAll;BOOL;Global;False;Alarm acknowledge all;;None;False;False;False;
+VAR;bExportLog;BOOL;Global;False;Dump the log ring to file;;None;False;False;False;
+VAR;g_hmiSysStat;ST_SP_SysStat;Global;False;---------------- Status (logic writes, HMI reads) ------------------;;None;False;False;False;
+VAR;g_astHmiRob;ARRAY[1..4] OF ST_SP_RobStat;Global;False;Robot status mirrors for the HMI (one row per robot) 1..GC_ROBOTS;;None;False;False;False;
+VAR;g_astHmiFeed;ARRAY[1..8] OF ST_SP_FeedIo;Global;False;Feed/conveyor status mirrors for the HMI 1..GC_FEEDS;;None;False;False;False;
+VAR;g_astHmiCam;ARRAY[1..2] OF ST_SP_VisionStat;Global;False;Camera status mirrors for the HMI 1..GC_CAMS;;None;False;False;False;
+VAR;g_stHmiStats;ST_SP_Counters;Global;False;Production counters mirror (OEE page);;None;False;False;False;
+VAR;rHmiPiecesPerH;LREAL;Global;False;Pieces-per-hour KPI computed by Main;;None;False;False;False;
+VAR;g_astHmiAlarm;ARRAY[1..8] OF ST_SP_Alarm;Global;False;---------------- Diagnostics views (refreshed cyclically) ----------;;None;False;False;False;
+VAR;g_astHmiLog;ARRAY[1..8] OF ST_SP_LogEntry;Global;False;Last 8 log entries for the HMI list box;;None;False;False;False;
+VAR;sHmiRecipeState;STRING(24);Global;False;Recipe operation feedback;;None;False;False;False;
+VAR;bApplyConfig;BOOL;Global;False;Configuration edits happen directly on the g_ast*Cfg mirrors of GVL_SP_Prod while the system is stopped, then PRG applies them via the Configure methods (bApplyConfig command below).;;None;False;False;False;
+VAR;g_aiCamModel;ARRAY[1..2] OF SINT;Global;False;"Camera model preset selector (HW-4, applied by bApplyConfig): -1 = Cognex, 1 = Keyence, 2 = GenericTCP, 3 = Simulated, 0 = keep the current configuration. Uses the ET_SP_CamDrv numbering; see FUN_SP_CamPreset. 1..GC_CAMS";;None;False;False;False;
+VAR;bRunSelfTest;BOOL;Global;False;Run the startup self-test suite;;None;False;False;False;
+VAR;bShiftReset;BOOL;Global;False;Reset the OEE shift accumulator;;None;False;False;False;
+VAR;bMaintReset;BOOL;Global;False;Reset the maintenance counters;;None;False;False;False;
+VAR;g_stHmiOee;ST_SP_OeeView;Global;False;OEE snapshot (OEE page);;None;False;False;False;
+VAR;rIdealCycleMs;LREAL;Global;False;Ideal cycle time per piece [ms] (performance reference, editable);2000.0;None;False;False;False;
+VAR;g_stHmiMaint;ST_SP_MaintStat;Global;False;Maintenance counters and due flags (maintenance page);;None;False;False;False;
+VAR;g_stHmiTest;ST_SP_TestRes;Global;False;Self-test result (diagnostics page);;None;False;False;False;
+VAR;g_astHmiCol;ARRAY[1..4] OF ST_SP_RobCol;Global;False;Advanced collision guard diagnostics (R-05b diagnostics page) 1..GC_ROBOTS;;None;False;False;False;

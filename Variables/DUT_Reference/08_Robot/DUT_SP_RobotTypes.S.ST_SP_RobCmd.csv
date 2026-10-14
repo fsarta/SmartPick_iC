@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bHome;BOOL;Local;False;Start homing sequence;;None;False;False;False;
+STRUCT;bStop;BOOL;Local;False;Immediate controlled stop;;None;False;False;False;
+STRUCT;bReset;BOOL;Local;False;Fault reset;;None;False;False;False;
+STRUCT;bPause;BOOL;Local;False;Freeze job (items stay reserved);;None;False;False;False;
+STRUCT;bResume;BOOL;Local;False;Resume from freeze;;None;False;False;False;
+STRUCT;bDryRun;BOOL;Local;False;Trial run lock: no grip, raised Z;;None;False;False;False;

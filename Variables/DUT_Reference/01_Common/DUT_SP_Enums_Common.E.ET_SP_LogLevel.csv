@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Debug;ET_SP_LogLevel;Local;False;;0;None;False;False;False;
+ENUM;Info;ET_SP_LogLevel;Local;False;;1;None;False;False;False;
+ENUM;Warn;ET_SP_LogLevel;Local;False;;2;None;False;False;False;
+ENUM;Error;ET_SP_LogLevel;Local;False;;3;None;False;False;False;

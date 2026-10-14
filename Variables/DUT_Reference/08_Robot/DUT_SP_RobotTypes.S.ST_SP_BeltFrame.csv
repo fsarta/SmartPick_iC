@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bUsed;BOOL;Local;False;Feed wired for native tracking (PRG call);;None;False;False;False;
+STRUCT;stWorld;ST_SP_Transf2D;Local;False;Feed -> world frame transform (frame source);;None;False;False;False;
+STRUCT;iDir;SINT;Local;False;Belt travel sign (+1 / -1) from the feed config;;None;False;False;False;
+STRUCT;rOrgX;LREAL;Local;False;Belt CS origin X in world/MCS [mm] (feed origin = pick line center);;None;False;False;False;
+STRUCT;rOrgY;LREAL;Local;False;Belt CS origin Y in world/MCS [mm];;None;False;False;False;
+STRUCT;rOrgZ;LREAL;Local;False;Belt CS origin Z in world/MCS [mm] = rZBelt;;None;False;False;False;
+STRUCT;rPhi;LREAL;Local;False;Belt CS rotation in world [deg], x-axis along belt travel;;None;False;False;False;
+STRUCT;rSyncDist;LREAL;Local;False;TrackOptions.SyncIn.ConveyorDistance [mm], always > 0 (FW 2026.6);;None;False;False;False;
+STRUCT;rZBelt;LREAL;Local;False;Belt surface height in world [mm] (item Z reference);;None;False;False;False;

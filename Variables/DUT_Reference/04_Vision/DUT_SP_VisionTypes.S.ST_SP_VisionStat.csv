@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;eState;ET_SP_VisionState;Local;False;Driver state machine state;;None;False;False;False;
+STRUCT;bConn;BOOL;Local;False;TCP connected;;None;False;False;False;
+STRUCT;bTrigPending;BOOL;Local;False;Trigger requested, not yet served;;None;False;False;False;
+STRUCT;rLastTrigPos;LREAL;Local;False;Belt position at last trigger [mm];;None;False;False;False;
+STRUCT;udiTriggers;UDINT;Local;False;Trigger counter;;None;False;False;False;
+STRUCT;udiItems;UDINT;Local;False;Parsed items counter;;None;False;False;False;
+STRUCT;udiErr;UDINT;Local;False;Communication/protocol errors;;None;False;False;False;
+STRUCT;udiRspMs;UDINT;Local;False;Last response round trip [ms];;None;False;False;False;
+STRUCT;iOwnerRobot;SINT;Local;False;Robot owning camera control (resiliency);;None;False;False;False;

@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Job item scan index (place);;None;False;False;False;
+VAR;uiMask;UINT;Local;False;Tool mask rebuilt from per-tool busy states;;None;False;False;False;
+VAR;bHold;BOOL;Local;False;TRUE while the robot holds a zone (R-05);;None;False;False;False;

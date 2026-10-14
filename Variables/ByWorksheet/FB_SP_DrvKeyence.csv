@@ -1,0 +1,16 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bEnable;BOOL;Input;False;TRUE = driver operational (forwarded to engine);;None;False;False;False;
+VAR_INPUT;bTrig;BOOL;Input;False;Image trigger (rising edge, forwarded);;None;False;False;False;
+VAR_INPUT;udiTickMs;UDINT;Input;False;Time source (forwarded);;None;False;False;False;
+VAR_INPUT;rBeltPos;LREAL;Input;False;Belt position at trigger [mm] (stamped into items);;None;False;False;False;
+VAR_OUTPUT;eState;ET_SP_VisionState;Output;False;Engine state passthrough;;None;False;False;False;
+VAR_OUTPUT;bDone;BOOL;Output;False;Image-processed pulse passthrough;;None;False;False;False;
+VAR_OUTPUT;bErr;BOOL;Output;False;Error pulse passthrough;;None;False;False;False;
+VAR_OUTPUT;uiErr;UINT;Output;False;Error code passthrough (1=open 2=timeout 3=send 4=parse);;None;False;False;False;
+VAR_OUTPUT;bItemsAvail;BOOL;Output;False;Items ready for GetItem passthrough;;None;False;False;False;
+VAR_OUTPUT;out_stItem;ST_SP_VisionItem;Output;False;GetItem result passthrough;;None;False;False;False;
+VAR_OUTPUT;stCfg;ST_SP_VisionCfg;Output;False;Public config passthrough;;None;False;False;False;
+VAR;m_Eng;SP_DrvAscii;Local;False;Protocol engine;;None;False;False;False;
+VAR_INPUT;stIn;ST_SP_VisionCfg;Input;False;User configuration (empty fields get presets);;None;False;False;False;
+VAR;stPres;ST_SP_VisionCfg;Local;False;Configuration after applying Keyence defaults;;None;False;False;False;
+VAR;eRc;ET_SP_RetCode;Local;False;Engine Configure() result;;None;False;False;False;

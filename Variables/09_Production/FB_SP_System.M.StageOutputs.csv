@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;uiStage;SINT;Input;False;Startup stage to encode into enable vectors;;None;False;False;False;
+VAR;i;SINT;Local;False;Robot loop index (publish scan);;None;False;False;False;
+VAR;k;SINT;Local;False;Camera loop index (ownership check);;None;False;False;False;
+VAR;bOwnerOk;BOOL;Local;False;TRUE when the camera owner robot is online;;None;False;False;False;

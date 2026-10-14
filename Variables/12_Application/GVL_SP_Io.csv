@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;bEStopOk;BOOL;Global;False;Emergency stop chain healthy;TRUE;None;False;False;False;
+VAR;bSafetyOk;BOOL;Global;False;Guards / scanners healthy;TRUE;None;False;False;False;
+VAR;abPickOut;ARRAY[1..16] OF BOOL;Global;False;Tool signals: PICK (out), PLACE (out), FEEDBACK (in) - MotoPick 4 spec 1..GC_ROBOTS*GC_TOOLS;;None;False;False;False;
+VAR;abPlaceOut;ARRAY[1..16] OF BOOL;Global;False;Place/grip digital outputs (robot x tool channel map) 1..GC_ROBOTS*GC_TOOLS;;None;False;False;False;
+VAR;abToolFbkIn;ARRAY[1..16] OF BOOL;Global;False;Grip feedback inputs (looped back in simulation) 1..GC_ROBOTS*GC_TOOLS;;None;False;False;False;
+VAR;grConvDrive;ARRAY[1..8] OF REAL;Global;False;Conveyor drive: analog speed factor per feed (0.0 .. 1.0) 1..GC_FEEDS;;None;False;False;False;
+VAR;abTraySensor;ARRAY[1..8] OF BOOL;Global;False;Tray / light barrier sensors per outfeed 1..GC_FEEDS;;None;False;False;False;

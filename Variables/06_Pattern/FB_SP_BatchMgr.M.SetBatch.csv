@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iIdx;SINT;Input;False;;;None;False;False;False;
+VAR_INPUT;stDef;ST_SP_BatchDef;Input;False;;;None;False;False;False;

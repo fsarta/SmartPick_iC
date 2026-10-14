@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iIdx;SINT;Input;False;Queue slot to close;;None;False;False;False;
+VAR_INPUT;bOk;BOOL;Input;False;TRUE = grip verified (pick succeeded);;None;False;False;False;
+VAR_INPUT;uiMaxTry;UINT;Input;False;Retry limit before the item is declared Lost;;None;False;False;False;

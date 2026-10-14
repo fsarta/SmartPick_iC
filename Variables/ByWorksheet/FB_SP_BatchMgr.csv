@@ -1,0 +1,27 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;uiActive;UINT;Output;False;Number of running batches;;None;False;False;False;
+VAR_OUTPUT;out_stDef;ST_SP_BatchDef;Output;False;Result buffer of GetDef;;None;False;False;False;
+VAR_OUTPUT;out_stStat;ST_SP_BatchStat;Output;False;Result buffer of GetStat;;None;False;False;False;
+VAR;m_astDef;ARRAY[1..8] OF ST_SP_BatchDef;Local;False;Batch definitions (per outfeed, 1..GC_BATCHES);;None;False;False;False;
+VAR;m_astStat;ARRAY[1..8] OF ST_SP_BatchStat;Local;False;Live batch progress (placed/remaining, 1..GC_BATCHES);;None;False;False;False;
+VAR;m_udiIdGen;UDINT;Local;False;Runtime batch id generator;0;None;False;False;False;
+VAR;i;SINT;Local;False;Per-feed progress loop index;;None;False;False;False;
+VAR;uiC;UINT;Local;False;Active batch counter;;None;False;False;False;
+VAR_INPUT;stDef;ST_SP_BatchDef;Input;False;Batch definition to register;;None;False;False;False;
+VAR;i;SINT;Local;False;Per-feed progress loop index;;None;False;False;False;
+VAR;iFree;SINT;Local;False;Free registry slot (0 = none found);;None;False;False;False;
+VAR_INPUT;iIdx;SINT;Input;False;;;None;False;False;False;
+VAR_INPUT;stDef;ST_SP_BatchDef;Input;False;;;None;False;False;False;
+VAR_INPUT;iIdx;SINT;Input;False;Batch slot addressed by the call;;None;False;False;False;
+VAR;i;SINT;Local;False;Per-feed progress loop index;;None;False;False;False;
+VAR_INPUT;iIdx;SINT;Input;False;Batch slot addressed by the call;;None;False;False;False;
+VAR_INPUT;iFeed;SINT;Input;False;Outfeed whose batch arbitration is requested;;None;False;False;False;
+VAR;i;SINT;Local;False;Per-feed progress loop index;;None;False;False;False;
+VAR;iBest;SINT;Local;False;Highest-priority active batch slot for the outfeed;;None;False;False;False;
+VAR;iPri;SINT;Local;False;Priority of the candidate being compared;;None;False;False;False;
+VAR_INPUT;iIdx;SINT;Input;False;Batch slot addressed by the call;;None;False;False;False;
+VAR_INPUT;iIdx;SINT;Input;False;Batch slot addressed by the call;;None;False;False;False;
+VAR_INPUT;iIdx;SINT;Input;False;Batch slot addressed by the call;;None;False;False;False;
+VAR_INPUT;iIdx;SINT;Input;False;Batch index;;None;False;False;False;
+VAR_INPUT;stStat;ST_SP_BatchStat;Input;False;Pattern generator statistics;;None;False;False;False;
+VAR;i;SINT;Local;False;Per-feed progress loop index;;None;False;False;False;

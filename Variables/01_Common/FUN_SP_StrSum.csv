@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sTxt;STRING(120);Input;False;Text whose additive checksum is computed;;None;False;False;False;
+VAR;i;INT;Local;False;Character loop index (checksum);;None;False;False;False;
+VAR;iLen;INT;Local;False;Length of the concatenation result;;None;False;False;False;
+VAR;udi;UDINT;Local;False;Accumulated checksum;;None;False;False;False;
+VAR;sCh;STRING(1);Local;False;Character under examination;;None;False;False;False;
+VAR;iPos;INT;Local;False;Character position in the allowed-charset table;;None;False;False;False;

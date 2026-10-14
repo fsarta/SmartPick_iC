@@ -1,0 +1,2 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;uiId;UINT;Local;False;Fixed alarm id for externally declared faults;UINT#10;None;False;False;False;

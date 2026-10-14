@@ -1,0 +1,2 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;SyncIn;ST_SP_TrkSyncIn;Local;False;Sync-in window parameters;;None;False;False;False;

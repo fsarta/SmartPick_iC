@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bRun;BOOL;Input;False;One-shot trigger (HMI command or recipe-load hook);;None;False;False;False;
+VAR_INPUT;stNow;Yt_YA_RTC_Struct;Input;False;Wall clock stamp (from TaskSvc);;None;False;False;False;
+VAR_OUTPUT;stRes;ST_SP_TestRes;Output;False;Result record (mirrored to the HMI by Main);;None;False;False;False;
+VAR;i;SINT;Local;False;Loop indices;;None;False;False;False;
+VAR;k;SINT;Local;False;Loop indices;;None;False;False;False;
+VAR;sMsg;STRING(80);Local;False;Message scratch;;None;False;False;False;
+VAR_INPUT;sMsg;STRING(80);Input;False;Failure message ('' = check passed);;None;False;False;False;

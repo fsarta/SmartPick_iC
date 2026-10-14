@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iTool;SINT;Input;False;Tool selector;;None;False;False;False;
+VAR_INPUT;bOn;BOOL;Input;False;TRUE = channel ON, FALSE = OFF;;None;False;False;False;

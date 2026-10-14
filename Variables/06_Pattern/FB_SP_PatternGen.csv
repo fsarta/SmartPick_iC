@@ -1,0 +1,25 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;bActive;BOOL;Output;False;Generating (batch running);;None;False;False;False;
+VAR_OUTPUT;out_stTarget;ST_SP_TrkItem;Output;False;Drained target (GetNextTarget);;None;False;False;False;
+VAR_OUTPUT;uiGenPending;UINT;Output;False;Targets waiting for drain;;None;False;False;False;
+VAR_OUTPUT;stStat;ST_SP_BatchStat;Output;False;Runtime batch state;;None;False;False;False;
+VAR;m_stDef;ST_SP_PattDef;Local;False;Active pattern;;None;False;False;False;
+VAR;m_stBatch;ST_SP_BatchDef;Local;False;Active batch;;None;False;False;False;
+VAR;m_bRun;BOOL;Local;False;Batch active;;None;False;False;False;
+VAR;m_bPatOk;BOOL;Local;False;Pattern loaded;;None;False;False;False;
+VAR;m_stWorld;ST_SP_Transf2D;Local;False;Feed -> world;;None;False;False;False;
+VAR;m_rZBelt;LREAL;Local;False;Belt surface Z;;None;False;False;False;
+VAR;m_iDir;SINT;Local;False;Belt direction sign;;None;False;False;False;
+VAR;m_bCfgOk;BOOL;Local;False;Belt direction sign;;None;False;False;False;
+VAR;m_rLastGen;LREAL;Local;False;Encoder at last pattern instance;;None;False;False;False;
+VAR;m_bInit;BOOL;Local;False;Encoder at last pattern instance;;None;False;False;False;
+VAR;m_iSlot;UINT;Local;False;Next slot to generate (1-based);;None;False;False;False;
+VAR;m_iMix;UINT;Local;False;Current mix entry;;None;False;False;False;
+VAR;m_iMixCnt;UINT;Local;False;Slots consumed of current mix entry;;None;False;False;False;
+VAR;m_uiLayer;UINT;Local;False;Current layer (0-based);;None;False;False;False;
+VAR;m_uiPlacedInLayer;UINT;Local;False;Placed slots of current layer;;None;False;False;False;
+VAR;m_bLayerOpen;BOOL;Local;False;TRUE while current layer not exhausted;;None;False;False;False;
+VAR;m_astT;ARRAY[1..32] OF ST_SP_TrkItem;Local;False;Out-queue 1..GC_VIS_MAX2;;None;False;False;False;
+VAR;m_iTCnt;SINT;Local;False;Targets waiting in the out-queue;0;None;False;False;False;
+VAR;m_iTRd;SINT;Local;False;Drain index for GetTarget;0;None;False;False;False;
+VAR;m_udiBatchId;UDINT;Local;False;Id of the running batch (0 = idle);0;None;False;False;False;

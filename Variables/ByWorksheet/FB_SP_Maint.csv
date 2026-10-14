@@ -1,0 +1,15 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;uiDtMs;UDINT;Input;False;Task period [ms];;None;False;False;False;
+VAR_INPUT;bPumpOn;BOOL;Input;False;Vacuum pump running;;None;False;False;False;
+VAR_INPUT;stCfg;ST_SP_MaintCfg;Input;False;Configuration: thresholds (0 = counter disabled). Main/HMI write.;;None;False;False;False;
+VAR_INPUT;audiRobPicks;ARRAY[1..4] OF UDINT;Input;False;Lifetime picks per robot 1..GC_ROBOTS;;None;False;False;False;
+VAR_INPUT;audiCamTrig;ARRAY[1..2] OF UDINT;Input;False;Lifetime triggers per camera 1..GC_CAMS;;None;False;False;False;
+VAR_INPUT;abConvRun;ARRAY[1..8] OF BOOL;Input;False;Conveyor running 1..GC_FEEDS;;None;False;False;False;
+VAR_OUTPUT;stStat;ST_SP_MaintStat;Output;False;Published maintenance state (mirrored to the HMI by Main);;None;False;False;False;
+VAR;m_stCfg;ST_SP_MaintCfg;Local;False;Effective thresholds with defaults applied;;None;False;False;False;
+VAR;m_audiRobPrev;ARRAY[1..4] OF UDINT;Local;False;Previous-cycle mirror scans (delta sources);;None;False;False;False;
+VAR;m_audiCamPrev;ARRAY[1..2] OF UDINT;Local;False;Prev-cycle shot counters (delta scan for maintenance);;None;False;False;False;
+VAR;m_audiConvMs;ARRAY[1..8] OF UDINT;Local;False;Conveyor minute accumulator (ms -> minutes);;None;False;False;False;
+VAR;m_udiPumpMs;UDINT;Local;False;Pump minute accumulator (ms -> minutes);0;None;False;False;False;
+VAR;i;SINT;Local;False;Loop indices;;None;False;False;False;
+VAR;i;SINT;Local;False;Loop index over the counter families;;None;False;False;False;

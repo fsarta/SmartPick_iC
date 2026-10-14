@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;eLevel;ET_SP_LogLevel;Input;False;Severity of the entry (Debug/Info/Warn/Error);;None;False;False;False;
+VAR_INPUT;eSrc;ET_SP_LogSource;Input;False;Originating module tag;;None;False;False;False;
+VAR_INPUT;uiCode;UINT;Input;False;Module-specific event/alarm code (0 = none);;None;False;False;False;
+VAR_INPUT;sText;STRING(120);Input;False;Message text (without level/code);;None;False;False;False;
+VAR;iW;UINT;Local;False;Write slot computed from ring head;;None;False;False;False;

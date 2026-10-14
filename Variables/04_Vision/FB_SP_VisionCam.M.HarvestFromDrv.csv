@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bFromEng;BOOL;Input;False;Reserved: engine based harvest flag;;None;False;False;False;
+VAR;stVi;ST_SP_VisionItem;Local;False;Item pulled from the active driver;;None;False;False;False;
+VAR;iFeed;SINT;Local;False;Region-resolved destination feed (0 = none);;None;False;False;False;
+VAR;i;SINT;Local;False;Region table loop index;;None;False;False;False;
+VAR;iGot;SINT;Local;False;Items enqueued by this call;;None;False;False;False;

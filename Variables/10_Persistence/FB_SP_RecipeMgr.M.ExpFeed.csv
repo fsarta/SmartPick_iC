@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;i;SINT;Input;False;Token/field parse index;;None;False;False;False;
+VAR;stF;ST_SP_TrkCfg;Local;False;FEED record accumulator;;None;False;False;False;
+VAR;s;STRING(200);Local;False;CSV line under construction;;None;False;False;False;

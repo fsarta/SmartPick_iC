@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Cognex;ET_SP_VisionDrv;Local;False;;0;None;False;False;False;
+ENUM;Keyence;ET_SP_VisionDrv;Local;False;;1;None;False;False;False;
+ENUM;GenericTCP;ET_SP_VisionDrv;Local;False;;2;None;False;False;False;
+ENUM;Simulated;ET_SP_VisionDrv;Local;False;;3;None;False;False;False;

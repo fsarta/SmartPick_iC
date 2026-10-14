@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;iCR;INT;Local;False;Position of CR in the pending buffer;;None;False;False;False;
+VAR;iLF;INT;Local;False;Position of LF in the pending buffer;;None;False;False;False;
+VAR;iPos;INT;Local;False;Line-break position inside the pending buffer;;None;False;False;False;
+VAR;sLine;STRING(64);Local;False;Line consumed from the pending buffer;;None;False;False;False;
+VAR;iLen;INT;Local;False;Pending-buffer length before the cut;;None;False;False;False;

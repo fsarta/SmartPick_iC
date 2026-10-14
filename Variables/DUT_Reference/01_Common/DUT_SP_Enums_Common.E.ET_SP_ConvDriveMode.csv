@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Analog;ET_SP_ConvDriveMode;Local;False;;0;None;False;False;False;
+ENUM;ServoAxis;ET_SP_ConvDriveMode;Local;False;;1;None;False;False;False;
+ENUM;External;ET_SP_ConvDriveMode;Local;False;;2;None;False;False;False;

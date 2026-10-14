@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sTxt;STRING(16);Input;False;Digits-only text to convert (UDINT);;None;False;False;False;
+VAR_INPUT;udiDefault;UDINT;Input;False;Value returned when parsing fails;;None;False;False;False;
+VAR;i;INT;Local;False;Character loop index (StrToUd);;None;False;False;False;
+VAR;iLen;INT;Local;False;Length of the concatenation result;;None;False;False;False;
+VAR;sCh;STRING(1);Local;False;Character under examination;;None;False;False;False;
+VAR;iD;SINT;Local;False;Numeric value of the current digit (0..9);;None;False;False;False;
+VAR;udi;UDINT;Local;False;Accumulated integer result;;None;False;False;False;

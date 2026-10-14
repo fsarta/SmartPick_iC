@@ -1,0 +1,16 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sTxt;STRING(32);Input;False;Text to parse as decimal LREAL;;None;False;False;False;
+VAR_INPUT;rDefault;LREAL;Input;False;Value returned when parsing fails;;None;False;False;False;
+VAR;s;STRING(32);Local;False;Trimmed working copy of the input;;None;False;False;False;
+VAR;iLen;INT;Local;False;Length of the concatenation result;;None;False;False;False;
+VAR;i;INT;Local;False;Character loop index (LReal parse);;None;False;False;False;
+VAR;sCh;STRING(1);Local;False;Character under examination;;None;False;False;False;
+VAR;rSign;LREAL;Local;False;Sign factor (-1.0 / +1.0);;None;False;False;False;
+VAR;rInt;LREAL;Local;False;Accumulated integer part;;None;False;False;False;
+VAR;rFrac;LREAL;Local;False;Accumulated fractional part;;None;False;False;False;
+VAR;rDiv;LREAL;Local;False;Fractional divider (10^number_of_decimals);;None;False;False;False;
+VAR;rExp;LREAL;Local;False;Accumulated exponent digits;;None;False;False;False;
+VAR;iExpSgn;SINT;Local;False;Exponent sign (-1 / +1);;None;False;False;False;
+VAR;ePhase;SINT;Local;False;0=int 1=frac 2=exp;;None;False;False;False;
+VAR;bDigit;BOOL;Local;False;0=int 1=frac 2=exp;;None;False;False;False;
+VAR;iD;SINT;Local;False;Numeric value of the current digit (0..9);;None;False;False;False;

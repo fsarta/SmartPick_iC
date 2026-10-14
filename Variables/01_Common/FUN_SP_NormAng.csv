@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rAng;LREAL;Input;False;Angle to normalize [deg];;None;False;False;False;
+VAR;rA;LREAL;Local;False;Working copy of the angle [deg];;None;False;False;False;

@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;udiPickOk;UDINT;Local;False;Successful picks;;None;False;False;False;
+STRUCT;udiPickNg;UDINT;Local;False;Failed picks (verification NG);;None;False;False;False;
+STRUCT;udiPlaceOk;UDINT;Local;False;Successful placements;;None;False;False;False;
+STRUCT;udiPlaceNg;UDINT;Local;False;Failed placements;;None;False;False;False;
+STRUCT;udiCycles;UDINT;Local;False;Completed pick/place cycles;;None;False;False;False;
+STRUCT;udiAlarms;UDINT;Local;False;Raised alarms;;None;False;False;False;

@@ -1,0 +1,17 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bUsed;BOOL;Local;False;Tool present;;None;False;False;False;
+STRUCT;sName;STRING(16);Local;False;Human readable tool name;;None;False;False;False;
+STRUCT;bSuction;BOOL;Local;False;TRUE = suction, FALSE = mechanical grip;;None;False;False;False;
+STRUCT;rMaxWeight;LREAL;Local;False;Payload capacity [g], 0 = unlimited;;None;False;False;False;
+STRUCT;uiPickOutCh;UINT;Local;False;Pick output channel (0 = auto robot*tool);;None;False;False;False;
+STRUCT;uiPlaceOutCh;UINT;Local;False;Place output channel (0 = auto);;None;False;False;False;
+STRUCT;uiFbkInCh;UINT;Local;False;Feedback input channel (0 = auto);;None;False;False;False;
+STRUCT;tGrip;TIME;Local;False;Grip duration before motion release;;None;False;False;False;
+STRUCT;tRelease;TIME;Local;False;Release duration before departure;;None;False;False;False;
+STRUCT;rAdvance;LREAL;Local;False;Advance timing distance (cut-off margin) [mm];;None;False;False;False;
+STRUCT;uiCups;UINT;Local;False;Active cups 1..GC_CUPS;;None;False;False;False;
+STRUCT;bSingleType;BOOL;Local;False;Tool holds one type per cycle (no mixing);;None;False;False;False;
+STRUCT;astCups;ARRAY[1..4] OF ST_SP_Point3D;Local;False;Cup offsets rel. TCP [mm] 1..GC_CUPS;;None;False;False;False;
+STRUCT;auiCupFbkCh;ARRAY[1..4] OF UINT;Local;False;Per-cup vacuum feedback channels (0 = tool fbk) 1..GC_CUPS;;None;False;False;False;
+STRUCT;rMatchTol;LREAL;Local;False;Cluster cup-to-item match tolerance [mm];;None;False;False;False;
+STRUCT;rCapCog;LREAL;Local;False;Max CoG offset from TCP [mm], 0 = check off;;None;False;False;False;

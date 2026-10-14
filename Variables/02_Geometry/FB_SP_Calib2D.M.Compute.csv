@@ -1,0 +1,24 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Pairwise-solution loop indices (iK reuses pairs for RMS);;None;False;False;False;
+VAR;j;SINT;Local;False;Pairwise-solution loop indices (iK reuses pairs for RMS);;None;False;False;False;
+VAR;iK;SINT;Local;False;Pairwise-solution loop indices (iK reuses pairs for RMS);;None;False;False;False;
+VAR;rDCx;LREAL;Local;False;Camera vector between the two points of the pair;;None;False;False;False;
+VAR;rDCy;LREAL;Local;False;Camera vector between the two points of the pair;;None;False;False;False;
+VAR;rDWx;LREAL;Local;False;World vector between the two points of the pair;;None;False;False;False;
+VAR;rDWy;LREAL;Local;False;World vector between the two points of the pair;;None;False;False;False;
+VAR;rRot;LREAL;Local;False;Rotation and uniform scale of the pairwise solution [deg];;None;False;False;False;
+VAR;rSc;LREAL;Local;False;Rotation and uniform scale of the pairwise solution [deg];;None;False;False;False;
+VAR;rLenC;LREAL;Local;False;Vector lengths used for degeneracy check and scale;;None;False;False;False;
+VAR;rLenW;LREAL;Local;False;Vector lengths used for degeneracy check and scale;;None;False;False;False;
+VAR;rTx;LREAL;Local;False;Translation of the pairwise solution;;None;False;False;False;
+VAR;rTy;LREAL;Local;False;Translation of the pairwise solution;;None;False;False;False;
+VAR;rSumRot;LREAL;Local;False;Accumulators averaged over all valid pairs;;None;False;False;False;
+VAR;rSumSc;LREAL;Local;False;Accumulators averaged over all valid pairs;;None;False;False;False;
+VAR;rSumTx;LREAL;Local;False;Accumulators averaged over all valid pairs;;None;False;False;False;
+VAR;rSumTy;LREAL;Local;False;Accumulators averaged over all valid pairs;;None;False;False;False;
+VAR;rRes;LREAL;Local;False;Point residual and squared-residual accumulator (RMS);;None;False;False;False;
+VAR;rSumRes;LREAL;Local;False;Point residual and squared-residual accumulator (RMS);;None;False;False;False;
+VAR;iSols;SINT;Local;False;Number of non-degenerate pairwise solutions;;None;False;False;False;
+VAR;stSol;ST_SP_Transf2D;Local;False;Averaged transform before validation;;None;False;False;False;
+VAR;rXt;LREAL;Local;False;Camera point mapped through stSol (residual check);;None;False;False;False;
+VAR;rYt;LREAL;Local;False;Camera point mapped through stSol (residual check);;None;False;False;False;

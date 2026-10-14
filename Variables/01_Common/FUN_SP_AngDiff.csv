@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rFrom;LREAL;Input;False;Start angle a [deg];;None;False;False;False;
+VAR_INPUT;rTo;LREAL;Input;False;Target angle b [deg];;None;False;False;False;

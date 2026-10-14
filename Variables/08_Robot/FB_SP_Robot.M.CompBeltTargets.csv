@@ -1,0 +1,12 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stBase;ST_SP_Pose3D;Input;False;World base pose the targets were computed from (cup on item);;None;False;False;False;
+VAR_INPUT;iFeed;SINT;Input;False;Pick feed 1..GC_FEEDS;;None;False;False;False;
+VAR_INPUT;stItem;ST_SP_TrkItem;Input;False;"Reserved item snapshot (capture data); v1.4 place side = target";;None;False;False;False;
+VAR_INPUT;bPlaceSel;BOOL;Input;False;v1.4: TRUE = place side - the native policy additionally gates on the per-feed tracked place selector GVL_SP_Fw.g_abPlaceTrack;;None;False;False;False;
+VAR;iF;SINT;Local;False;Clamped feed index;;None;False;False;False;
+VAR;stFr;ST_SP_BeltFrame;Local;False;Belt frame of the pick feed;;None;False;False;False;
+VAR;rU;LREAL;Local;False;Item across-belt coordinate at capture [mm];;None;False;False;False;
+VAR;rCos;LREAL;Local;False;cos / sin of the product world yaw (rotate into the object frame);;None;False;False;False;
+VAR;rSin;LREAL;Local;False;cos / sin of the product world yaw (rotate into the object frame);;None;False;False;False;
+VAR;rDX;LREAL;Local;False;World-frame offsets from the base pose;;None;False;False;False;
+VAR;rDY;LREAL;Local;False;World-frame offsets from the base pose;;None;False;False;False;

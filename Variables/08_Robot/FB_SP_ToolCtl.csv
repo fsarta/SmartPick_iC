@@ -1,0 +1,16 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bInhibit;BOOL;Input;False;TRUE = dry-run: outputs forced OFF;;None;False;False;False;
+VAR_INPUT;uiDtMs;UDINT;Input;False;Task period [ms];;None;False;False;False;
+VAR_OUTPUT;astStat;ARRAY[1..4] OF ST_SP_ToolStat;Output;False;Per-tool status published to HMI 1..GC_TOOLS;;None;False;False;False;
+VAR_OUTPUT;bAnyBusy;BOOL;Output;False;Any grip/release sequence running;;None;False;False;False;
+VAR_OUTPUT;bDone;BOOL;Output;False;One-cycle pulse: sequence finished;;None;False;False;False;
+VAR;m_iRob;SINT;Local;False;Owning robot id (channel mapping);1;None;False;False;False;
+VAR;m_astCfg;ARRAY[1..4] OF ST_SP_ToolCfg;Local;False;1..GC_TOOLS;;None;False;False;False;
+VAR;m_bCfgOk;BOOL;Local;False;TRUE after a valid Configure();;None;False;False;False;
+VAR;m_bInhibit;BOOL;Local;False;Dry-run inhibit: outputs frozen, sequences simulated;;None;False;False;False;
+VAR;m_eOp;SINT;Local;False;0=Idle 1=Grip 2=Release;0;None;False;False;False;
+VAR;m_iTool;SINT;Local;False;Active tool;1;None;False;False;False;
+VAR;m_uiT;UDINT;Local;False;Sequence timer [ms];0;None;False;False;False;
+VAR;m_uiDur;UDINT;Local;False;Sequence duration [ms];0;None;False;False;False;
+VAR;m_bSync;BOOL;Local;False;R-07 synchronized grip: TRUE while a GripSync sequence runs;;None;False;False;False;
+VAR;m_uiSyncCups;UINT;Local;False;Cups covered by the running sync grip (1..GC_CUPS);;None;False;False;False;

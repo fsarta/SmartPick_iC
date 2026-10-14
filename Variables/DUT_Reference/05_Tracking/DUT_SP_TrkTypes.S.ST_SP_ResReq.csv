@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;iRobotId;SINT;Local;False;Requesting robot (1..GC_ROBOTS);;None;False;False;False;
+STRUCT;rRangeFrom;LREAL;Local;False;Robot work range, belt Y offset [mm];;None;False;False;False;
+STRUCT;rRangeTo;LREAL;Local;False;Robot work range, belt Y offset [mm];;None;False;False;False;
+STRUCT;uiTypeId;UINT;Local;False;Required type, 0 = any;;None;False;False;False;
+STRUCT;bTargetOnly;BOOL;Local;False;TRUE = only placement targets;;None;False;False;False;
+STRUCT;rMaxWeight;LREAL;Local;False;Tool capacity [g], 0 = unlimited;;None;False;False;False;

@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bOk;BOOL;Input;False;TRUE = good pick;;None;False;False;False;
+VAR_INPUT;iFeed;SINT;Input;False;Feed index 1..GC_FEEDS;;None;False;False;False;

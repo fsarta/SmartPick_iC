@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Offline;ET_SP_VisionState;Local;False;;0;None;False;False;False;
+ENUM;Connecting;ET_SP_VisionState;Local;False;;10;None;False;False;False;
+ENUM;Online;ET_SP_VisionState;Local;False;;20;None;False;False;False;
+ENUM;Triggered;ET_SP_VisionState;Local;False;;30;None;False;False;False;
+ENUM;Ready;ET_SP_VisionState;Local;False;;50;None;False;False;False;
+ENUM;Fault;ET_SP_VisionState;Local;False;;90;None;False;False;False;

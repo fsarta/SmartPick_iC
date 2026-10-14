@@ -1,0 +1,14 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Done;ET_SP_RetCode;Local;False;;0;None;False;False;False;
+ENUM;Busy;ET_SP_RetCode;Local;False;;1;None;False;False;False;
+ENUM;Idle;ET_SP_RetCode;Local;False;;2;None;False;False;False;
+ENUM;ErrParam;ET_SP_RetCode;Local;False;;10;None;False;False;False;
+ENUM;ErrState;ET_SP_RetCode;Local;False;;11;None;False;False;False;
+ENUM;ErrFull;ET_SP_RetCode;Local;False;;12;None;False;False;False;
+ENUM;ErrEmpty;ET_SP_RetCode;Local;False;;13;None;False;False;False;
+ENUM;ErrNotFound;ET_SP_RetCode;Local;False;;14;None;False;False;False;
+ENUM;ErrCom;ET_SP_RetCode;Local;False;;15;None;False;False;False;
+ENUM;ErrIo;ET_SP_RetCode;Local;False;;16;None;False;False;False;
+ENUM;ErrBusy;ET_SP_RetCode;Local;False;;17;None;False;False;False;
+ENUM;ErrRange;ET_SP_RetCode;Local;False;;18;None;False;False;False;
+ENUM;NotImpl;ET_SP_RetCode;Local;False;;99;None;False;False;False;

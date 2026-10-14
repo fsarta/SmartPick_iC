@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;m_bInit;BOOL;Local;False;First-scan boot latch;TRUE;None;False;False;False;
+VAR;iBatch;SINT;Local;False;Batch id under processing;;None;False;False;False;
+VAR;iD;DINT;Local;False;Robot loop index (sync grip);;None;False;False;False;
+VAR;udiDlt;UDINT;Local;False;Statistics ring occupancy;;None;False;False;False;
+VAR;udiGuard;UDINT;Local;False;Drain guard (max events/scan);;None;False;False;False;
+VAR;eStEv;ST_SP_StatEv;Local;False;Event under drain;;None;False;False;False;
+VAR;udiIdx;UDINT;Local;False;Ring slot index;;None;False;False;False;
+VAR;bRc;BOOL;Local;False;Boolean call result scratch;;None;False;False;False;
+VAR;eRc;ET_SP_RetCode;Local;False;Enumerated call result scratch;;None;False;False;False;

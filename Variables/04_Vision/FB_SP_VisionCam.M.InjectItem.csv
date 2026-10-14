@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stVi;ST_SP_VisionItem;Input;False;Item pushed by the simulation;;None;False;False;False;
+VAR_INPUT;iFeed;SINT;Input;False;Destination feed tag supplied by the caller;;None;False;False;False;

@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iTool;SINT;Input;False;Tool selector;;None;False;False;False;
+VAR_INPUT;iCup;SINT;Input;False;Cup index inside the tool (1-based);;None;False;False;False;
+VAR;uiCh;UINT;Local;False;Resolved feedback channel for the cup;;None;False;False;False;

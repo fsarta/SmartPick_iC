@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bOk;BOOL;Local;False;TRUE = at least the anchor was reserved;;None;False;False;False;
+STRUCT;bSync;BOOL;Local;False;TRUE = synchronized multi-pick possible;;None;False;False;False;
+STRUCT;uiN;UINT;Local;False;Members reserved 1..GC_CUPS;;None;False;False;False;
+STRUCT;aiIdx;ARRAY[1..4] OF SINT;Local;False;Queue slot per member 1..GC_CUPS;;None;False;False;False;
+STRUCT;aCup;ARRAY[1..4] OF SINT;Local;False;Cup id per member (1-based) 1..GC_CUPS;;None;False;False;False;
+STRUCT;astRsp;ARRAY[1..4] OF ST_SP_ResRsp;Local;False;Per-member reservation 1..GC_CUPS;;None;False;False;False;
+STRUCT;stTcp;ST_SP_Pose3D;Local;False;Synchronized TCP pose at the pick event;;None;False;False;False;
+STRUCT;rTotWeight;LREAL;Local;False;Cluster total weight [g], 0 = unknown;;None;False;False;False;
+STRUCT;rCogOff;LREAL;Local;False;CoG offset from TCP [mm] (0 = unknown);;None;False;False;False;

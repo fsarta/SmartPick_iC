@@ -1,0 +1,23 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bUsed;BOOL;Local;False;Camera enabled;;None;False;False;False;
+STRUCT;sName;STRING(16);Local;False;Human readable camera name;;None;False;False;False;
+STRUCT;eDrv;ET_SP_VisionDrv;Local;False;Selected driver;;None;False;False;False;
+STRUCT;sIp;STRING(16);Local;False;Camera IP address;;None;False;False;False;
+STRUCT;uiPort;UINT;Local;False;Camera TCP port;;None;False;False;False;
+STRUCT;tTimeout;TIME;Local;False;Response timeout;;None;False;False;False;
+STRUCT;tDelay;TIME;Local;False;Delayed acquisition time after trigger;;None;False;False;False;
+STRUCT;tInterval;TIME;Local;False;Periodic trigger interval (Interval mode);;None;False;False;False;
+STRUCT;eTrig;ET_SP_TrigMode;Local;False;Trigger policy;;None;False;False;False;
+STRUCT;uiMaxItems;UINT;Local;False;Max items parsed per image;;None;False;False;False;
+STRUCT;sTrigStr;STRING(32);Local;False;Trigger command (Cognex/Keyence/Generic);;None;False;False;False;
+STRUCT;sEndTok;STRING(8);Local;False;Response end token, '' = idle-timeout based;;None;False;False;False;
+STRUCT;sSendFmt;STRING(64);Local;False;Generic driver send template, {SEQ} macro;;None;False;False;False;
+STRUCT;sDelim;STRING(1);Local;False;Result token delimiter;;None;False;False;False;
+STRUCT;uiIdxType;UINT;Local;False;1-based token index: type;;None;False;False;False;
+STRUCT;uiIdxX;UINT;Local;False;1-based token index: X;;None;False;False;False;
+STRUCT;uiIdxY;UINT;Local;False;1-based token index: Y;;None;False;False;False;
+STRUCT;uiIdxTh;UINT;Local;False;1-based token index: theta;;None;False;False;False;
+STRUCT;uiIdxScore;UINT;Local;False;1-based token index: score;;None;False;False;False;
+STRUCT;bThInRad;BOOL;Local;False;"TRUE = theta from vision in radians (converted to deg); FALSE = degrees";;None;False;False;False;
+STRUCT;rMinScore;LREAL;Local;False;Minimum accepted match score [0..1];;None;False;False;False;
+STRUCT;astMap;ARRAY[1..8] OF ST_SP_CamFeedMap;Local;False;Feed region table 1..GC_FEEDS;;None;False;False;False;

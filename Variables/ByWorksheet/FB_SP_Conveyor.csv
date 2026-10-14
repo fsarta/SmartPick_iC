@@ -1,0 +1,20 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;bEnable;BOOL;Input;False;Master enable (system running);;None;False;False;False;
+VAR_INPUT;rNearDist;LREAL;Input;False;"Nearest item distance upstream of pick line [mm]; GC_REAL_MAX when none";;None;False;False;False;
+VAR_INPUT;rDtSec;LREAL;Input;False;Task period [s];;None;False;False;False;
+VAR_INPUT;bSim;BOOL;Input;False;Simulated conveyor;;None;False;False;False;
+VAR_INPUT;rSimPos;LREAL;Input;False;Simulated belt position [mm];;None;False;False;False;
+VAR_INPUT;rSimFrc;LREAL;Input;False;Simulated speed factor override (scenario);;None;False;False;False;
+VAR_IN_OUT;ioAxis;AXIS_REF;InOut;False;Encoder / belt axis;;None;False;False;False;
+VAR_OUTPUT;stOut;ST_SP_ConvStat;Output;False;Published status (HMI + system);;None;False;False;False;
+VAR;stCfg;ST_SP_ConvCfg;Local;False;Configuration (validated by Configure);;None;False;False;False;
+VAR;m_bCfgOk;BOOL;Local;False;Configuration valid;;None;False;False;False;
+VAR;m_rRawPos;LREAL;Local;False;Raw encoder position before scaling;;None;False;False;False;
+VAR;m_rPosPrev;LREAL;Local;False;Previous cycle scaled position [mm];;None;False;False;False;
+VAR;m_bPosInit;BOOL;Local;False;First position acquired;FALSE;None;False;False;False;
+VAR;m_Enc;SP_ConvEncoder;Local;False;Encoder adapter;;None;False;False;False;
+VAR;m_Drv;SP_ConvDrive;Local;False;Drive adapter;;None;False;False;False;
+VAR;m_Flt;SP_MovAvg;Local;False;Speed filter;;None;False;False;False;
+VAR_INPUT;stIn;ST_SP_ConvCfg;Input;False;Configuration record applied inside Configure();;None;False;False;False;
+VAR_INPUT;rNearDist;LREAL;Input;False;Distance upstream of pick line [mm];;None;False;False;False;
+VAR_INPUT;rBeltOff;LREAL;Input;False;Distance upstream of pick line [mm];;None;False;False;False;

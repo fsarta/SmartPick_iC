@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;g_eFwStatMode;SINT;Global;False;0 = proxy via enable, 1 = inject real status;0;None;False;False;False;
+VAR;g_abFwGrpReady;ARRAY[1..4] OF BOOL;Global;False;Group enabled / ready 1..GC_ROBOTS;;None;False;False;False;
+VAR;g_abFwGrpRef;ARRAY[1..4] OF BOOL;Global;False;Group referenced / homed 1..GC_ROBOTS;;None;False;False;False;
+VAR;g_eTrkMode;SINT;Global;False;0 = fallback: cut-off predicted world pose + MCS linear move (v1.x behavior, works without the tracking option and in simulation). 1 = native: MC_TrackConveyorBelt session + PCS synchronized moves (full-speed flying pick, firmware-managed belt following). Plain variable (not constant) so the mode can be switched from the HMI/init or per-line recipe without touching any POU.;0;None;False;False;False;
+VAR;g_abPlaceTrack;ARRAY[1..8] OF BOOL;Global;False;1..GC_FEEDS;;None;False;False;False;

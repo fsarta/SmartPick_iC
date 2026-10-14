@@ -1,0 +1,13 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bUsed;BOOL;Local;False;Feed enabled;;None;False;False;False;
+STRUCT;sName;STRING(16);Local;False;Human readable feed name;;None;False;False;False;
+STRUCT;iDir;SINT;Local;False;Belt direction sign (+1 / -1);;None;False;False;False;
+STRUCT;rWinStart;LREAL;Local;False;Distance pick line -> window start [mm];;None;False;False;False;
+STRUCT;rWinLen;LREAL;Local;False;Tracking window length [mm];;None;False;False;False;
+STRUCT;rPickAhead;LREAL;Local;False;Reservation cut-off ahead of pick line [mm];;None;False;False;False;
+STRUCT;tTimeout;TIME;Local;False;Item tracking timeout;;None;False;False;False;
+STRUCT;astCalib;ARRAY[1..2] OF ST_SP_Transf2D;Local;False;Camera -> feed world 1..GC_CAMS;;None;False;False;False;
+STRUCT;stWorld;ST_SP_Transf2D;Local;False;Feed -> robot world frame (misalignment compensation);;None;False;False;False;
+STRUCT;rZBelt;LREAL;Local;False;Belt surface height in world frame [mm];;None;False;False;False;
+STRUCT;rDupTol;LREAL;Local;False;Duplicate suppression radius across overlapping shots [mm];25.0;None;False;False;False;
+STRUCT;bDupSameType;BOOL;Local;False;"TRUE = deduplicate only identical uiTypeId; FALSE = any type";FALSE;None;False;False;False;

@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bStart;BOOL;Local;False;TRUE = pending StartBatch request;;None;False;False;False;
+STRUCT;bAbort;BOOL;Local;False;TRUE = pending AbortBatch request;;None;False;False;False;
+STRUCT;iFeed;SINT;Local;False;Outfeed the engine drives (1..GC_FEEDS);;None;False;False;False;
+STRUCT;iBatch;SINT;Local;False;Batch index (for diagnostics);;None;False;False;False;
+STRUCT;stDef;ST_SP_BatchDef;Local;False;Resolved batch definition snapshot;;None;False;False;False;
+STRUCT;stPatt;ST_SP_PattDef;Local;False;Pattern definition snapshot (g_astPatt);;None;False;False;False;
+STRUCT;udiBatchId;UDINT;Local;False;Runtime batch id for the engine;;None;False;False;False;

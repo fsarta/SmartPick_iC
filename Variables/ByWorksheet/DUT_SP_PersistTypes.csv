@@ -1,0 +1,12 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;uiVer;UINT;Local;False;Blob layout version;;None;False;False;False;
+STRUCT;uiSum;UDINT;Local;False;Additive checksum of the payload;;None;False;False;False;
+STRUCT;bInit;BOOL;Local;False;TRUE after first valid restore;;None;False;False;False;
+STRUCT;sRecipe;STRING(32);Local;False;Last loaded recipe name;;None;False;False;False;
+STRUCT;udiPickTotal;UDINT;Local;False;Lifetime picks;;None;False;False;False;
+STRUCT;udiPlaceTotal;UDINT;Local;False;Lifetime placements;;None;False;False;False;
+STRUCT;aiCamOwner;ARRAY[1..2] OF SINT;Local;False;Camera control ownership (resiliency) 1..GC_CAMS;;None;False;False;False;
+STRUCT;astBatch;ARRAY[1..8] OF ST_SP_BatchStat;Local;False;Batch progress per definition 1..GC_BATCHES;;None;False;False;False;
+STRUCT;sName;STRING(32);Local;False;Recipe name (file name stem);;None;False;False;False;
+STRUCT;uiVer;UINT;Local;False;Format version;;None;False;False;False;
+STRUCT;uiSum;UDINT;Local;False;Content checksum (informational);;None;False;False;False;

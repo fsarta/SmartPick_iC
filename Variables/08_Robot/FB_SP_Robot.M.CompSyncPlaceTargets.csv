@@ -1,0 +1,14 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Job item scan index (place side);;None;False;False;False;
+VAR;uiN;UINT;Local;False;Pending place item count and tool of the first one;;None;False;False;False;
+VAR;uiTool;UINT;Local;False;Tool of the first pending place item (cup layout source);;None;False;False;False;
+VAR;astP;ARRAY[1..4] OF ST_SP_Pose3D;Local;False;Member poses and reordered cup offsets (residual input) 1..GC_CUPS;;None;False;False;False;
+VAR;astCw;ARRAY[1..4] OF ST_SP_Point3D;Local;False;World poses of the pending place points (LSQ fit input);;None;False;False;False;
+VAR;rYaw;LREAL;Local;False;Fitted TCP yaw / translation and worst residual;;None;False;False;False;
+VAR;rTx;LREAL;Local;False;Fitted TCP yaw / translation and worst residual;;None;False;False;False;
+VAR;rTy;LREAL;Local;False;Fitted TCP yaw / translation and worst residual;;None;False;False;False;
+VAR;rRes;LREAL;Local;False;Fitted TCP yaw / translation and worst residual;;None;False;False;False;
+VAR;rTol;LREAL;Local;False;Match tolerance from the tool configuration [mm];;None;False;False;False;
+VAR;stJI;ST_SP_JobItem;Local;False;Anchor job item (offset source);;None;False;False;False;
+VAR;stT;ST_SP_Pose3D;Local;False;Working place pose;;None;False;False;False;
+VAR;rLift;LREAL;Local;False;Dry-run lift [mm];;None;False;False;False;

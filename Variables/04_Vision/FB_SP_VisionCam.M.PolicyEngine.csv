@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Region table loop index;;None;False;False;False;
+VAR;rEff;LREAL;Local;False;Speed-scaled effective trigger distance [mm];;None;False;False;False;
+VAR;rTrav;LREAL;Local;False;Belt travel since the last trigger [mm];;None;False;False;False;
+VAR;bAnyF;BOOL;Local;False;At least one mapped feed has queue space;;None;False;False;False;
+VAR;bMapOk;BOOL;Local;False;At least one feed mapped;;None;False;False;False;

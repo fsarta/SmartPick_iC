@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;Free;ET_SP_ItemState;Local;False;;0;None;False;False;False;
+ENUM;Tracked;ET_SP_ItemState;Local;False;;10;None;False;False;False;
+ENUM;Reserved;ET_SP_ItemState;Local;False;;20;None;False;False;False;
+ENUM;Picked;ET_SP_ItemState;Local;False;;30;None;False;False;False;
+ENUM;Held;ET_SP_ItemState;Local;False;;40;None;False;False;False;
+ENUM;Placed;ET_SP_ItemState;Local;False;;50;None;False;False;False;
+ENUM;Lost;ET_SP_ItemState;Local;False;;60;None;False;False;False;
+ENUM;TimedOut;ET_SP_ItemState;Local;False;;70;None;False;False;False;

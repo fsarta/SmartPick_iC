@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sTxt;STRING(255);Input;False;Input line to tokenize;;None;False;False;False;
+VAR_INPUT;sDelim;STRING(1);Input;False;Single-character field delimiter;;None;False;False;False;
+VAR;sRest;STRING(255);Local;False;Unconsumed tail while counting tokens;;None;False;False;False;
+VAR;uiCnt;UINT;Local;False;Token counter (starts at 1: a line is always one token);;None;False;False;False;
+VAR;iPos;INT;Local;False;Character position in the allowed-charset table;;None;False;False;False;
+VAR;iNdx;INT;Local;False;Delimiter position copied for LEN arithmetic;;None;False;False;False;

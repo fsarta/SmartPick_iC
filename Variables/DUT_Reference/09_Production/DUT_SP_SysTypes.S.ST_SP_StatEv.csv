@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bCycle;BOOL;Local;False;TRUE = cycle-complete event (AddCycle);;None;False;False;False;
+STRUCT;bPlace;BOOL;Local;False;TRUE = place event, FALSE = pick event;;None;False;False;False;
+STRUCT;bOk;BOOL;Local;False;TRUE = good part, FALSE = NG part;;None;False;False;False;
+STRUCT;iFeed;SINT;Local;False;Feed the event belongs to (1..GC_FEEDS);;None;False;False;False;

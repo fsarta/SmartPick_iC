@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Robot loop index (publish scan);;None;False;False;False;
+VAR;iFeed;SINT;Local;False;Outfeed addressed by the batch command;;None;False;False;False;
+VAR;eRc;ET_SP_RetCode;Local;False;Batch registry call result;;None;False;False;False;

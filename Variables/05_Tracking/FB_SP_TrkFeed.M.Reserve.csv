@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stReq;ST_SP_ResReq;Input;False;Reservation request (robot, range, filters);;None;False;False;False;
+VAR_INPUT;rEncNow;LREAL;Input;False;Current belt encoder [mm] (housekeeping);;None;False;False;False;
+VAR_INPUT;rBeltSpd;LREAL;Input;False;Current signed belt speed [mm/s];;None;False;False;False;
+VAR;eRc;ET_SP_RetCode;Local;False;Queue Reserve() result;;None;False;False;False;

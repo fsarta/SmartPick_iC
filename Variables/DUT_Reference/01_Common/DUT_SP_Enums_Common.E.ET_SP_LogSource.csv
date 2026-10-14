@@ -1,0 +1,11 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+ENUM;System;ET_SP_LogSource;Local;False;;0;None;False;False;False;
+ENUM;Robot;ET_SP_LogSource;Local;False;;1;None;False;False;False;
+ENUM;Feed;ET_SP_LogSource;Local;False;;2;None;False;False;False;
+ENUM;Conveyor;ET_SP_LogSource;Local;False;;3;None;False;False;False;
+ENUM;Camera;ET_SP_LogSource;Local;False;;4;None;False;False;False;
+ENUM;Balancer;ET_SP_LogSource;Local;False;;5;None;False;False;False;
+ENUM;Batch;ET_SP_LogSource;Local;False;;6;None;False;False;False;
+ENUM;Persist;ET_SP_LogSource;Local;False;;7;None;False;False;False;
+ENUM;Simulation;ET_SP_LogSource;Local;False;;8;None;False;False;False;
+ENUM;User;ET_SP_LogSource;Local;False;;9;None;False;False;False;

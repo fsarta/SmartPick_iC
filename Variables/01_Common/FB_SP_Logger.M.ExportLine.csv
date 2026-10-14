@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;iIdx;UINT;Input;False;Entry selector, 1 = newest;;None;False;False;False;
+VAR;bOk;BOOL;Local;False;TRUE when the requested entry exists;;None;False;False;False;
+VAR;sLvl;STRING(6);Local;False;Level rendered as fixed-width ASCII tag;;None;False;False;False;
+VAR;sTmp;STRING(120);Local;False;Line under construction (built right-to-left);;None;False;False;False;

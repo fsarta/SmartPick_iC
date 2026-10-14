@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sTxt;STRING(64);Input;False;String to trim;;None;False;False;False;
+VAR;iLen;INT;Local;False;Length of the concatenation result;;None;False;False;False;
+VAR;iSt;INT;Local;False;First non-space position;;None;False;False;False;
+VAR;iEn;INT;Local;False;Last non-space position;;None;False;False;False;
+VAR;i;INT;Local;False;Character loop index (trim scan);;None;False;False;False;
+VAR;sCh;STRING(1);Local;False;Character under examination;;None;False;False;False;

@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rEncNow;LREAL;Input;False;Current belt encoder [mm];;None;False;False;False;
+VAR;i;SINT;Local;False;Slot loop index (aging);;None;False;False;False;
+VAR;rOff;LREAL;Local;False;Item offset re-read for prediction;;None;False;False;False;
+VAR;rBest;LREAL;Local;False;Nearest upstream distance [mm];;None;False;False;False;

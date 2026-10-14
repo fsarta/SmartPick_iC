@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;eKind;ET_SP_JobKind;Local;False;Pick / Place / PickPlace;;None;False;False;False;
+STRUCT;iRobot;SINT;Local;False;Assigned robot;;None;False;False;False;
+STRUCT;uiCount;UINT;Local;False;Valid items 1..GC_CUPS;;None;False;False;False;
+STRUCT;astItems;ARRAY[1..4] OF ST_SP_JobItem;Local;False;1..GC_CUPS;;None;False;False;False;
+STRUCT;eExec;ET_SP_GripExec;Local;False;AsyncCup = sequential, SyncAll = one descent;;None;False;False;False;
+STRUCT;stSyncPick;ST_SP_Pose3D;Local;False;Cluster TCP pose at the pick event (SyncAll);;None;False;False;False;

@@ -1,0 +1,14 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;iSec;SINT;Local;False;Export section cursor (conv, feed, cam, ...);;None;False;False;False;
+VAR;iIdx;SINT;Local;False;Record index inside the current section;;None;False;False;False;
+VAR;iSub;SINT;Local;False;Sub-record index (maps, mix entries);;None;False;False;False;
+VAR;r;UDINT;Local;False;Reserved marker written into the header;;None;False;False;False;
+VAR;udF;UDINT;Local;False;Per-section record counters (feeds, cams, patterns, batches, seq, ranges);;None;False;False;False;
+VAR;udC;UDINT;Local;False;Per-section record counters (feeds, cams, patterns, batches, seq, ranges);;None;False;False;False;
+VAR;udP;UDINT;Local;False;Per-section record counters (feeds, cams, patterns, batches, seq, ranges);;None;False;False;False;
+VAR;udB;UDINT;Local;False;Per-section record counters (feeds, cams, patterns, batches, seq, ranges);;None;False;False;False;
+VAR;udSeq;UDINT;Local;False;Per-section record counters (feeds, cams, patterns, batches, seq, ranges);;None;False;False;False;
+VAR;udR;UDINT;Local;False;Per-section record counters (feeds, cams, patterns, batches, seq, ranges);;None;False;False;False;
+VAR;udMap;UDINT;Local;False;Emitted CAMMAP and BATCHMIX line counters;;None;False;False;False;
+VAR;udMix;UDINT;Local;False;Emitted CAMMAP and BATCHMIX line counters;;None;False;False;False;
+VAR;bEmit;BOOL;Local;False;TRUE when the current record holds data (skip disabled);;None;False;False;False;

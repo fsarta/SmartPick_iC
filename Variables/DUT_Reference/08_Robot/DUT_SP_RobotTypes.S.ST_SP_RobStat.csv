@@ -1,0 +1,21 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;eState;ET_SP_RobState;Local;False;;;None;False;False;False;
+STRUCT;bOnline;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bReady;BOOL;Local;False;Homed, enabled, accepting jobs;;None;False;False;False;
+STRUCT;bBusy;BOOL;Local;False;Homed, enabled, accepting jobs;;None;False;False;False;
+STRUCT;bFault;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bPaused;BOOL;Local;False;;;None;False;False;False;
+STRUCT;bHolding;BOOL;Local;False;Any tool holding;;None;False;False;False;
+STRUCT;bDryRun;BOOL;Local;False;Any tool holding;;None;False;False;False;
+STRUCT;uiCurTool;UINT;Local;False;;;None;False;False;False;
+STRUCT;uiCurFeed;SINT;Local;False;;;None;False;False;False;
+STRUCT;uiCurPlaceFeed;UINT;Local;False;"Place feed of the current job (0 = none; R-05b collision input)";;None;False;False;False;
+STRUCT;bTrkPlace;BOOL;Local;False;v1.4: TRUE = native tracked place armed for the current place item;;None;False;False;False;
+STRUCT;uiJobCnt;UINT;Local;False;Items in current job;;None;False;False;False;
+STRUCT;uiToolMask;UINT;Local;False;Bit i-1 = tool i idle (balancer input);;None;False;False;False;
+STRUCT;p2Now;ST_SP_Pose2D;Local;False;Current world pose;;None;False;False;False;
+STRUCT;udiCycles;UDINT;Local;False;Completed cycles;;None;False;False;False;
+STRUCT;udiPicks;UDINT;Local;False;Lifetime picks (balancer metric);;None;False;False;False;
+STRUCT;udiPlaces;UDINT;Local;False;Lifetime placements;;None;False;False;False;
+STRUCT;rLoadPct;LREAL;Local;False;Load metric for the balancer [0..1];;None;False;False;False;
+STRUCT;uiErrId;UINT;Local;False;Last error code (0 = none);;None;False;False;False;

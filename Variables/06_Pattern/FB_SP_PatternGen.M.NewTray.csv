@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;uiSlotNo;UINT;Local;False;Sequential slot number inside the layer;;None;False;False;False;
+VAR;rU;LREAL;Local;False;Slot placement pose in the tray frame (X/Y/Z);;None;False;False;False;
+VAR;rV;LREAL;Local;False;Slot placement pose in the tray frame (X/Y/Z);;None;False;False;False;
+VAR;rZ;LREAL;Local;False;Slot placement pose in the tray frame (X/Y/Z);;None;False;False;False;
+VAR;rTh;LREAL;Local;False;Slot placement orientation [deg];;None;False;False;False;
+VAR;stT;ST_SP_TrkItem;Local;False;Target record built for the queue;;None;False;False;False;
+VAR;uiRow;UINT;Local;False;Row/column indices of the slot in the grid;;None;False;False;False;
+VAR;uiCol;UINT;Local;False;Row/column indices of the slot in the grid;;None;False;False;False;

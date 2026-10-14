@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;g_FBRTC;Y_YA_RealTimeClock;Global;False;"Vendor RTC FB instance; called ONLY by PRG_SP_TaskSvc section 1";;None;False;False;False;
+VAR;g_stRtcNow;Yt_YA_RTC_Struct;Global;False;Latest wall-clock snapshot (Year/Month/Day/Hour/Minute/Second/mSec);;None;False;False;False;
+VAR;g_bRtcValid;BOOL;Global;False;TRUE when the vendor RTC returned a Valid clock this cycle;FALSE;None;False;False;False;
+VAR;g_uiRtcErr;UINT;Global;False;"Last RTC FB error id (0 = none; diagnostics mirror)";UINT#0;None;False;False;False;
+VAR;g_sRtcNow;STRING(23);Global;False;Formatted snapshot 'YYYY-MM-DD HH:MM:SS.mmm' (HMI / diagnostics);;None;False;False;False;
+VAR;g_udiTickMs;UDINT;Global;False;"Milliseconds since boot, advanced by PRG_SP_TaskFast (+g_uiDtMs); free-running: elapsed times use unsigned subtraction";UDINT#0;None;False;False;False;

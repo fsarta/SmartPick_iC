@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;astP;ARRAY[1..4] OF ST_SP_Pose3D;Input;False;Member item poses (world, XY used) 1..GC_CUPS;;None;False;False;False;
+VAR_INPUT;astC;ARRAY[1..4] OF ST_SP_Point3D;Input;False;Cup offsets in the tool frame (XY used) 1..GC_CUPS;;None;False;False;False;
+VAR_INPUT;stTcp;ST_SP_Pose3D;Input;False;Candidate synchronized TCP pose;;None;False;False;False;
+VAR_INPUT;uiN;UINT;Input;False;Number of valid members/cups 1..GC_CUPS;;None;False;False;False;
+VAR;i;SINT;Local;False;Member loop index (residual scan);;None;False;False;False;
+VAR;rCx;LREAL;Local;False;Cup position rotated into the world frame;;None;False;False;False;
+VAR;rCy;LREAL;Local;False;Cup position rotated into the world frame;;None;False;False;False;
+VAR;rD;LREAL;Local;False;Per-member residual [mm];;None;False;False;False;

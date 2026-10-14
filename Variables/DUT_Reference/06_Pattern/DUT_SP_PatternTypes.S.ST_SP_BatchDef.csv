@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bUsed;BOOL;Local;False;Batch slot in use;;None;False;False;False;
+STRUCT;sName;STRING(24);Local;False;Human readable batch name;;None;False;False;False;
+STRUCT;iOutFeed;SINT;Local;False;Outfeed 1..GC_FEEDS;;None;False;False;False;
+STRUCT;uiPattId;UINT;Local;False;Pattern index 1..GC_PATT;;None;False;False;False;
+STRUCT;aiMix;ARRAY[1..8] OF UINT;Local;False;Type mix sequence 1..GC_SEQ (1..GC_TYPES);;None;False;False;False;
+STRUCT;aiMixCnt;ARRAY[1..8] OF UINT;Local;False;Slots per mix entry 1..GC_SEQ (per layer);;None;False;False;False;
+STRUCT;udiQty;UDINT;Local;False;Total target quantity;;None;False;False;False;
+STRUCT;eTrig;ET_SP_PattTrig;Local;False;Pattern instance trigger;;None;False;False;False;
+STRUCT;iPriority;SINT;Local;False;Scheduling priority (higher = sooner);;None;False;False;False;

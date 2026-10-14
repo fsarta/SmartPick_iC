@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;rDx;LREAL;Local;False;Translation X (parent frame) [mm];;None;False;False;False;
+STRUCT;rDy;LREAL;Local;False;Translation Y (parent frame) [mm];;None;False;False;False;
+STRUCT;rRot;LREAL;Local;False;Rotation child->parent [deg];;None;False;False;False;
+STRUCT;rScale;LREAL;Local;False;Uniform scale child->parent [u_child/u_parent];;None;False;False;False;
+STRUCT;bValid;BOOL;Local;False;TRUE after successful calibration;;None;False;False;False;

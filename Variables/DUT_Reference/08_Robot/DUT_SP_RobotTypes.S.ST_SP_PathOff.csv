@@ -1,0 +1,8 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;rAppDx;LREAL;Local;False;Approach: X offset from pick/place point;;None;False;False;False;
+STRUCT;rAppDy;LREAL;Local;False;Approach: Y offset;;None;False;False;False;
+STRUCT;rAppDz;LREAL;Local;False;Approach: Z offset above point;;None;False;False;False;
+STRUCT;rDepDx;LREAL;Local;False;Depart: X offset;;None;False;False;False;
+STRUCT;rDepDy;LREAL;Local;False;Depart: Y offset;;None;False;False;False;
+STRUCT;rDepDz;LREAL;Local;False;Depart: Z offset;;None;False;False;False;
+STRUCT;rPtDz;LREAL;Local;False;Point Z correction (belt tolerance);;None;False;False;False;

@@ -1,0 +1,12 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;rVal;LREAL;Input;False;Value to format;;None;False;False;False;
+VAR_INPUT;iDec;SINT;Input;False;number of decimal digits, 0..6;;None;False;False;False;
+VAR;rV;LREAL;Local;False;Absolute working copy of rVal;;None;False;False;False;
+VAR;bNeg;BOOL;Local;False;TRUE when the input value is negative;;None;False;False;False;
+VAR;udiI;UDINT;Local;False;Integer part digits (rounded up on overflow);;None;False;False;False;
+VAR;udiF;UDINT;Local;False;Fractional digits scaled by 10^iDec;;None;False;False;False;
+VAR;udiS;UDINT;Local;False;Scale factor 10^iDec;;None;False;False;False;
+VAR;sI;STRING(16);Local;False;Formatted integer part;;None;False;False;False;
+VAR;sF;STRING(8);Local;False;Formatted fractional part (with dot);;None;False;False;False;
+VAR;iK;SINT;Local;False;Scale-factor loop index;;None;False;False;False;
+VAR;iD;SINT;Local;False;Numeric value of the current digit (0..9);;None;False;False;False;

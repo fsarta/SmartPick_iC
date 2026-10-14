@@ -1,0 +1,28 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stShare;ST_SP_ShareCfg;Input;False;Distribution configuration;;None;False;False;False;
+VAR_INPUT;aiOutfeed;ARRAY[1..8] OF SINT;Input;False;mirror of stShare.aiOutfeedMap 1..GC_FEEDS;;None;False;False;False;
+VAR_INPUT;abiFeedOn;ARRAY[1..8] OF BOOL;Input;False;Feed eligible for dispatch 1..GC_FEEDS;;None;False;False;False;
+VAR_INPUT;bEnable;BOOL;Input;False;System dispatch gate;;None;False;False;False;
+VAR_INPUT;uiMaxGrip;UINT;Input;False;Parts per cycle;UINT#1;None;False;False;False;
+VAR_INPUT;abSyncGrip;ARRAY[1..4] OF BOOL;Input;False;R-07: synchronized multi-grip enabled per robot (Main fills from the robot cfg: eGripMode = Sync AND uiMaxGrip > 1) 1..GC_ROBOTS;;None;False;False;False;
+VAR_INPUT;astReq;ARRAY[1..4] OF ST_SP_DispReq;Input;False;Handshake responses and latched request flags (Main/Fast access) 1..GC_ROBOTS;;None;False;False;False;
+VAR_INPUT;abReqPulse;ARRAY[1..4] OF BOOL;Input;False;;;None;False;False;False;
+VAR_INPUT;astResRsp;ARRAY[1..4] OF ST_SP_ResRsp;Input;False;Fast fills;;None;False;False;False;
+VAR_INPUT;abResDone;ARRAY[1..4] OF BOOL;Input;False;Fast fills;;None;False;False;False;
+VAR_INPUT;astClRsp;ARRAY[1..4] OF ST_SP_ClRsp;Input;False;Fast fills;;None;False;False;False;
+VAR_INPUT;ajobOffer;ARRAY[1..4] OF ST_SP_Job;Input;False;Completed job offers per robot;;None;False;False;False;
+VAR_INPUT;abJobPulse;ARRAY[1..4] OF BOOL;Input;False;Completed job offers per robot;;None;False;False;False;
+VAR_INPUT;astJobRes;ARRAY[1..4] OF ST_SP_Job;Input;False;Fast fills;;None;False;False;False;
+VAR_INPUT;abJobResDone;ARRAY[1..4] OF BOOL;Input;False;Fast fills;;None;False;False;False;
+VAR_INPUT;astCancel;ARRAY[1..4] OF ST_SP_CancelReq;Input;False;Fast fills;;None;False;False;False;
+VAR_INPUT;abCancelPulse;ARRAY[1..4] OF BOOL;Input;False;;;None;False;False;False;
+VAR;Bal;SP_LoadBalancer;Local;False;Subordinate load balancer;;None;False;False;False;
+VAR;m_aeDSt;ARRAY[1..4] OF SINT;Local;False;Per-robot dispatch state 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_astJob;ARRAY[1..4] OF ST_SP_Job;Local;False;Job under construction per robot 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_iPickFeed;ARRAY[1..4] OF SINT;Local;False;Pick feed of the assigned offer 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_iPlaceFeed;ARRAY[1..4] OF SINT;Local;False;Place (out)feed derived from the batch 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_uiTool;ARRAY[1..4] OF UINT;Local;False;Tool id allocated for the job 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_astShare;ARRAY[1..4] OF ST_SP_RobShare;Local;False;Snapshot cache 1..GC_ROBOTS;;None;False;False;False;
+VAR;m_abClReq;ARRAY[1..4] OF BOOL;Local;False;R-07: request was a cluster reservation (latched for the response);;None;False;False;False;
+VAR;m_abClJob;ARRAY[1..4] OF BOOL;Local;False;R-07: job under construction is a cluster job (slot place flow);;None;False;False;False;
+VAR;m_iPlaceSlot;ARRAY[1..4] OF SINT;Local;False;R-07: job slot whose place target is being reserved;;None;False;False;False;

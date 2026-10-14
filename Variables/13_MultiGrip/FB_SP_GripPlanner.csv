@@ -1,0 +1,21 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;out_bOk;BOOL;Output;False;Plan valid (Finish called);;None;False;False;False;
+VAR_OUTPUT;out_bSync;BOOL;Output;False;TRUE = synchronized multi-pick approved;;None;False;False;False;
+VAR_OUTPUT;out_uiN;UINT;Output;False;Final members 1..GC_CUPS;;None;False;False;False;
+VAR_OUTPUT;out_aiIdx;ARRAY[1..4] OF SINT;Output;False;Queue slot per member (1 = anchor) 1..GC_CUPS;;None;False;False;False;
+VAR_OUTPUT;out_aCup;ARRAY[1..4] OF SINT;Output;False;Cup id per member (1 = anchor cup) 1..GC_CUPS;;None;False;False;False;
+VAR_OUTPUT;out_astP;ARRAY[1..4] OF ST_SP_Pose3D;Output;False;Member item poses (capture frame, world) 1..GC_CUPS;;None;False;False;False;
+VAR_OUTPUT;out_stTcp;ST_SP_Pose3D;Output;False;Synchronized TCP pose at the pick event (capture frame);;None;False;False;False;
+VAR_OUTPUT;out_rW;LREAL;Output;False;Total accepted weight [g];;None;False;False;False;
+VAR_OUTPUT;out_rCog;LREAL;Output;False;CoG offset from TCP [mm], 0 = unknown;;None;False;False;False;
+VAR;m_bRun;BOOL;Local;False;TRUE between Begin and Finish;;None;False;False;False;
+VAR;m_stReq;ST_SP_ClReq;Local;False;Working copy of the cluster request (rules + cup layout);;None;False;False;False;
+VAR;m_p2A;ST_SP_Pose2D;Local;False;Anchor world pose (XY + yaw = matching reference frame);;None;False;False;False;
+VAR;m_uiTypeA;UINT;Local;False;Anchor product type (single-type rule);;None;False;False;False;
+VAR;m_uiN;UINT;Local;False;Accepted member count;;None;False;False;False;
+VAR;m_aiIdx;ARRAY[1..4] OF SINT;Local;False;Queue slot per accepted member 1..GC_CUPS;;None;False;False;False;
+VAR;m_aCup;ARRAY[1..4] OF SINT;Local;False;Cup id per accepted member 1..GC_CUPS;;None;False;False;False;
+VAR;m_astP;ARRAY[1..4] OF ST_SP_Pose3D;Local;False;Accepted member poses (world, capture frame) 1..GC_CUPS;;None;False;False;False;
+VAR;m_arW;ARRAY[1..4] OF LREAL;Local;False;Accepted member weights [g] (CoG audit) 1..GC_CUPS;;None;False;False;False;
+VAR;m_abCupUsed;ARRAY[1..4] OF BOOL;Local;False;Cup occupancy flags (cup 1 = anchor, always used) 1..GC_CUPS;;None;False;False;False;
+VAR;m_rW;LREAL;Local;False;Running weight sum [g];;None;False;False;False;

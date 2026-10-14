@@ -1,0 +1,15 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Member loop index (fit / prune / compact);;None;False;False;False;
+VAR;k;SINT;Local;False;Member loop index (fit / prune / compact);;None;False;False;False;
+VAR;astCw;ARRAY[1..4] OF ST_SP_Point3D;Local;False;Working cup array reordered per member (residual input) 1..GC_CUPS;;None;False;False;False;
+VAR;rYaw;LREAL;Local;False;Fitted TCP yaw and translation accumulators;;None;False;False;False;
+VAR;rTx;LREAL;Local;False;Fitted TCP yaw and translation accumulators;;None;False;False;False;
+VAR;rTy;LREAL;Local;False;Fitted TCP yaw and translation accumulators;;None;False;False;False;
+VAR;rRes;LREAL;Local;False;Worst residual of the current fit [mm];;None;False;False;False;
+VAR;iWorst;SINT;Local;False;Index and value of the worst member (pruning);;None;False;False;False;
+VAR;rWorst;LREAL;Local;False;Largest per-cup residual of the candidate set [mm];;None;False;False;False;
+VAR;rD;LREAL;Local;False;Per-member residual (pruning scan);;None;False;False;False;
+VAR;rCogX;LREAL;Local;False;Center-of-gravity accumulators;;None;False;False;False;
+VAR;rCogY;LREAL;Local;False;Center-of-gravity accumulators;;None;False;False;False;
+VAR;rWL;LREAL;Local;False;Weight sum as LREAL (type-safe division);;None;False;False;False;
+VAR;iGuard;SINT;Local;False;Prune loop guard;;None;False;False;False;

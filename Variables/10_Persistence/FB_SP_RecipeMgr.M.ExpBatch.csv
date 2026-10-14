@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;i;SINT;Input;False;Token/field parse index;;None;False;False;False;
+VAR;stB;ST_SP_BatchDef;Local;False;BATCH record accumulator;;None;False;False;False;
+VAR;s;STRING(200);Local;False;CSV line under construction;;None;False;False;False;
+VAR;uiTrg;UINT;Local;False;Encoded trigger enum;;None;False;False;False;

@@ -1,0 +1,9 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_OUTPUT;bRestored;BOOL;Output;False;TRUE = valid retain data available;;None;False;False;False;
+VAR_OUTPUT;bDefaults;BOOL;Output;False;TRUE = blob was invalid, defaults applied;;None;False;False;False;
+VAR_OUTPUT;uiVer;UINT;Output;False;TRUE = blob was invalid, defaults applied;;None;False;False;False;
+VAR;m_bFirst;BOOL;Local;False;TRUE on the first cycle (retain validity decision);TRUE;None;False;False;False;
+VAR;i;SINT;Local;False;Robot loop index (restore/copy);;None;False;False;False;
+VAR;i;SINT;Local;False;Feed loop index (restore/copy);;None;False;False;False;
+VAR;udi;UDINT;Local;False;Checksum of the retain payload (validation);;None;False;False;False;
+VAR_INPUT;sName;STRING(32);Input;False;Retain mirror file name;;None;False;False;False;

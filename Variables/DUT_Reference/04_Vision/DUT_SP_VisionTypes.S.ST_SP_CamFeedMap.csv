@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;iFeed;SINT;Local;False;Linked feed 1..GC_FEEDS, 0 = unused;;None;False;False;False;
+STRUCT;rYmin;LREAL;Local;False;Region lower bound (camera Y, along belt);;None;False;False;False;
+STRUCT;rYmax;LREAL;Local;False;Region upper bound (camera Y, along belt);;None;False;False;False;
+STRUCT;rTrigDist;LREAL;Local;False;Base trigger distance for this feed [mm];;None;False;False;False;
+STRUCT;rRefSpeed;LREAL;Local;False;Reference belt speed for auto-scaling [mm/s];;None;False;False;False;
+STRUCT;rLastTrig;LREAL;Local;False;Belt position at last trigger (runtime);;None;False;False;False;

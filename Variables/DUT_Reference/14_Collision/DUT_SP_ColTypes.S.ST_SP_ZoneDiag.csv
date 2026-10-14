@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bHeld;BOOL;Local;False;Zone occupied by at least one robot;;None;False;False;False;
+STRUCT;iHolder;SINT;Local;False;Current holder robot id (0 = free);;None;False;False;False;
+STRUCT;uiWaiters;UINT;Local;False;Robots currently waiting for this zone;;None;False;False;False;
+STRUCT;udiGrant;UDINT;Local;False;Total grants handed out (statistics);;None;False;False;False;
+STRUCT;udiCont;UDINT;Local;False;Contention events (request while held);;None;False;False;False;

@@ -1,0 +1,10 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;sTxt;STRING(255);Input;False;Input line to tokenize;;None;False;False;False;
+VAR_INPUT;sDelim;STRING(1);Input;False;Single-character field delimiter;;None;False;False;False;
+VAR_INPUT;uiN;UINT;Input;False;1-based token index;;None;False;False;False;
+VAR;sRest;STRING(255);Local;False;Unconsumed tail of the input while scanning tokens;;None;False;False;False;
+VAR;iFound;SINT;Local;False;Flag: at least one delimiter was seen;;None;False;False;False;
+VAR;uiK;UINT;Local;False;Token loop counter (1..uiN);;None;False;False;False;
+VAR;iPos;INT;Local;False;Character position in the allowed-charset table;;None;False;False;False;
+VAR;iNdx;INT;Local;False;Delimiter position copied for LEN arithmetic;;None;False;False;False;
+VAR;sTok;STRING(64);Local;False;Token extracted for the requested index;;None;False;False;False;

@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bOk;BOOL;Local;False;Reservation granted;;None;False;False;False;
+STRUCT;iIdx;SINT;Local;False;Queue index of the reserved item;;None;False;False;False;
+STRUCT;stItem;ST_SP_TrkItem;Local;False;Snapshot of the reserved item;;None;False;False;False;
+STRUCT;p3Pick;ST_SP_Pose3D;Local;False;Predicted world pick pose (pick line);;None;False;False;False;
+STRUCT;rBeltSpd;LREAL;Local;False;Belt speed at reservation [mm/s];;None;False;False;False;

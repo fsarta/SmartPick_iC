@@ -1,0 +1,26 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;bUsed;BOOL;Local;False;Robot enabled;;None;False;False;False;
+STRUCT;sName;STRING(16);Local;False;Human readable name;;None;False;False;False;
+STRUCT;uiGroup;UINT;Local;False;Firmware kinematic group index (adapter);;None;False;False;False;
+STRUCT;uiNumTools;UINT;Local;False;Configured tools 1..GC_TOOLS;;None;False;False;False;
+STRUCT;astTools;ARRAY[1..4] OF ST_SP_ToolCfg;Local;False;1..GC_TOOLS;;None;False;False;False;
+STRUCT;rVelApp;LREAL;Local;False;Approach/depart moves;;None;False;False;False;
+STRUCT;rVelTrack;LREAL;Local;False;Tracking pick move (belt synchronized);;None;False;False;False;
+STRUCT;rVelPlace;LREAL;Local;False;Place moves;;None;False;False;False;
+STRUCT;rAcc;LREAL;Local;False;Acceleration [mm/s2];;None;False;False;False;
+STRUCT;rDec;LREAL;Local;False;Deceleration [mm/s2];;None;False;False;False;
+STRUCT;ePrecApp;ET_SP_Precision;Local;False;Precision modes per segment;;None;False;False;False;
+STRUCT;ePrecPick;ET_SP_Precision;Local;False;;;None;False;False;False;
+STRUCT;ePrecPlace;ET_SP_Precision;Local;False;;;None;False;False;False;
+STRUCT;rZoneTight;LREAL;Local;False;ZoneTight blending radius [mm];;None;False;False;False;
+STRUCT;rZoneWide;LREAL;Local;False;ZoneWide blending radius [mm];;None;False;False;False;
+STRUCT;rZSafe;LREAL;Local;False;Safe travel height above belt [mm];;None;False;False;False;
+STRUCT;tHomeTimeout;TIME;Local;False;Homing supervision;;None;False;False;False;
+STRUCT;eGripMode;ET_SP_GripMode;Local;False;Sync / Partial / Async;;None;False;False;False;
+STRUCT;uiMaxGrip;UINT;Local;False;Max parts per cycle 1..GC_CUPS;;None;False;False;False;
+STRUCT;bVerifyPick;BOOL;Local;False;Verify grip feedback at pick;;None;False;False;False;
+STRUCT;bVerifyPlace;BOOL;Local;False;Verify release/place;;None;False;False;False;
+STRUCT;bDeferVerify;BOOL;Local;False;Deferred: verify holding at place;;None;False;False;False;
+STRUCT;uiRetries;UINT;Local;False;Retry count before NG;;None;False;False;False;
+STRUCT;abiCamOwner;ARRAY[1..2] OF BOOL;Local;False;TRUE = this robot owns camera i 1..GC_CAMS;;None;False;False;False;
+STRUCT;astOff;ARRAY[1..8] OF ARRAY[1..32] OF ST_SP_PathOff;Local;False;1..GC_FEEDS x 1..GC_TYPES;;None;False;False;False;

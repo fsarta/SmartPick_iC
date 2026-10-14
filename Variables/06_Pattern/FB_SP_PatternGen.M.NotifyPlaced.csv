@@ -1,0 +1,3 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;uiSlot;UINT;Input;False;Placed slot number (informational);;None;False;False;False;
+VAR;uiLayerSlots;UINT;Local;False;Slots of one layer (rows x cols);;None;False;False;False;

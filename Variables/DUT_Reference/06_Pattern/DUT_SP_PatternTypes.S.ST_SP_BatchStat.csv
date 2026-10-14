@@ -1,0 +1,7 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+STRUCT;eState;ET_SP_BatchState;Local;False;;;None;False;False;False;
+STRUCT;udiDone;UDINT;Local;False;Targets placed;;None;False;False;False;
+STRUCT;udiGen;UDINT;Local;False;Targets generated;;None;False;False;False;
+STRUCT;udiBatchId;UDINT;Local;False;Runtime batch id;;None;False;False;False;
+STRUCT;uiLayer;UINT;Local;False;Current layer being generated;;None;False;False;False;
+STRUCT;udiTrays;UDINT;Local;False;Tray instances generated;;None;False;False;False;

@@ -1,0 +1,4 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR;i;SINT;Local;False;Camera/robot scan indices (iNew = new owner);;None;False;False;False;
+VAR;k;SINT;Local;False;Camera/robot scan indices (iNew = new owner);;None;False;False;False;
+VAR;iNew;SINT;Local;False;Camera/robot scan indices (iNew = new owner);;None;False;False;False;

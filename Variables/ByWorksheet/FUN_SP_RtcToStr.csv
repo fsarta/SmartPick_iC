@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;stRtc;Yt_YA_RTC_Struct;Input;False;RTC snapshot to format (Yaskawa Yt_YA_RTC_Struct, INT fields);;None;False;False;False;
+VAR;sY;STRING(10);Local;False;Date part yyyy-mm-dd;;None;False;False;False;
+VAR;sT;STRING(12);Local;False;Time part hh:mm:ss.mmm;;None;False;False;False;
+VAR;iV;DINT;Local;False;Field working copy (0-based INT fields are clamped for formatting);;None;False;False;False;

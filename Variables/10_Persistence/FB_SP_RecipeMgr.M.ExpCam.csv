@@ -1,0 +1,6 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;i;SINT;Input;False;Token/field parse index;;None;False;False;False;
+VAR;stV;ST_SP_VisionCfg;Local;False;CAM record accumulator;;None;False;False;False;
+VAR;s;STRING(200);Local;False;CSV line under construction;;None;False;False;False;
+VAR;uiDrv;UINT;Local;False;Encoded driver / trigger enum values;;None;False;False;False;
+VAR;uiTrg;UINT;Local;False;Encoded driver / trigger enum values;;None;False;False;False;

@@ -1,0 +1,5 @@
+Group;Name;DataType;Usage;IsTranslate;Comment;InitValue;AccessSpecifier;IsRetain;IsConstant;IsOpc;Address
+VAR_INPUT;udiVal;UDINT;Input;False;32-bit value to format as decimal text;;None;False;False;False;
+VAR;udi;UDINT;Local;False;Working copy of the value;;None;False;False;False;
+VAR;s;STRING(16);Local;False;Formatted output under construction;;None;False;False;False;
+VAR;iD;SINT;Local;False;Numeric value of the current digit (0..9);;None;False;False;False;
